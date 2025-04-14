@@ -1,0 +1,2 @@
+C:/Users/Hype/Work/mobile/mobile_umroh_v2/android/app/.cxx/Debug/6b4e2b36/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Hype/Work/mobile/mobile_umroh_v2/android/app/.cxx/Debug/6b4e2b36/armeabi-v7a/CMakeFiles/rebuild_cache.dir
