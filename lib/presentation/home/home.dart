@@ -140,7 +140,7 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Paket Umrah Desa - Termasuk Madinah",
+                    const Text("Paket Umroh nihhh",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
                     Row(
@@ -162,10 +162,10 @@ class HomePage extends StatelessWidget {
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Rp. 33.900.000",
+                        Text("Rp. 31",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, color: Color(0xFF3A7AFB))),
-                        Text("Sampai 48 bulan", style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text("Sampai 2 bulan", style: TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 12),
