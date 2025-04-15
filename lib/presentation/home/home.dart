@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
         ),
         ClipOval(
           child: Image.asset(
-            'assets/image/profile.png', // ganti dengan path foto user
+            'assets/image/profile.png',
             width: 100,
             height: 100,
             fit: BoxFit.cover,
@@ -218,11 +218,11 @@ class HomePage extends StatelessWidget {
             children: [
               Icon(Icons.location_pin, size: 16, color: Colors.grey),
               SizedBox(width: 4),
-              Text("Jakarta", style: TextStyle(fontSize: 12)),
+              Text("Bojong", style: TextStyle(fontSize: 12)),
             ],
           ),
-          Text("Ashar", style: TextStyle(fontWeight: FontWeight.bold)),
-          Text("15.15 sore", style: TextStyle(color: Colors.black54)),
+          Text("Isya", style: TextStyle(fontWeight: FontWeight.bold)),
+          Text("19:19 Malam", style: TextStyle(color: Colors.black54)),
         ],
       ),
     );
@@ -257,10 +257,10 @@ class HomePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Tata Cara Menjalankan Umrah Dengan Baik dan Benar",
+                        Text("Tata Cara Menjalankan Umrah yang baik dan benar",
                             style: TextStyle(fontWeight: FontWeight.w500)),
                         SizedBox(height: 6),
-                        Text("Durasi 12:33", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        Text("Durasi 10 jam", style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ],
                     ),
                   )

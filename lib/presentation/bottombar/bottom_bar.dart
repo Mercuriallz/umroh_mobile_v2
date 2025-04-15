@@ -16,9 +16,7 @@ class _BottomMainState extends State<BottomMain> {
   final List<Widget> _screen = [
     const HomePage(),
     const SearchPage(),
-    // const SaldoPage(),
-    // const NotifikasiPage(),
-    // const ProfilePage(),
+  
   ];
 
   void _onTapSelected(int index) {
@@ -38,17 +36,11 @@ class _BottomMainState extends State<BottomMain> {
         label: 'Cari',
       ),
       BottomNavigationBarItem(
-        icon: ImageIcon(AssetImage('assets/icons/jadwal_2.png')), 
-        label: 'Jadwal'
-      ),
-      // BottomNavigationBarItem(
-      //   icon: ImageIcon(AssetImage('assets/icons/Bell.png')),
-      //   label: 'Notifikasi',
-      // ),
+          icon: ImageIcon(AssetImage('assets/icons/jadwal_2.png')),
+          label: 'Jadwal'),
       BottomNavigationBarItem(
-        icon: ImageIcon(AssetImage('assets/icons/profile_2.png')), 
-        label: 'Profile'
-      )
+          icon: ImageIcon(AssetImage('assets/icons/profile_2.png')),
+          label: 'Profile')
     ];
   }
 
