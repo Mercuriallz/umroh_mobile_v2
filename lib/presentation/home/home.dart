@@ -55,11 +55,12 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        ClipOval(
-          child: Image.asset(
-            'assets/image/profile.png',
-            width: 100,
-            height: 100,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Image.network(
+            'https://i.pravatar.cc/100',
+            width: 50,
+            height: 50,
             fit: BoxFit.cover,
           ),
         )

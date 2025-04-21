@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mobile_umroh_v2/presentation/home/home.dart';
+import 'package:mobile_umroh_v2/presentation/profile/profile_page.dart';
 import 'package:mobile_umroh_v2/presentation/search/search_page.dart';
 
 class BottomMain extends StatefulWidget {
@@ -16,7 +17,8 @@ class _BottomMainState extends State<BottomMain> {
   final List<Widget> _screen = [
     const HomePage(),
     const SearchPage(),
-  
+    const ProfilePage(),
+    const ProfilePage(),
   ];
 
   void _onTapSelected(int index) {

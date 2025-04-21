@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_umroh_v2/presentation/auth/register/register_page.dart';
 import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -47,7 +48,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 32),
 
-                // Card Form Login
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(24),
@@ -74,10 +74,11 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      TextField(
+                      TextFormField(
                         decoration: InputDecoration(
                           hintText: "Username/E-mail/NIK",
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 16),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(32),
                             borderSide: BorderSide.none,
@@ -87,11 +88,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      TextField(
+                      TextFormField(
                         obscureText: _obscurePassword,
                         decoration: InputDecoration(
                           hintText: "Password",
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 16),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(32),
                             borderSide: BorderSide.none,
@@ -100,7 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                           fillColor: const Color(0xFFF2F4F7),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                               color: Colors.grey,
                             ),
                             onPressed: () {
@@ -155,7 +159,10 @@ class _LoginPageState extends State<LoginPage> {
                     const Text("Tidak punya akun?"),
                     TextButton(
                       onPressed: () {
-                        // Navigasi ke halaman daftar
+                        Get.to(
+                            transition: Transition.rightToLeft,
+                            () => const RegisterPage(),
+                            duration: const Duration(milliseconds: 500));
                       },
                       child: const Text("Daftar"),
                     ),
