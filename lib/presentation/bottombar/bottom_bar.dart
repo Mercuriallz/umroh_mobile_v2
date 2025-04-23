@@ -15,7 +15,7 @@ class _BottomMainState extends State<BottomMain> {
   int _selectedIndex = 0;
 
   final List<Widget> _screen = [
-    const HomePage(),
+     HomePage(),
     const SearchPage(),
     const ProfilePage(),
     const ProfilePage(),

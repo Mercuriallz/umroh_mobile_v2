@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_umroh_v2/constant/rupiah.dart';
+import 'package:mobile_umroh_v2/presentation/detail/order_page.dart';
 
-class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+class DetailPage extends StatefulWidget {
+  final Map<String, dynamic> package;
+  final int? harga;
 
+  const DetailPage({super.key, required this.package, this.harga});
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,10 +35,10 @@ class DetailPage extends StatelessWidget {
               _buildFlight(),
               const SizedBox(height: 16),
               _buildDestination(),
-              const SizedBox(height: 16),
+              const SizedBox(height: 25),
               _buildHotelFacility(),
-              const SizedBox(height: 24),
-              _buildMoneyCalculator(),
+              // const SizedBox(height: 24),
+              // _buildMoneyCalculator(),
               const SizedBox(height: 50),
               _buildPrice(),
             ],
@@ -77,8 +88,8 @@ class DetailPage extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        const Text(
-          "Paket Umrah Desa - Termasuk Madinah",
+        Text(
+          widget.package['title'],
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 6),
@@ -127,14 +138,14 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _buildDescription() {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Deskripsi Singkat",
             style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 6),
         Text(
-          "Lorem ipsum dolor sit amet consectetur.",
+          widget.package['deskripsi'],
           style: TextStyle(color: Colors.black87),
         ),
       ],
@@ -289,85 +300,97 @@ class DetailPage extends StatelessWidget {
     );
   }
 
- Widget _buildMoneyCalculator() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text(
-        'Kalkulator Keuangan',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-      ),
-      const SizedBox(height: 8),
-      const Text(
-        'Sebelum pesan, apakah Anda ingin mengecek keuangan Anda dengan kalkulator?',
-        style: TextStyle(fontSize: 12),
-      ),
-      const SizedBox(height: 16),
-      ElevatedButton(
-        onPressed: () {
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF75B6FF),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        child: const Text(
-          'Kalkulator Keuangan',
-          style: TextStyle(color: Colors.white, fontSize: 16),
-        ),
-      ),
-    ],
-  );
-}
-
+//  Widget _buildMoneyCalculator() {
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       const Text(
+//         'Kalkulator Keuangan',
+//         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+//       ),
+//       const SizedBox(height: 8),
+//       const Text(
+//         'Sebelum pesan, apakah Anda ingin mengecek keuangan Anda dengan kalkulator?',
+//         style: TextStyle(fontSize: 12),
+//       ),
+//       const SizedBox(height: 16),
+//       ElevatedButton(
+//         onPressed: () {
+//         },
+//         style: ElevatedButton.styleFrom(
+//           backgroundColor: const Color(0xFF75B6FF),
+//           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(25),
+//           ),
+//         ),
+//         child: const Text(
+//           'Kalkulator Keuangan',
+//           style: TextStyle(color: Colors.white, fontSize: 16),
+//         ),
+//       ),
+//     ],
+//   );
+// }
 
   Widget _buildPrice() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Mulai dari',
-            style: TextStyle(fontSize: 16),
-          ),
-          SizedBox(height: 4),
-          Text(
-            'Rp. 33.900.000',
-            style: TextStyle(
-              fontSize: 22,
-              color: Color(0xFF75B6FF),
-              fontWeight: FontWeight.bold,
+    final rupiahConverter = RupiahConverter();
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Mulai dari',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 4),
+            Text(
+              widget.harga != null
+                  ? rupiahConverter.formatToRupiah(int.parse(widget.harga.toString()))
+                  : 'Rp. 0',
+              style: TextStyle(
+                fontSize: 22,
+                color: Color(0xFF75B6FF),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              'Cicilan sampai ${widget.package['cicilan']} bulan',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        ElevatedButton(
+          onPressed: () {
+            
+            Get.to(
+              transition: Transition.rightToLeft,
+              duration: const Duration(milliseconds: 500),
+              () =>
+              OrderPage(
+                package: widget.package,
+                price: widget.harga,
+              ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF75B6FF),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
           ),
-          SizedBox(height: 4),
-          Text(
-            'Cicilan sampai 48 bulan',
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
-      ElevatedButton(
-        onPressed: () {
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF75B6FF),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+          child: const Text(
+            'Pesan Sekarang',
+            style: TextStyle(color: Colors.white, fontSize: 16),
           ),
         ),
-        child: const Text(
-          'Pesan Sekarang',
-          style: TextStyle(color: Colors.white, fontSize: 16),
-        ),
-      ),
-    ],
-  );
-}
-
+      ],
+    );
+  }
 }

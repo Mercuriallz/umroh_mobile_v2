@@ -1,9 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/presentation/detail/detail_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+
+  final List<Map<String, dynamic>> packages = [
+    {
+      'image': 'assets/image/kabah.png',
+      'title': 'Paket Haji Nih',
+      'deskripsi': 'Paket Haji dan Umroh 31 juta',
+      'price':  31000000,
+      'cicilan': 1,
+      'views': '100',
+    },
+    {
+      'image': 'assets/image/kabah.png',
+      'title': 'Oke gas',
+      'deskripsi': 'Paket Haji dan Umroh 32 juta',
+      'price':  32000000,
+      'cicilan': 3,
+      'views': '400',
+    },
+    {
+      'image': 'assets/image/kabah.png',
+      'title': 'Program Makan Siang Gratis',
+      'deskripsi': 'Paket Haji dan Umroh 35 juta',
+      'price': 35000000,
+      'cicilan': 6,
+      'views': '30',
+    },
+  ];
+
+   HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -121,111 +150,131 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildPaketUmrahSection(Size size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text("Paket Umrah",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-        const SizedBox(height: 12),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
-          ),
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(20)),
-                child: Image.asset(
-                  'assets/image/kabah.png',
-                  width: double.infinity,
-                  height: size.height * 0.25,
-                  fit: BoxFit.cover,
-                ),
+    final rupiahConverter = RupiahConverter();
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text("Paket Umrah",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+      const SizedBox(height: 12),
+      SizedBox(
+        height: size.height * 0.45, 
+        child: ListView.builder(
+          itemCount: packages.length,
+          scrollDirection: Axis.horizontal, 
+          itemBuilder: (context, i) {
+            return Container(
+              width: size.width * 0.75, 
+              margin: const EdgeInsets.only(right: 16), 
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(color: Colors.black12, blurRadius: 10)
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Paket Umroh nihhh",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        _buildIconText(Icons.flight, "Pesawat"),
-                        _buildIconText(Icons.directions_car, "Antar"),
-                        _buildIconText(Icons.hotel, "Hotel"),
-                      ],
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(20)),
+                    child: Image.asset(
+                      packages[i]['image']!,
+                      width: double.infinity,
+                      height: size.height * 0.2,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(height: 12),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Mulai dari", style: TextStyle(fontSize: 12)),
-                        Text("Cicilan :", style: TextStyle(fontSize: 12)),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Rp. 31",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF3A7AFB))),
-                        Text("Sampai 2 bulan",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                          },
-                          icon: const Icon(Icons.bookmark_border,
-                              color: Colors.grey),
+                        Text(packages[i]['title']!,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            _buildIconText(Icons.flight, "Pesawat"),
+                            _buildIconText(Icons.directions_car, "Antar"),
+                            _buildIconText(Icons.hotel, "Hotel"),
+                          ],
                         ),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Get.to(
-                                () => const DetailPage(),
-                                transition: Transition.rightToLeft,
-                                duration: const Duration(milliseconds: 300),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF70B8FF),
-                              minimumSize: const Size.fromHeight(40),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32),
+                        const SizedBox(height: 12),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Mulai dari",
+                                style: TextStyle(fontSize: 12)),
+                            Text("Cicilan :", style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(rupiahConverter.formatToRupiah(int.parse(
+                                packages[i]['price'].toString())),
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF3A7AFB))),
+                            Text("Sampai ${packages[i]['cicilan'].toString()} bulan",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.bookmark_border,
+                                  color: Colors.grey),
+                            ),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Get.to(
+                                    () =>  DetailPage(
+                                      package: packages[i],
+                                      harga: packages[i]['price'],
+                                    ),
+                                    transition: Transition.rightToLeft,
+                                    duration:
+                                        const Duration(milliseconds: 300),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF70B8FF),
+                                  minimumSize: const Size.fromHeight(40),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(32),
+                                  ),
+                                ),
+                                child: const Text(
+                                  "Detail Paket",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                            child: const Text(
-                              "Detail Paket",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        )
-      ],
-    );
-  }
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    ],
+  );
+}
 
   Widget _buildIconText(IconData icon, String text) {
     return Padding(
