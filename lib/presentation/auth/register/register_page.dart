@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart' as gets ;
 import 'package:mobile_umroh_v2/presentation/auth/register/set_password_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -50,9 +51,14 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       });
 
-      print('$label file selected: ${file.name} at ${file.path}');
+      // print('$label file selected: ${file.name} at ${file.path}');
     } else {
-      print('$label file selection canceled.');
+      gets.Get.snackbar("File Tidak Dipilih", "Silahkan pilih file yang sesuai",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          icon: const Icon(Icons.error, color: Colors.white));
     }
   }
 
@@ -75,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   IconButton(
                     icon: const Icon(Icons.arrow_back_ios),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Get.back();
                     },
                   ),
                   const SizedBox(height: 10),

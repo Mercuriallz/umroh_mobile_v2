@@ -115,7 +115,7 @@ final CarouselSliderController _controller = CarouselSliderController();
                     shape: BoxShape.circle,
                     color: _current == entry.key
                         ? Colors.blue
-                        : Colors.blue.withOpacity(0.3),
+                        : Colors.blue.withValues(blue: 0.3),
                   ),
                 );
               }).toList(),

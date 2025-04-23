@@ -139,7 +139,7 @@ class SearchPage extends StatelessWidget {
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             child: Image.asset(
-              'assets/kaaba_full.jpg',
+              'assets/image/kabah.png',
               width: double.infinity,
               height: size.height * 0.22,
               fit: BoxFit.cover,

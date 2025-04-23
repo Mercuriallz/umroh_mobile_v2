@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_umroh_v2/presentation/detail/detail_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -70,14 +71,14 @@ class HomePage extends StatelessWidget {
 
   Widget _buildMenuGrid() {
     List<Map<String, String>> menu = [
-      {"title": "Umrah", "icon": "assets/menu.png"},
-      {"title": "Bimbingan", "icon": "assets/menu.png"},
-      {"title": "Fitur Haji", "icon": "assets/menu.png"},
-      {"title": "Kurs & Mata Uang", "icon": "assets/menu.png"},
-      {"title": "Info Cuaca", "icon": "assets/menu.png"},
-      {"title": "Jadwal Sholat", "icon": "assets/menu.png"},
-      {"title": "Al-qur’an", "icon": "assets/menu.png"},
-      {"title": "Lainnya", "icon": "assets/menu.png"},
+      {"title": "Umrah", "icon": "assets/icons/blocks 1.png"},
+      {"title": "Bimbingan", "icon": "assets/icons/blocks 1.png"},
+      {"title": "Fitur Haji", "icon": "assets/icons/blocks 1.png"},
+      {"title": "Kurs & Mata Uang", "icon": "assets/icons/blocks 1.png"},
+      {"title": "Info Cuaca", "icon": "assets/icons/blocks 1.png"},
+      {"title": "Jadwal Sholat", "icon": "assets/icons/blocks 1.png"},
+      {"title": "Al-qur’an", "icon": "assets/icons/blocks 1.png"},
+      {"title": "Lainnya", "icon": "assets/icons/blocks 1.png"},
     ];
 
     return GridView.builder(
@@ -90,7 +91,7 @@ class HomePage extends StatelessWidget {
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
-      itemBuilder: (context, index) {
+      itemBuilder: (context, i) {
         return Column(
           children: [
             Container(
@@ -102,10 +103,17 @@ class HomePage extends StatelessWidget {
                   BoxShadow(color: Colors.black12, blurRadius: 6),
                 ],
               ),
-              child: Image.asset(menu[index]['icon']!, width: 28, height: 28),
+              child: Image.asset(menu[i]['icon']!, width: 28, height: 28),
             ),
             const SizedBox(height: 6),
-            Text(menu[index]['title']!, style: const TextStyle(fontSize: 12)),
+            Align(
+                alignment: Alignment.center,
+                child: Text(
+                  menu[i]['title']!,
+                  style: const TextStyle(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                )),
           ],
         );
       },
@@ -116,7 +124,8 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Paket Umrah", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        const Text("Paket Umrah",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         const SizedBox(height: 12),
         Container(
           width: double.infinity,
@@ -128,7 +137,8 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
                 child: Image.asset(
                   'assets/image/kabah.png',
                   width: double.infinity,
@@ -165,22 +175,48 @@ class HomePage extends StatelessWidget {
                       children: [
                         Text("Rp. 31",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, color: Color(0xFF3A7AFB))),
-                        Text("Sampai 2 bulan", style: TextStyle(fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF3A7AFB))),
+                        Text("Sampai 2 bulan",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF70B8FF),
-                        minimumSize: const Size.fromHeight(44),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                          },
+                          icon: const Icon(Icons.bookmark_border,
+                              color: Colors.grey),
                         ),
-                      ),
-                      child: const Text("Detail Paket"),
-                    )
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Get.to(
+                                () => const DetailPage(),
+                                transition: Transition.rightToLeft,
+                                duration: const Duration(milliseconds: 300),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF70B8FF),
+                              minimumSize: const Size.fromHeight(40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32),
+                              ),
+                            ),
+                            child: const Text(
+                              "Detail Paket",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               )
@@ -261,7 +297,8 @@ class HomePage extends StatelessWidget {
                         Text("Tata Cara Menjalankan Umrah yang baik dan benar",
                             style: TextStyle(fontWeight: FontWeight.w500)),
                         SizedBox(height: 6),
-                        Text("Durasi 10 jam", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        Text("Durasi 10 jam",
+                            style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ],
                     ),
                   )

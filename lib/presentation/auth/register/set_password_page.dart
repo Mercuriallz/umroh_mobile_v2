@@ -37,22 +37,21 @@ class SetPasswordPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   RichText(
                     text: TextSpan(
-                      style: const TextStyle(color: Colors.black87, fontSize: 14),
+                      style:
+                          const TextStyle(color: Colors.black87, fontSize: 14),
                       children: [
-                        const TextSpan(text: 'Dengan ini saya menyetujui segala '),
+                        const TextSpan(
+                            text: 'Dengan ini saya menyetujui segala '),
                         TextSpan(
                           text: 'Syarat dan Ketentuan',
                           style: const TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()..onTap = () {
-
-                          },
+                          recognizer: TapGestureRecognizer()..onTap = () {},
                         ),
                         const TextSpan(text: ' serta '),
                         TextSpan(
                           text: 'Kebijakan Privasi',
                           style: const TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()..onTap = () {
-                          },
+                          recognizer: TapGestureRecognizer()..onTap = () {},
                         ),
                       ],
                     ),
@@ -71,7 +70,8 @@ class SetPasswordPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 12),
                         ),
                         child: const Text('Kirim'),
                       ),
@@ -94,7 +94,8 @@ class SetPasswordPage extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         ),
       ),
     );
