@@ -101,7 +101,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         },
                         child: _buildJemaahItem(jemaah['nama'] ?? "-", jemaah['jenis_kelamin'] ?? "-", jemaah['type_jemaah'] ?? "-"),
                       );
-                    }).toList(),
+                    }),
                     const SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
@@ -120,13 +120,11 @@ class _DataOrderPageState extends State<DataOrderPage> {
               ),
             ),
 
-            // Tombol Pesan Sekarang tetap di bawah
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Submit atau proses lanjut
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
