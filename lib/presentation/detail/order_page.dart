@@ -183,7 +183,7 @@ class _OrderPageState extends State<OrderPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F7F7),
+        color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(

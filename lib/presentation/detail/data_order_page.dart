@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/constant/loading.dart';
 import 'package:mobile_umroh_v2/presentation/detail/add_jemaah_page.dart';
 
 class DataOrderPage extends StatefulWidget {
@@ -57,7 +58,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("Data Pemesanan", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text("Data Pemesanan",
+            style: TextStyle(fontWeight: FontWeight.bold)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -69,14 +71,15 @@ class _DataOrderPageState extends State<DataOrderPage> {
           children: [
             _buildBookingInfoSection(),
             const SizedBox(height: 24),
-
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     _buildSectionHeader(totalJemaah),
                     const SizedBox(height: 12),
-                    _buildJemaahItem(widget.namaPemesan ?? "-", widget.jenisKelamin ?? "-", widget.typeJemaah ?? "-", isPemesan: true),
+                    _buildJemaahItem(widget.namaPemesan ?? "-",
+                        widget.jenisKelamin ?? "-", widget.typeJemaah ?? "-",
+                        isPemesan: true),
                     const SizedBox(height: 8),
                     ...jemaahList.asMap().entries.map((entry) {
                       final index = entry.key;
@@ -87,19 +90,25 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         background: Container(
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(12)),
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(12)),
                           child: const Icon(Icons.delete, color: Colors.white),
                         ),
                         onDismissed: (_) {
                           setState(() {
                             jemaahList.removeAt(index);
                           });
-                          Get.snackbar("Jama'ah Dihapus", "${jemaah['nama']} telah dihapus",
+                          Get.snackbar("Jama'ah Dihapus",
+                              "${jemaah['nama']} telah dihapus",
                               snackPosition: SnackPosition.BOTTOM,
                               colorText: ColorConstant.secondary100,
                               backgroundColor: Colors.red);
                         },
-                        child: _buildJemaahItem(jemaah['nama'] ?? "-", jemaah['jenis_kelamin'] ?? "-", jemaah['type_jemaah'] ?? "-"),
+                        child: _buildJemaahItem(
+                            jemaah['nama'] ?? "-",
+                            jemaah['jenis_kelamin'] ?? "-",
+                            jemaah['type_jemaah'] ?? "-"),
                       );
                     }),
                     const SizedBox(height: 12),
@@ -110,29 +119,36 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.blue,
                           backgroundColor: Colors.blue.shade100,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24)),
                         ),
-                        child: const Text("Tambah +", style: TextStyle(color: Colors.blue)),
+                        child: const Text("Tambah +",
+                            style: TextStyle(color: Colors.blue)),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const OrderLoadingPage()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24)),
                 ),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
-                  child: Text("Pesan Sekarang", style: TextStyle(color: Colors.white)),
+                  child: Text("Pesan Sekarang",
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
             ),
@@ -146,7 +162,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text("Data Jama'ah", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        const Text("Data Jama'ah",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         Text("$totalJemaah / ${widget.totalOrang}"),
       ],
     );
@@ -156,7 +173,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Informasi Pemesanan", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        const Text("Informasi Pemesanan",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         const SizedBox(height: 12),
         _buildInfoItem("Kode Paket", "UMR000131", isLink: true),
         _buildInfoItem("Nama Paket", "Paket Umrah Desa - Termasuk Madinah"),
@@ -165,7 +183,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
         const SizedBox(height: 8),
         const Align(
           alignment: Alignment.center,
-          child: Text("Lihat Informasi Pemesanan", style: TextStyle(color: Colors.blue)),
+          child: Text("Lihat Informasi Pemesanan",
+              style: TextStyle(color: Colors.blue)),
         ),
       ],
     );
@@ -182,15 +201,23 @@ class _DataOrderPageState extends State<DataOrderPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(flex: 2, child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(
+              flex: 2,
+              child: Text(title,
+                  style: const TextStyle(fontWeight: FontWeight.bold))),
           const SizedBox(width: 8),
-          Expanded(flex: 3, child: Text(value, style: TextStyle(color: isLink ? Colors.blue : Colors.black))),
+          Expanded(
+              flex: 3,
+              child: Text(value,
+                  style:
+                      TextStyle(color: isLink ? Colors.blue : Colors.black))),
         ],
       ),
     );
   }
 
-  Widget _buildJemaahItem(String nama, String jenisKelamin, String typeJemaah, {bool isPemesan = false} ) {
+  Widget _buildJemaahItem(String nama, String jenisKelamin, String typeJemaah,
+      {bool isPemesan = false}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
@@ -205,7 +232,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
             Text(nama, style: const TextStyle(fontWeight: FontWeight.bold)),
             Text(jenisKelamin),
           ]),
-          Text(isPemesan ? "Pemesan" : typeJemaah, style: const TextStyle(color: Colors.blue)),
+          Text(isPemesan ? "Pemesan" : typeJemaah,
+              style: const TextStyle(color: Colors.blue)),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 
 class AddJemaahPage extends StatefulWidget {
   const AddJemaahPage({super.key});
@@ -106,17 +107,20 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
       ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _submit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.lightBlueAccent,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 14, horizontal: 32),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorConstant.primaryBlue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 32),
+                ),
+                child:
+                    const Text("Tambah", style: TextStyle(color: Colors.white)),
               ),
-              child:
-                  const Text("Tambah", style: TextStyle(color: Colors.white)),
             )
           ],
         ),

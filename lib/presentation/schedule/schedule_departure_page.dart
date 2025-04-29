@@ -27,7 +27,6 @@ class ScheduleDeparturePage extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      // Card 1
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
@@ -73,7 +72,6 @@ class ScheduleDeparturePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
 
-                      // Card 2
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
