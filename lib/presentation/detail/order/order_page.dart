@@ -4,7 +4,7 @@ import 'package:get/get.dart' as gets;
 
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
-import 'package:mobile_umroh_v2/presentation/detail/data_order_page.dart';
+import 'package:mobile_umroh_v2/presentation/detail/order/data_order_page.dart';
 
 class OrderPage extends StatefulWidget {
   final Map<String, dynamic> package;
@@ -289,11 +289,23 @@ class _OrderPageState extends State<OrderPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InkWell(onTap: decrementCounter, child: Icon(Icons.arrow_left)),
+            InkWell(onTap: decrementCounter, child: Container(
+              margin: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(width: 1, color: ColorConstant.black)),
+              child: Icon(Icons.arrow_left))),
             SizedBox(width: 16),
             Text("$counter orang"),
             SizedBox(width: 16),
-            InkWell(onTap: incrementCounter, child: Icon(Icons.arrow_right)),
+            InkWell(onTap: incrementCounter, child: Container(
+              margin: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(width: 1, color: ColorConstant.black)),
+              child: Icon(Icons.arrow_right))),
           ],
         ),
         const SizedBox(height: 8),

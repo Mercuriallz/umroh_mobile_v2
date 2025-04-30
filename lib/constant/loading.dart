@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mobile_umroh_v2/constant/success.dart';
 
-class OrderLoadingPage extends StatefulWidget {
-  const OrderLoadingPage({super.key});
+class LoadingTransitionPage extends StatefulWidget {
+  final String lottiePath;
+  final String message;
+  final Duration duration;
+  final Widget nextPage;
+
+  const LoadingTransitionPage({
+    super.key,
+    required this.lottiePath,
+    required this.message,
+    required this.duration,
+    required this.nextPage,
+  });
 
   @override
-  State<OrderLoadingPage> createState() => _OrderLoadingPageState();
+  State<LoadingTransitionPage> createState() => _LoadingTransitionPageState();
 }
 
-class _OrderLoadingPageState extends State<OrderLoadingPage> {
+class _LoadingTransitionPageState extends State<LoadingTransitionPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const OrderSuccessPage()),
-      );
+    Future.delayed(widget.duration, () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => widget.nextPage),
+        );
+      }
     });
   }
 
@@ -30,15 +42,16 @@ class _OrderLoadingPageState extends State<OrderLoadingPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset(
-              'assets/lottie/loading_animation.json',
+              widget.lottiePath,
               width: 200,
               height: 200,
-              frameRate: FrameRate.max
+              frameRate: FrameRate.max,
             ),
             const SizedBox(height: 24),
-            const Text(
-              "Pesanan Anda Sedang Diproses...",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              widget.message,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

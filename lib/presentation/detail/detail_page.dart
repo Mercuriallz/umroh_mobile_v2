@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
-import 'package:mobile_umroh_v2/presentation/detail/order_page.dart';
+import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
 
 class DetailPage extends StatefulWidget {
   final Map<String, dynamic> package;
@@ -57,7 +57,7 @@ class _DetailPageState extends State<DetailPage> {
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(Icons.arrow_back_ios_new,
+            child: const Icon(Icons.arrow_back_ios,
                 size: 20, color: Colors.black87),
           ),
           const SizedBox(width: 8),

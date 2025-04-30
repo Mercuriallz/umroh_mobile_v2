@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/presentation/detail/transaction/result_transaction_page.dart';
 
-class OrderSuccessPage extends StatelessWidget {
-  const OrderSuccessPage({super.key});
+class DetailOrderPage extends StatelessWidget {
+  const DetailOrderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +191,6 @@ class OrderSuccessPage extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              // Buttons
               Row(
                 children: [
                   Expanded(
@@ -203,15 +205,20 @@ class OrderSuccessPage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // TODO: navigate ke detail transaksi
+                        Get.to(
+                            transition: Transition.rightToLeft,
+                            () => const ResultTransactionPage(),
+                            duration: const Duration(milliseconds: 500));
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF68A9F0),
+                        backgroundColor: ColorConstant.primaryBlue,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text('Lihat Transaksi'),
+                      child:  Text('Lihat Transaksi', style: TextStyle(
+                        color: ColorConstant.secondary100,
+                      ),),
                     ),
                   ),
                 ],

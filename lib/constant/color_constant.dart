@@ -17,7 +17,7 @@ class ColorConstant {
   static const Color primary99 = Color(0xffEAF0FE);
   static const Color onSurface = Color(0xff2D2F33);
   static const Color greenColor = Color(0xff00DD3B);
-  static const Color primaryBlue = Color(0xFF73B4FF);
+  static const Color primaryBlue = Color(0xFF5687BF);
 
   static const Color secondary30Color = Color(0xff6794CD);
   static const Color secondary90 = Color(0xffD7E8FF);

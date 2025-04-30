@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/loading.dart';
-import 'package:mobile_umroh_v2/presentation/detail/add_jemaah_page.dart';
+import 'package:mobile_umroh_v2/presentation/detail/order/add_jemaah_page.dart';
+import 'package:mobile_umroh_v2/presentation/detail/order/detail_order_page.dart';
 
 class DataOrderPage extends StatefulWidget {
   final String? namaPemesan;
@@ -137,7 +138,14 @@ class _DataOrderPageState extends State<DataOrderPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const OrderLoadingPage()),
+                    MaterialPageRoute(
+                        builder: (_) => LoadingTransitionPage(
+                              lottiePath:
+                                  'assets/lottie/loading_animation.json',
+                              message: 'Pesanan Anda Sedang Diproses...',
+                              duration: const Duration(seconds: 3),
+                              nextPage: const DetailOrderPage(),
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -195,11 +203,12 @@ class _DataOrderPageState extends State<DataOrderPage> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
               flex: 2,

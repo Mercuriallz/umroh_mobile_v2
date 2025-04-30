@@ -109,20 +109,20 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDropdown(String label) {
-    return SizedBox(
-      width: 160,
-      child: DropdownButtonFormField<String>(
-        items: const [],
-        onChanged: (value) {},
-        decoration: InputDecoration(
-          labelText: label,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-        ),
-      ),
-    );
-  }
+  // Widget _buildDropdown(String label) {
+  //   return SizedBox(
+  //     width: 160,
+  //     child: DropdownButtonFormField<String>(
+  //       items: const [],
+  //       onChanged: (value) {},
+  //       decoration: InputDecoration(
+  //         labelText: label,
+  //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+  //         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildPackageCard(Size size) {
     return Container(
