@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/presentation/auth/login_page.dart';
+import 'package:mobile_umroh_v2/services/storage.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -131,6 +132,8 @@ class ProfilePage extends StatelessWidget {
   Widget _buildLogoutButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
+        final secureStorage = SecureStorageService();
+        secureStorage.deleteAll();
         Get.offAll(LoginPage());
       },
       style: ElevatedButton.styleFrom(

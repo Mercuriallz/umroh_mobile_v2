@@ -1,11 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_umroh_v2/constant/on_boarding/on_boarding_screen.dart';
+import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
+import 'package:mobile_umroh_v2/services/storage.dart';
 
-class OnBoardingMain extends StatelessWidget {
+class OnBoardingMain extends StatefulWidget {
   const OnBoardingMain({super.key});
 
   @override
+  State<OnBoardingMain> createState() => _OnBoardingMainState();
+}
+
+class _OnBoardingMainState extends State<OnBoardingMain> {
+  final secureStorage = SecureStorageService();
+  bool _isLoading = true;
+  bool _isLoggedIn = false;
+  String? _token;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthStatus();
+  }
+
+  Future<void> _checkAuthStatus() async {
+    final token = await secureStorage.read("token");
+    final isLoggedIn = await secureStorage.readBool("login") ?? false;
+
+    setState(() {
+      _token = token;
+      _isLoggedIn = isLoggedIn;
+      _isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return  OnBoardingScreen();
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_token != null && _isLoggedIn) {
+      return const BottomMain();
+    } else {
+      return const OnBoardingScreen();
+    }
   }
 }

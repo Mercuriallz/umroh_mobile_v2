@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
-import 'package:mobile_umroh_v2/constant/loading.dart';
+import 'package:mobile_umroh_v2/constant/loading_page.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/add_jemaah_page.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/detail_order_page.dart';
 

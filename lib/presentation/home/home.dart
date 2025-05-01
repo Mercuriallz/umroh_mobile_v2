@@ -2,9 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/presentation/detail/detail_page.dart';
+import 'package:mobile_umroh_v2/services/storage.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
 
+
+   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  final secureStorage = SecureStorageService();
+
+  String? username; 
+
+
+
+  
   final List<Map<String, dynamic>> packages = [
     {
       'image': 'assets/image/kabah.png',
@@ -32,7 +49,18 @@ class HomePage extends StatelessWidget {
     },
   ];
 
-   HomePage({super.key});
+  void loadUsername() async {
+    final name = await secureStorage.read("name");
+    setState(() {
+      username = name.toString();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUsername();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +101,11 @@ class HomePage extends StatelessWidget {
   Widget _buildUserCard() {
     return Row(
       children: [
-        const Expanded(
+         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Bleks",
+              Text(username ?? "-",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
               Text("000123",

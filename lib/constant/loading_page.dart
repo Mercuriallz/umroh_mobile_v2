@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class LoadingOverlay extends StatelessWidget {
+class LoadingTransitionPage extends StatefulWidget {
   final String lottiePath;
   final String message;
+  final Duration duration;
+  final Widget nextPage;
 
-  const LoadingOverlay({
+  const LoadingTransitionPage({
     super.key,
     required this.lottiePath,
     required this.message,
+    required this.duration,
+    required this.nextPage,
   });
+
+  @override
+  State<LoadingTransitionPage> createState() => _LoadingTransitionPageState();
+}
+
+class _LoadingTransitionPageState extends State<LoadingTransitionPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(widget.duration, () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => widget.nextPage),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +42,14 @@ class LoadingOverlay extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset(
-              lottiePath,
+              widget.lottiePath,
               width: 200,
               height: 200,
               frameRate: FrameRate.max,
             ),
             const SizedBox(height: 24),
             Text(
-              message,
+              widget.message,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/presentation/detail/transaction/result_transaction_page.dart';
+import 'package:mobile_umroh_v2/presentation/home/home.dart';
 
 class DetailOrderPage extends StatelessWidget {
   const DetailOrderPage({super.key});
@@ -196,7 +197,7 @@ class DetailOrderPage extends StatelessWidget {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        Navigator.popUntil(context, (route) => route.isFirst);
+                        Get.offAll(HomePage());
                       },
                       child: const Text('Selesai'),
                     ),
