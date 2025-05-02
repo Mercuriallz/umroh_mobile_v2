@@ -43,23 +43,17 @@ class RegisterBloc extends Cubit<RegisterState> {
         ),
       );
 
-      print("respon data --> ${response.data}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print("respon data --> ${response.data}");
-        // Success state - UI will handle navigation and feedback
         emit(RegisterSuccess());
       } else {
-        // Handle non-success status codes
         emit(RegisterFailed("Registrasi gagal: ${response.statusMessage}"));
       }
     } catch (e) {
-      // Extract meaningful error message if possible
       String errorMessage = "Terjadi kesalahan saat registrasi";
       
       if (e is DioException) {
         if (e.response != null) {
-          // Try to get error message from response data
           try {
             final responseData = e.response!.data;
             if (responseData is Map && responseData.containsKey('message')) {

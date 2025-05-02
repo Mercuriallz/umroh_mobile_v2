@@ -8,7 +8,7 @@ class ProvinsiBloc extends Cubit<ProvinsiState> {
 
   void getProvinsi() async {
     var response = await ProvinsiRepository().loadProvinsi();
-    var provinsiData = ProvinceModel.fromJson(response.data).data;
-    emit(ProvinsiLoaded(provinsiData!));
+    var provinsiData = ProvinceModel.fromJson(response.data).data!;
+    emit(ProvinsiLoaded(provinsiData));
   }
 }

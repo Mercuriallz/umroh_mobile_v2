@@ -48,8 +48,7 @@ class LoginBloc extends Cubit<LoginState> {
         }
         await secureStorage.write("token", token);
         await secureStorage.write("name", name);
-        print("data token --> $token");
-        print("data nama --> $name");
+     
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {
         String errorMessage =

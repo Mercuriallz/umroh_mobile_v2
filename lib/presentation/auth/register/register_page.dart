@@ -175,17 +175,21 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Wrap(
             children: [
               ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Ambil dari Kamera'),
-                onTap: () async {
-                  final XFile? photo =
-                      await picker.pickImage(source: ImageSource.camera);
-                  Navigator.pop(context);
-                  if (photo != null) {
-                    _handlePickedFile(File(photo.path), label);
-                  }
-                },
-              ),
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text('Ambil dari Kamera'),
+                  onTap: () async {
+                    final XFile? photo =
+                        await picker.pickImage(source: ImageSource.camera);
+
+                    if (!context.mounted) {
+                      return;
+                    }
+                    Navigator.pop(context);
+
+                    if (photo != null) {
+                      _handlePickedFile(File(photo.path), label);
+                    }
+                  }),
               ListTile(
                 leading: const Icon(Icons.photo_library),
                 title: const Text('Pilih dari Galeri'),
@@ -219,6 +223,8 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
   }
+
+
 
   void _handlePickedFile(File file, String label) {
     setState(() {
@@ -263,10 +269,22 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    phoneNumberController.dispose();
+    emailController.dispose();
+    addressController.dispose();
+    ktpController.dispose();
+    birthdayController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+           
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: FormBuilder(
             key: _formKey,

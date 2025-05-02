@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_umroh_v2/bloc/auth/login/login_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/register/register_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kabupaten/kabupaten_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kecamatan/kecamatan_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kelurahan/kelurahan_bloc.dart';
@@ -25,7 +26,7 @@ void main() async {
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => LoginBloc()),
-        // BlocProvider(create: (_) => PackageBloc()),
+        BlocProvider(create: (_) => PackageBloc()),
         BlocProvider(create: (_) => ProvinsiBloc()),
         BlocProvider(create: (_) => KabupatenBloc()),
         BlocProvider(create: (_) => KecamatanBloc()),

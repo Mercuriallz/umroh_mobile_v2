@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
+import 'package:mobile_umroh_v2/model/package/package_model.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
 
 class DetailPage extends StatefulWidget {
-  final Map<String, dynamic> package;
-  final int? harga;
+  final DataPackage? package;
 
-  const DetailPage({super.key, required this.package, this.harga});
+  const DetailPage({super.key, required this.package});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -80,8 +80,8 @@ class _DetailPageState extends State<DetailPage> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.asset(
-            "assets/image/kabah.png",
+          child: Image.network(
+            widget.package!.imgThumbnail ?? "",
             height: 180,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -89,7 +89,7 @@ class _DetailPageState extends State<DetailPage> {
         ),
         const SizedBox(height: 12),
         Text(
-          widget.package['title'],
+          widget.package!.namaPaket ?? "-",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 6),
@@ -105,23 +105,12 @@ class _DetailPageState extends State<DetailPage> {
           padding: const EdgeInsets.only(right: 12),
           child: Row(
             children: [
-              Icon(Icons.flight, size: 16),
-              const SizedBox(
-                width: 4,
-              ),
-              Text("Pesawat", style: TextStyle(color: Colors.black54)),
-              const SizedBox(width: 12),
-              Icon(Icons.directions_car, size: 16),
-              const SizedBox(
-                width: 4,
-              ),
-              Text("Antar", style: TextStyle(color: Colors.black54)),
-              const SizedBox(width: 12),
-              Icon(Icons.hotel, size: 16),
-              const SizedBox(
-                width: 4,
-              ),
-              Text("Hotel", style: TextStyle(color: Colors.black54)),
+              if (widget.package!.arrFeature!.contains("Pesawat"))
+                _buildIconText(Icons.flight, "Pesawat"),
+              if (widget.package!.arrFeature!.contains("Antar"))
+                _buildIconText(Icons.directions_car, "Antar"),
+              if (widget.package!.arrFeature!.contains("Hotel"))
+                _buildIconText(Icons.hotel, "Hotel"),
             ],
           ),
         ),
@@ -145,7 +134,7 @@ class _DetailPageState extends State<DetailPage> {
             style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 6),
         Text(
-          widget.package['deskripsi'],
+          widget.package!.desc ?? "-",
           style: TextStyle(color: Colors.black87),
         ),
       ],
@@ -195,12 +184,12 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildDestination() {
-    return const Column(
+    return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Perjalanan", style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 6),
-        Text("11 Desember 2025"),
+        Text(widget.package!.jadwalPerjalanan ?? "-"),
         Text("Normal: 3 - 4 Jam (Tergantung situasi dan kondisi)",
             style: TextStyle(color: Colors.grey)),
       ],
@@ -349,8 +338,9 @@ class _DetailPageState extends State<DetailPage> {
             ),
             SizedBox(height: 4),
             Text(
-              widget.harga != null
-                  ? rupiahConverter.formatToRupiah(int.parse(widget.harga.toString()))
+              widget.package!.harga != null
+                  ? rupiahConverter.formatToRupiah(
+                      int.parse(widget.package!.harga.toString()))
                   : 'Rp. 0',
               style: TextStyle(
                 fontSize: 22,
@@ -360,21 +350,18 @@ class _DetailPageState extends State<DetailPage> {
             ),
             SizedBox(height: 4),
             Text(
-              'Cicilan sampai ${widget.package['cicilan']} bulan',
+              '12 bulan',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ],
         ),
         ElevatedButton(
           onPressed: () {
-            
             Get.to(
               transition: Transition.rightToLeft,
               duration: const Duration(milliseconds: 500),
-              () =>
-              OrderPage(
+              () => OrderPage(
                 package: widget.package,
-                price: widget.harga,
               ),
             );
           },
@@ -394,3 +381,17 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 }
+
+
+  Widget _buildIconText(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 12),
+      child: Row(
+        children: [
+          Icon(icon, size: 16),
+          const SizedBox(width: 4),
+          Text(text, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
+    );
+  }

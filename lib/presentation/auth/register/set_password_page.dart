@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:mobile_umroh_v2/bloc/auth/register/register_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/register/register_state.dart'; // Import state
 import 'package:mobile_umroh_v2/constant/loading.dart';
@@ -32,33 +31,29 @@ class SetPasswordPage extends StatefulWidget {
   final File? bpjsFile;
   final File? passPhotoFile;
 
-  const SetPasswordPage({
-    super.key,
-    this.name,
-    this.selectedGender,
-    this.phoneNumber,
-    this.email,
-    this.selectedProvinsi,
-    this.selectedKabupaten,
-    this.selectedKecamatan,
-    this.selectedKelurahan,
-    this.ktpFile,
-    this.kkFile,
-    this.pasporFile,
-    this.vaksinFile,
-    this.ktp,
-    this.selectedDate,
-    this.address,
-    this.bpjsFile,
-    this.passPhotoFile
-  });
+  const SetPasswordPage(
+      {super.key,
+      this.name,
+      this.selectedGender,
+      this.phoneNumber,
+      this.email,
+      this.selectedProvinsi,
+      this.selectedKabupaten,
+      this.selectedKecamatan,
+      this.selectedKelurahan,
+      this.ktpFile,
+      this.kkFile,
+      this.pasporFile,
+      this.vaksinFile,
+      this.ktp,
+      this.selectedDate,
+      this.address,
+      this.bpjsFile,
+      this.passPhotoFile});
 
   @override
   State<SetPasswordPage> createState() => _SetPasswordPageState();
 }
-
-// Custom Loading Widget
-
 
 class _SetPasswordPageState extends State<SetPasswordPage> {
   final formKey = GlobalKey<FormState>();
@@ -142,33 +137,34 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
   }
 
   void _submitRegistration() async {
+    final registVM = context.read<RegisterBloc>();
+
     if (formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
-      
+
       await removeCacheFoldersContainingImages();
-      
+
       final data = RegisterModel(
-        email: widget.email,
-        password: passwordController.text,
-        name: widget.name,
-        noTelp: widget.phoneNumber,
-        imgKtp: widget.ktpFile,
-        imgKk: widget.kkFile,
-        imgPassport: widget.pasporFile,
-        imgVaksin: widget.vaksinFile,
-        nik: widget.ktp,
-        address: widget.address,
-        imgBpjsKesehatan: widget.bpjsFile,
-        imgPasFoto: widget.passPhotoFile,
-        idKabupaten: widget.selectedKabupaten,
-        idKecamatan: widget.selectedKecamatan,
-        idProvinsi: widget.selectedProvinsi,
-        dob: widget.selectedDate
-      );
-      
-      context.read<RegisterBloc>().register(data);
+          email: widget.email,
+          password: passwordController.text,
+          name: widget.name,
+          noTelp: widget.phoneNumber,
+          imgKtp: widget.ktpFile,
+          imgKk: widget.kkFile,
+          imgPassport: widget.pasporFile,
+          imgVaksin: widget.vaksinFile,
+          nik: widget.ktp,
+          address: widget.address,
+          imgBpjsKesehatan: widget.bpjsFile,
+          imgPasFoto: widget.passPhotoFile,
+          idKabupaten: widget.selectedKabupaten,
+          idKecamatan: widget.selectedKecamatan,
+          idProvinsi: widget.selectedProvinsi,
+          dob: widget.selectedDate);
+
+      registVM.register(data);
     }
   }
 
@@ -185,21 +181,21 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
             isLoading = false;
             showLoading = false;
           });
-          
+
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Registrasi berhasil'),
               backgroundColor: Colors.green,
             ),
           );
-          
-         Get.offAll(const LoginPage());
+
+          Get.offAll(const LoginPage());
         } else if (state is RegisterFailed) {
           setState(() {
             isLoading = false;
             showLoading = false;
           });
-          
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
@@ -208,114 +204,123 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
           );
         }
       },
-      child: showLoading 
-        ? const LoadingOverlay(
-            lottiePath: 'assets/lottie/loading_animation.json',
-            message: 'Sedang memproses registrasi...',
-          )
-        : Scaffold(
-        body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      const Center(
-                        child: Text(
-                          'Set Password',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 100),
-                      _buildPasswordField(
-                        controller: passwordController,
-                        label: 'Masukan Password',
-                        obscure: obscurePassword,
-                        onToggle: () {
-                          setState(() {
-                            obscurePassword = !obscurePassword;
-                          });
-                        },
-                      ),
-                      _buildPasswordField(
-                        controller: repeatPasswordController,
-                        label: 'Ulangi Password',
-                        obscure: obscureRepeatPassword,
-                        onToggle: () {
-                          setState(() {
-                            obscureRepeatPassword = !obscureRepeatPassword;
-                          });
-                        },
-                        validator: (value) {
-                          if (value != passwordController.text) {
-                            return 'Password tidak cocok';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      RichText(
-                        text: TextSpan(
-                          style: const TextStyle(color: Colors.black87, fontSize: 14),
+      child: showLoading
+          ? const LoadingOverlay(
+              lottiePath: 'assets/lottie/loading_animation.json',
+              message: 'Sedang memproses registrasi...',
+            )
+          : Scaffold(
+              body: SafeArea(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 16),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TextSpan(text: 'Dengan ini saya menyetujui segala '),
-                            TextSpan(
-                              text: 'Syarat dan Ketentuan',
-                              style: const TextStyle(color: Colors.blue),
-                              recognizer: TapGestureRecognizer()..onTap = () {},
+                            IconButton(
+                              icon: const Icon(Icons.arrow_back_ios),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                             ),
-                            const TextSpan(text: ' serta '),
-                            TextSpan(
-                              text: 'Kebijakan Privasi',
-                              style: const TextStyle(color: Colors.blue),
-                              recognizer: TapGestureRecognizer()..onTap = () {},
+                            const SizedBox(height: 10),
+                            const Center(
+                              child: Text(
+                                'Set Password',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
+                            const SizedBox(height: 100),
+                            _buildPasswordField(
+                              controller: passwordController,
+                              label: 'Masukan Password',
+                              obscure: obscurePassword,
+                              onToggle: () {
+                                setState(() {
+                                  obscurePassword = !obscurePassword;
+                                });
+                              },
+                            ),
+                            _buildPasswordField(
+                              controller: repeatPasswordController,
+                              label: 'Ulangi Password',
+                              obscure: obscureRepeatPassword,
+                              onToggle: () {
+                                setState(() {
+                                  obscureRepeatPassword =
+                                      !obscureRepeatPassword;
+                                });
+                              },
+                              validator: (value) {
+                                if (value != passwordController.text) {
+                                  return 'Password tidak cocok';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                    color: Colors.black87, fontSize: 14),
+                                children: [
+                                  const TextSpan(
+                                      text:
+                                          'Dengan ini saya menyetujui segala '),
+                                  TextSpan(
+                                    text: 'Syarat dan Ketentuan',
+                                    style: const TextStyle(color: Colors.blue),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {},
+                                  ),
+                                  const TextSpan(text: ' serta '),
+                                  TextSpan(
+                                    text: 'Kebijakan Privasi',
+                                    style: const TextStyle(color: Colors.blue),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 60),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Kembali',
+                                    style: TextStyle(fontSize: 16)),
+                                isLoading
+                                    ? const CircularProgressIndicator()
+                                    : ElevatedButton(
+                                        onPressed: _submitRegistration,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.lightBlue,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 12),
+                                        ),
+                                        child: const Text('Kirim'),
+                                      ),
+                              ],
+                            )
                           ],
                         ),
                       ),
-                      const SizedBox(height: 60),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Kembali', style: TextStyle(fontSize: 16)),
-                          isLoading
-                              ? const CircularProgressIndicator()
-                              : ElevatedButton(
-                                  onPressed: _submitRegistration,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.lightBlue,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 30, vertical: 12),
-                                  ),
-                                  child: const Text('Kirim'),
-                                ),
-                        ],
-                      )
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 
@@ -341,7 +346,8 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           suffixIcon: IconButton(
             icon: Icon(obscure ? Icons.visibility_off : Icons.visibility),
             onPressed: onToggle,

@@ -4,12 +4,12 @@ import 'package:get/get.dart' as gets;
 
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
+import 'package:mobile_umroh_v2/model/package/package_model.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/data_order_page.dart';
 
 class OrderPage extends StatefulWidget {
-  final Map<String, dynamic> package;
-  final int? price;
-  const OrderPage({super.key, required this.package, this.price});
+  final DataPackage? package;
+  const OrderPage({super.key, required this.package});
 
   @override
   State<OrderPage> createState() => _OrderPageState();
@@ -172,7 +172,7 @@ class _OrderPageState extends State<OrderPage> {
         _buildFullWidthInfoBox(
           title: "Harga Paket",
           value: rupiahConverter
-              .formatToRupiah(int.parse(widget.package["price"].toString())),
+              .formatToRupiah(int.parse(widget.package!.harga.toString())),
         ),
       ],
     );
@@ -312,7 +312,7 @@ class _OrderPageState extends State<OrderPage> {
         const Text("Total", style: TextStyle(color: Colors.black54)),
         Text(
             rupiahConverter.formatToRupiah(
-                int.parse(widget.package["price"].toString()) * counter),
+                int.parse(widget.package!.harga.toString()) * counter),
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const Text("Note : Satu kamar terdiri dari 4 orang",
             style: TextStyle(fontSize: 12))
@@ -458,6 +458,7 @@ class _OrderPageState extends State<OrderPage> {
           ],
         );
       }).toList(),
+      
     );
   }
 
