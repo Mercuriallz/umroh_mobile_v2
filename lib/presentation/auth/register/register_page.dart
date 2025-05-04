@@ -196,6 +196,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 onTap: () async {
                   final XFile? image =
                       await picker.pickImage(source: ImageSource.gallery);
+                  if(!context.mounted) {
+                    return;
+                  }
                   Navigator.pop(context);
                   if (image != null) {
                     _handlePickedFile(File(image.path), label);

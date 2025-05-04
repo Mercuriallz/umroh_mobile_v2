@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart' as getx;
+
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
@@ -14,12 +16,9 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final secureStorage = SecureStorageService();
-
   String? username;
-
- 
 
   void loadUsername() async {
     final name = await secureStorage.read("name");
@@ -27,17 +26,36 @@ class _HomePageState extends State<HomePage> {
       username = name.toString();
     });
   }
+  
+  void refreshData() {
+    context.read<PackageBloc>().getPackage();
+  }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     loadUsername();
-    context.read<PackageBloc>().getPackage();
+    refreshData();
+  }
+  
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      refreshData();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final rupiahConverter = RupiahConverter();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFF),
@@ -54,338 +72,382 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 20),
-              _buildUserCard(),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(username ?? "-",
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        const Text("000123",
+                            style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      ],
+                    ),
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.network(
+                      'https://i.pravatar.cc/100',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                ],
+              ),
               const SizedBox(height: 20),
-              _buildMenuGrid(),
+              GridView.builder(
+                itemCount: 8,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                ),
+                itemBuilder: (context, i) {
+                  final menu = [
+                    {"title": "Umrah", "icon": "assets/icons/blocks 1.png"},
+                    {"title": "Bimbingan", "icon": "assets/icons/blocks 1.png"},
+                    {"title": "Fitur Haji", "icon": "assets/icons/blocks 1.png"},
+                    {"title": "Kurs & Mata Uang", "icon": "assets/icons/blocks 1.png"},
+                    {"title": "Info Cuaca", "icon": "assets/icons/blocks 1.png"},
+                    {"title": "Jadwal Sholat", "icon": "assets/icons/blocks 1.png"},
+                    {"title": "Al-qur'an", "icon": "assets/icons/blocks 1.png"},
+                    {"title": "Lainnya", "icon": "assets/icons/blocks 1.png"},
+                  ];
+                  return Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 6),
+                          ],
+                        ),
+                        child: Image.asset(menu[i]['icon']!, width: 28, height: 28),
+                      ),
+                      const SizedBox(height: 6),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          menu[i]['title']!,
+                          style: const TextStyle(fontSize: 12),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
               const SizedBox(height: 30),
-              _buildPaketUmrahSection(size),
+              BlocBuilder<PackageBloc, PackageState>(
+                builder: (context, state) {
+                  if (state is PackageLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is PackageLoaded) {
+                    final packages = state.package;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Paket Umrah",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600)),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: size.height * 0.45,
+                          child: packages.isEmpty
+                              ? const Center(child: Text("Tidak ada paket tersedia"))
+                              : ListView.builder(
+                                  itemCount: packages.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, i) {
+                                    final package = packages[i];
+                                    return Container(
+                                      width: size.width * 0.75,
+                                      margin: const EdgeInsets.only(right: 16),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black12,
+                                              blurRadius: 10)
+                                        ],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.vertical(
+                                                    top: Radius.circular(20)),
+                                            child: Image.network(
+                                              package.imgThumbnail ?? "",
+                                              width: double.infinity,
+                                              height: size.height * 0.2,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  const Icon(Icons.image),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(package.namaPaket ?? "-",
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                const SizedBox(height: 6),
+                                                Row(
+                                                  children: [
+                                                    if (package.arrFeature !=
+                                                            null &&
+                                                        package.arrFeature!
+                                                            .contains("Pesawat"))
+                                                      Row(
+                                                        children: const [
+                                                          Icon(Icons.flight,
+                                                              size: 16),
+                                                          SizedBox(width: 4),
+                                                          Text("Pesawat",
+                                                              style: TextStyle(
+                                                                  fontSize: 12)),
+                                                        ],
+                                                      ),
+                                                    const SizedBox(width: 8),
+                                                    if (package.arrFeature !=
+                                                            null &&
+                                                        package.arrFeature!
+                                                            .contains("Antar"))
+                                                      Row(
+                                                        children: const [
+                                                          Icon(Icons.directions_car,
+                                                              size: 16),
+                                                          SizedBox(width: 4),
+                                                          Text("Antar",
+                                                              style: TextStyle(
+                                                                  fontSize: 12)),
+                                                        ],
+                                                      ),
+                                                    const SizedBox(width: 8),
+                                                    if (package.arrFeature !=
+                                                            null &&
+                                                        package.arrFeature!
+                                                            .contains("Hotel"))
+                                                      Row(
+                                                        children: const [
+                                                          Icon(Icons.hotel,
+                                                              size: 16),
+                                                          SizedBox(width: 4),
+                                                          Text("Hotel",
+                                                              style: TextStyle(
+                                                                  fontSize: 12)),
+                                                        ],
+                                                      ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 12),
+                                                const Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text("Mulai dari",
+                                                        style: TextStyle(
+                                                            fontSize: 12)),
+                                                    Text("Seat / Bangku :",
+                                                        style: TextStyle(
+                                                            fontSize: 12)),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      rupiahConverter
+                                                          .formatToRupiah(
+                                                              int.parse(package
+                                                                      .harga ??
+                                                                  "0")),
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Color(0xFF3A7AFB),
+                                                      ),
+                                                    ),
+                                                     Text(
+                                                      package.planeSeat.toString(),
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 12),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    IconButton(
+                                                      onPressed: () {},
+                                                      icon: const Icon(
+                                                          Icons.bookmark_border,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    Expanded(
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          Get.to(
+                                                            transition: getx.Transition.rightToLeft,
+                                                            () => DetailPage(
+                                                              id: package.paketId
+                                                                  .toString()))?.then((_) {
+                                                            refreshData();
+                                                          });
+                                                          
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              const Color(
+                                                                  0xFF70B8FF),
+                                                          minimumSize:
+                                                              const Size
+                                                                  .fromHeight(
+                                                                      40),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        32),
+                                                          ),
+                                                        ),
+                                                        child: const Text(
+                                                            "Detail Paket",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                        ),
+                      ],
+                    );
+                  } else if (state is PackageError) {
+                    return Text("Terjadi kesalahan: ${state.message}");
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
               const SizedBox(height: 20),
-              _buildJadwalSholat(),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(color: Colors.black12, blurRadius: 6)
+                  ],
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.location_pin,
+                            size: 16, color: Colors.grey),
+                        SizedBox(width: 4),
+                        Text("Bojong", style: TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                    Text("Isya",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text("19:19 Malam",
+                        style: TextStyle(color: Colors.black54)),
+                  ],
+                ),
+              ),
               const SizedBox(height: 20),
-              _buildPanduanUmrah(),
+              const Text("Panduan Umrah",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+              const SizedBox(height: 12),
+              Column(
+                children: List.generate(3, (index) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black12, blurRadius: 6)
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.grey[300],
+                        ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  "Tata Cara Menjalankan Umrah yang baik dan benar",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500)),
+                              SizedBox(height: 6),
+                              Text("Durasi 10 jam",
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey)),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ),
               const SizedBox(height: 80),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildUserCard() {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(username ?? "-",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              Text("000123",
-                  style: TextStyle(fontSize: 12, color: Colors.grey)),
-            ],
-          ),
-        ),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: Image.network(
-            'https://i.pravatar.cc/100',
-            width: 50,
-            height: 50,
-            fit: BoxFit.cover,
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _buildMenuGrid() {
-    List<Map<String, String>> menu = [
-      {"title": "Umrah", "icon": "assets/icons/blocks 1.png"},
-      {"title": "Bimbingan", "icon": "assets/icons/blocks 1.png"},
-      {"title": "Fitur Haji", "icon": "assets/icons/blocks 1.png"},
-      {"title": "Kurs & Mata Uang", "icon": "assets/icons/blocks 1.png"},
-      {"title": "Info Cuaca", "icon": "assets/icons/blocks 1.png"},
-      {"title": "Jadwal Sholat", "icon": "assets/icons/blocks 1.png"},
-      {"title": "Al-qur’an", "icon": "assets/icons/blocks 1.png"},
-      {"title": "Lainnya", "icon": "assets/icons/blocks 1.png"},
-    ];
-
-    return GridView.builder(
-      itemCount: menu.length,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        childAspectRatio: 1,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemBuilder: (context, i) {
-        return Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(color: Colors.black12, blurRadius: 6),
-                ],
-              ),
-              child: Image.asset(menu[i]['icon']!, width: 28, height: 28),
-            ),
-            const SizedBox(height: 6),
-            Align(
-                alignment: Alignment.center,
-                child: Text(
-                  menu[i]['title']!,
-                  style: const TextStyle(fontSize: 12),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                )),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildPaketUmrahSection(Size size) {
-    final rupiahConverter = RupiahConverter();
-
-    return BlocBuilder<PackageBloc, PackageState>(
-      builder: (context, state) {
-        if (state is PackageLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is PackageLoaded) {
-          final packages = state.package;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Paket Umrah",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: size.height * 0.45,
-                child: ListView.builder(
-                  itemCount: packages.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, i) {
-                    final package = packages[i];
-                    return Container(
-                      width: size.width * 0.75,
-                      margin: const EdgeInsets.only(right: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 10)
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(20)),
-                            child: Image.network(
-                              package.imgThumbnail ?? "",
-                              width: double.infinity,
-                              height: size.height * 0.2,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.image),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(package.namaPaket ?? "-",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                const SizedBox(height: 6),
-                                Row(
-                                  children: [
-                                    if (package.arrFeature!.contains("Pesawat"))
-                                      _buildIconText(Icons.flight, "Pesawat"),
-                                    if (package.arrFeature!.contains("Antar"))
-                                      _buildIconText(
-                                          Icons.directions_car, "Antar"),
-                                    if (package.arrFeature!.contains("Hotel"))
-                                      _buildIconText(Icons.hotel, "Hotel"),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Mulai dari",
-                                        style: TextStyle(fontSize: 12)),
-                                    Text("Cicilan :",
-                                        style: TextStyle(fontSize: 12)),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      rupiahConverter.formatToRupiah(
-                                          int.parse(package.harga ?? "0")),
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF3A7AFB),
-                                      ),
-                                    ),
-                                    const Text(
-                                        "Sampai 12 bulan", // asumsi static
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.bookmark_border,
-                                          color: Colors.grey),
-                                    ),
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          Get.to(() => DetailPage(
-                                            package: package,
-                                            // package: package,
-                                            // harga: package.harga,
-                                          ));
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              const Color(0xFF70B8FF),
-                                          minimumSize:
-                                              const Size.fromHeight(40),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(32),
-                                          ),
-                                        ),
-                                        child: const Text("Detail Paket",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        } else if (state is PackageError) {
-          return Text("Terjadi kesalahan: ${state.message}");
-        } else {
-          return const SizedBox();
-        }
-      },
-    );
-  }
-
-  Widget _buildIconText(IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12),
-      child: Row(
-        children: [
-          Icon(icon, size: 16),
-          const SizedBox(width: 4),
-          Text(text, style: const TextStyle(fontSize: 12)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildJadwalSholat() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-      ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.location_pin, size: 16, color: Colors.grey),
-              SizedBox(width: 4),
-              Text("Bojong", style: TextStyle(fontSize: 12)),
-            ],
-          ),
-          Text("Isya", style: TextStyle(fontWeight: FontWeight.bold)),
-          Text("19:19 Malam", style: TextStyle(color: Colors.black54)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPanduanUmrah() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text("Panduan Umrah",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-        const SizedBox(height: 12),
-        Column(
-          children: List.generate(3, (index) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    color: Colors.grey[300],
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Tata Cara Menjalankan Umrah yang baik dan benar",
-                            style: TextStyle(fontWeight: FontWeight.w500)),
-                        SizedBox(height: 6),
-                        Text("Durasi 10 jam",
-                            style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
-          }),
-        )
-      ],
     );
   }
 }
