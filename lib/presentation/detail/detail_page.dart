@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
+import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
 
 class DetailPage extends StatefulWidget {
   final String? id;
@@ -38,12 +40,14 @@ class _DetailPageState extends State<DetailPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 16),
                       child: Row(
                         children: [
                           GestureDetector(
                             onTap: () => Navigator.pop(context),
-                            child: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.black87),
+                            child: const Icon(Icons.arrow_back_ios,
+                                size: 20, color: Colors.black87),
                           ),
                           const SizedBox(width: 8),
                           const Text(
@@ -70,18 +74,22 @@ class _DetailPageState extends State<DetailPage> {
                     const SizedBox(height: 12),
                     Text(
                       package.namaPaket ?? "-",
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 6),
-                    package.isVip == true ?  Row(
-                      children: [
-                        Icon(Icons.star, size: 18, color: Colors.amber),
-                        SizedBox(width: 4),
-                        Text("VIP", style: TextStyle(color: Colors.amber)),
-                      ],
-                    ) : Text("Reguler"),
+                    package.isVip == true
+                        ? Row(
+                            children: [
+                              Icon(Icons.star, size: 18, color: Colors.amber),
+                              SizedBox(width: 4),
+                              Text("VIP",
+                                  style: TextStyle(color: Colors.amber)),
+                            ],
+                          )
+                        : Text("Reguler"),
                     const SizedBox(height: 12),
-                    Row(
+                     Row(
                       children: [
                         if (package.arrFeature?.contains("Pesawat") ?? false)
                           _buildIconText(Icons.flight, "Pesawat"),
@@ -100,9 +108,11 @@ class _DetailPageState extends State<DetailPage> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const Text("Deskripsi Singkat", style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text("Deskripsi Singkat",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
-                    Text(package.desc ?? "-", style: const TextStyle(color: Colors.black87)),
+                    Text(package.desc ?? "-",
+                        style: const TextStyle(color: Colors.black87)),
                     const SizedBox(height: 16),
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -112,19 +122,25 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.flight, color: Colors.black, size: 24),
+                          const Icon(Icons.flight,
+                              color: Colors.black, size: 24),
                           const SizedBox(width: 12),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: const [
-                              Text("Penerbangan", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                              Text("Penerbangan",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14)),
                               SizedBox(height: 4),
                               Text.rich(
                                 TextSpan(
                                   children: [
                                     TextSpan(
                                       text: "Saudi Airlines",
-                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                     TextSpan(
                                       text: " - Bandara Soekarno Hatta",
@@ -140,7 +156,8 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const Text("Perjalanan", style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text("Perjalanan",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
                     Text(package.jadwalPerjalanan ?? "-"),
                     const Text(
@@ -148,17 +165,22 @@ class _DetailPageState extends State<DetailPage> {
                       style: TextStyle(color: Colors.grey),
                     ),
                     const SizedBox(height: 25),
-                    const Text("Fasilitas Hotel", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    const Text("Fasilitas Hotel",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 12),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(16),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: SizedBox(
+                            width: 70,
+                            height: 70,
+                            child: Image.network(
+                              'https://i.pravatar.cc/100', // Ganti dengan URL atau Image.asset sesuai kebutuhan
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -166,17 +188,23 @@ class _DetailPageState extends State<DetailPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Hotel Hilton Makkah",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                              Text(
+                                package.tHotel![0].name ??
+                                    "Hotel Belum Ditemukan",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(height: 4),
-                              const Row(
-                                children: [
-                                  Icon(Icons.star, color: Colors.amber, size: 18),
-                                  SizedBox(width: 4),
-                                  Text("5", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                                ],
+                              Row(
+                                children: List.generate(5, (index) {
+                                  if (index < package.tHotel![0].rate!) {
+                                    return Icon(Icons.star,
+                                        color: Colors.amber);
+                                  } else {
+                                    return Icon(Icons.star_border,
+                                        color: Colors.amber);
+                                  }
+                                }),
                               ),
                               const SizedBox(height: 8),
                               Wrap(
@@ -201,11 +229,13 @@ class _DetailPageState extends State<DetailPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Mulai dari', style: TextStyle(fontSize: 16)),
+                            const Text('Mulai dari',
+                                style: TextStyle(fontSize: 16)),
                             const SizedBox(height: 4),
                             Text(
                               package.harga != null
-                                  ? RupiahConverter().formatToRupiah(int.parse(package.harga.toString()))
+                                  ? RupiahConverter().formatToRupiah(
+                                      int.parse(package.harga.toString()))
                                   : 'Rp. 0',
                               style: const TextStyle(
                                 fontSize: 22,
@@ -214,19 +244,24 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            const Text('12 bulan', style: TextStyle(fontWeight: FontWeight.w600)),
+                             Text("${package.planeSeat} Seat/Bangku",
+                                style: TextStyle(fontWeight: FontWeight.w600)),
                           ],
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            // Get.to(() => OrderPage(package: package));
+                            Get.to(() => OrderPage(id: package.paketId.toString()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF75B6FF),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 14),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
                           ),
-                          child: const Text('Pesan Sekarang', style: TextStyle(color: Colors.white, fontSize: 16)),
+                          child: const Text('Pesan Sekarang',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
                         ),
                       ],
                     ),

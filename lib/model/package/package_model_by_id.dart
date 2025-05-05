@@ -41,6 +41,7 @@ class DataPackageById {
   bool? isVip;
   int? planeSeat;
   List<TPaketFasilitas>? tPaketFasilitas;
+  List<THotel>? tHotel;
 
   DataPackageById(
       {this.paketId,
@@ -57,7 +58,8 @@ class DataPackageById {
       this.imgThumbnail,
       this.isVip,
       this.planeSeat,
-      this.tPaketFasilitas});
+      this.tPaketFasilitas,
+      this.tHotel});
 
   DataPackageById.fromJson(Map<String, dynamic> json) {
     paketId = json['paket_id'];
@@ -78,6 +80,12 @@ class DataPackageById {
       tPaketFasilitas = <TPaketFasilitas>[];
       json['t_paket_fasilitas'].forEach((v) {
         tPaketFasilitas!.add(TPaketFasilitas.fromJson(v));
+      });
+    }
+    if (json['t_hotel'] != null) {
+      tHotel = <THotel>[];
+      json['t_hotel'].forEach((v) {
+        tHotel!.add(THotel.fromJson(v));
       });
     }
   }
@@ -101,6 +109,9 @@ class DataPackageById {
     if (tPaketFasilitas != null) {
       data['t_paket_fasilitas'] =
           tPaketFasilitas!.map((v) => v.toJson()).toList();
+    }
+    if (tHotel != null) {
+      data['t_hotel'] = tHotel!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -127,6 +138,59 @@ class TPaketFasilitas {
     data['paket_id'] = paketId;
     data['desc'] = desc;
     data['created_at'] = createdAt;
+    return data;
+  }
+}
+
+class THotel {
+  int? hotelId;
+  String? name;
+  int? rate;
+  String? address;
+  List<String>? additionalInfo;
+  bool? isUpgradable;
+  String? priceUpgrade;
+  String? imgThumbnail;
+  String? createdAt;
+  int? paketId;
+
+  THotel(
+      {this.hotelId,
+      this.name,
+      this.rate,
+      this.address,
+      this.additionalInfo,
+      this.isUpgradable,
+      this.priceUpgrade,
+      this.imgThumbnail,
+      this.createdAt,
+      this.paketId});
+
+  THotel.fromJson(Map<String, dynamic> json) {
+    hotelId = json['hotel_id'];
+    name = json['name'];
+    rate = json['rate'];
+    address = json['address'];
+    additionalInfo = json['additional_info'].cast<String>();
+    isUpgradable = json['is_upgradable'];
+    priceUpgrade = json['price_upgrade'];
+    imgThumbnail = json['img_thumbnail'];
+    createdAt = json['created_at'];
+    paketId = json['paket_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['hotel_id'] = hotelId;
+    data['name'] = name;
+    data['rate'] = rate;
+    data['address'] = address;
+    data['additional_info'] = additionalInfo;
+    data['is_upgradable'] = isUpgradable;
+    data['price_upgrade'] = priceUpgrade;
+    data['img_thumbnail'] = imgThumbnail;
+    data['created_at'] = createdAt;
+    data['paket_id'] = paketId;
     return data;
   }
 }
