@@ -123,8 +123,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         child: ElevatedButton(
                           onPressed: navigateToTambahJemaah,
                           style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.blue,
-                            backgroundColor: Colors.blue.shade100,
+                            backgroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(24)),
                           ),

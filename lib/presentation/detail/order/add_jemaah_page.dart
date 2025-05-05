@@ -28,11 +28,20 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Jema’ah")),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: SafeArea(
         child: Column(
           children: [
+              const SizedBox(height: 16),
+              Row(
+                children: const [
+                  Icon(Icons.arrow_back),
+                  SizedBox(width: 8),
+                  Text("Jema'ah",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              const SizedBox(height: 20,),
             DropdownButtonFormField<String>(
               items: typeJemaah.map((String item) {
                 return DropdownMenuItem<String>(
@@ -50,17 +59,17 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
                 });
               },
               decoration: InputDecoration(
-                 hintText: "Pilih Type Jemaah",
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
+                hintText: "Pilih Type Jemaah",
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -69,10 +78,9 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
               decoration: InputDecoration(
                 hintText: "Nama Lengkap",
                 border: OutlineInputBorder(
-                   borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Colors.grey),
-                )
-                ,
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -92,19 +100,19 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
                   selectedGender = value;
                 });
               },
-              decoration:  InputDecoration(
-        hintText: "Pilih Jenis Kelamin",
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-      ),
+              decoration: InputDecoration(
+                hintText: "Pilih Jenis Kelamin",
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             SizedBox(

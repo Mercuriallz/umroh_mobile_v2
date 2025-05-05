@@ -1,5 +1,7 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/constant/dotted.dart';
 
 class ResultTransactionPage extends StatefulWidget {
   const ResultTransactionPage({super.key});
@@ -83,15 +85,41 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
           const SizedBox(height: 16),
           Center(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text("Jakarta", style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(width: 8),
-                Icon(Icons.flight, size: 16),
-                SizedBox(width: 8),
-                Text("Mekah", style: TextStyle(fontWeight: FontWeight.bold)),
-              ],
-            ),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          "Jakarta",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 6),
+         DotCircle(),
+        const SizedBox(width: 6),
+        const Flexible(
+          child: DottedLine(
+            dashColor: Colors.grey,
+            dashLength: 4,
+            lineThickness: 1,
+          ),
+        ),
+        const SizedBox(width: 6),
+        const Icon(Icons.flight, size: 20, color: Colors.black),
+        const SizedBox(width: 6),
+        const Flexible(
+          child: DottedLine(
+            dashColor: Colors.grey,
+            dashLength: 4,
+            lineThickness: 1,
+          ),
+        ),
+        const SizedBox(width: 6),
+        const DotCircle(),
+        const SizedBox(width: 6),
+        const Text(
+          "Mekah",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ],
+    )
           ),
           const SizedBox(height: 16),
           _buildInfoItem("Harga Paket", "Rp. 33.900.000"),
