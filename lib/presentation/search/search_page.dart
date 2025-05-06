@@ -157,7 +157,7 @@ class SearchPage extends StatelessWidget {
                 const SizedBox(height: 8),
                 const Row(
                   children: [
-                    Icon(Icons.flight, size: 16),
+                    Icon(Icons.flight_takeoff, size: 16),
                     SizedBox(width: 4),
                     Text("Pesawat"),
                     SizedBox(width: 12),

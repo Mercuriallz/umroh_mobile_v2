@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       username = name.toString();
     });
   }
-  
+
   void refreshData() {
     context.read<PackageBloc>().getPackage();
   }
@@ -38,13 +38,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     loadUsername();
     refreshData();
   }
-  
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-  
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -113,10 +113,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   final menu = [
                     {"title": "Umrah", "icon": "assets/icons/blocks 1.png"},
                     {"title": "Bimbingan", "icon": "assets/icons/blocks 1.png"},
-                    {"title": "Fitur Haji", "icon": "assets/icons/blocks 1.png"},
-                    {"title": "Kurs & Mata Uang", "icon": "assets/icons/blocks 1.png"},
-                    {"title": "Info Cuaca", "icon": "assets/icons/blocks 1.png"},
-                    {"title": "Jadwal Sholat", "icon": "assets/icons/blocks 1.png"},
+                    {
+                      "title": "Fitur Haji",
+                      "icon": "assets/icons/blocks 1.png"
+                    },
+                    {
+                      "title": "Kurs & Mata Uang",
+                      "icon": "assets/icons/blocks 1.png"
+                    },
+                    {
+                      "title": "Info Cuaca",
+                      "icon": "assets/icons/blocks 1.png"
+                    },
+                    {
+                      "title": "Jadwal Sholat",
+                      "icon": "assets/icons/blocks 1.png"
+                    },
                     {"title": "Al-qur'an", "icon": "assets/icons/blocks 1.png"},
                     {"title": "Lainnya", "icon": "assets/icons/blocks 1.png"},
                   ];
@@ -131,7 +143,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             BoxShadow(color: Colors.black12, blurRadius: 6),
                           ],
                         ),
-                        child: Image.asset(menu[i]['icon']!, width: 28, height: 28),
+                        child: Image.asset(menu[i]['icon']!,
+                            width: 28, height: 28),
                       ),
                       const SizedBox(height: 6),
                       Align(
@@ -165,7 +178,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         SizedBox(
                           height: size.height * 0.45,
                           child: packages.isEmpty
-                              ? const Center(child: Text("Tidak ada paket tersedia"))
+                              ? const Center(
+                                  child: Text("Tidak ada paket tersedia"))
                               : ListView.builder(
                                   itemCount: packages.length,
                                   scrollDirection: Axis.horizontal,
@@ -215,15 +229,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                     if (package.arrFeature !=
                                                             null &&
                                                         package.arrFeature!
-                                                            .contains("Pesawat"))
+                                                            .contains(
+                                                                "Pesawat"))
                                                       Row(
                                                         children: const [
-                                                          Icon(Icons.flight,
+                                                          Icon(
+                                                              Icons
+                                                                  .flight_takeoff,
                                                               size: 16),
                                                           SizedBox(width: 4),
                                                           Text("Pesawat",
                                                               style: TextStyle(
-                                                                  fontSize: 12)),
+                                                                  fontSize:
+                                                                      12)),
                                                         ],
                                                       ),
                                                     const SizedBox(width: 8),
@@ -233,12 +251,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                             .contains("Antar"))
                                                       Row(
                                                         children: const [
-                                                          Icon(Icons.directions_car,
+                                                          Icon(
+                                                              Icons
+                                                                  .directions_car,
                                                               size: 16),
                                                           SizedBox(width: 4),
                                                           Text("Antar",
                                                               style: TextStyle(
-                                                                  fontSize: 12)),
+                                                                  fontSize:
+                                                                      12)),
                                                         ],
                                                       ),
                                                     const SizedBox(width: 8),
@@ -253,7 +274,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                           SizedBox(width: 4),
                                                           Text("Hotel",
                                                               style: TextStyle(
-                                                                  fontSize: 12)),
+                                                                  fontSize:
+                                                                      12)),
                                                         ],
                                                       ),
                                                   ],
@@ -292,8 +314,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                             Color(0xFF3A7AFB),
                                                       ),
                                                     ),
-                                                     Text(
-                                                      package.planeSeat.toString(),
+                                                    Text(
+                                                      package.planeSeat
+                                                          .toString(),
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold),
@@ -316,13 +339,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                       child: ElevatedButton(
                                                         onPressed: () {
                                                           Get.to(
-                                                            transition: getx.Transition.rightToLeft,
-                                                            () => DetailPage(
-                                                              id: package.paketId
-                                                                  .toString()))?.then((_) {
+                                                              transition: getx
+                                                                  .Transition
+                                                                  .rightToLeft,
+                                                              () => DetailPage(
+                                                                  id: package
+                                                                      .paketId
+                                                                      .toString()))?.then(
+                                                              (_) {
                                                             refreshData();
                                                           });
-                                                          
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(
@@ -332,7 +358,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                           minimumSize:
                                                               const Size
                                                                   .fromHeight(
-                                                                      40),
+                                                                  40),
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             borderRadius:
@@ -377,23 +403,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black12, blurRadius: 6)
-                  ],
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.location_pin,
-                            size: 16, color: Colors.grey),
+                        Icon(Icons.location_pin, size: 16, color: Colors.grey),
                         SizedBox(width: 4),
                         Text("Bojong", style: TextStyle(fontSize: 12)),
                       ],
                     ),
-                    Text("Isya",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text("Isya", style: TextStyle(fontWeight: FontWeight.bold)),
                     Text("19:19 Malam",
                         style: TextStyle(color: Colors.black54)),
                   ],
@@ -429,8 +451,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             children: [
                               Text(
                                   "Tata Cara Menjalankan Umrah yang baik dan benar",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500)),
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w500)),
                               SizedBox(height: 6),
                               Text("Durasi 10 jam",
                                   style: TextStyle(

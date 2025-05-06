@@ -35,6 +35,9 @@ class _DetailPageState extends State<DetailPage> {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is PackageLoadedById) {
                 final package = state.packageId;
+                final features =
+                    package.arrFeature?.map((e) => e.toLowerCase()).toList() ??
+                        [];
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,14 +92,14 @@ class _DetailPageState extends State<DetailPage> {
                           )
                         : Text("Reguler"),
                     const SizedBox(height: 12),
-                     Row(
+                    Row(
                       children: [
-                        if (package.arrFeature?.contains("Pesawat") ?? false)
-                          _buildIconText(Icons.flight, "Pesawat"),
-                        if (package.arrFeature?.contains("Antar") ?? false)
+                        if (features.contains("pesawat"))
+                          _buildIconText(Icons.flight_takeoff, "Pesawat"),
+                        if (features.contains("antar"))
                           _buildIconText(Icons.directions_car, "Antar"),
-                        if (package.arrFeature?.contains("Hotel") ?? false)
-                          _buildIconText(Icons.hotel, "Hotel"),
+                        if (features.contains("hotel"))
+                          _buildIconText(Icons.hotel, "Hotel")
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -122,7 +125,7 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.flight,
+                          const Icon(Icons.flight_takeoff,
                               color: Colors.black, size: 24),
                           const SizedBox(width: 12),
                           Column(
@@ -244,13 +247,14 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                             ),
                             const SizedBox(height: 4),
-                             Text("${package.planeSeat} Seat/Bangku",
+                            Text("${package.planeSeat} Seat/Bangku",
                                 style: TextStyle(fontWeight: FontWeight.w600)),
                           ],
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            Get.to(() => OrderPage(id: package.paketId.toString()));
+                            Get.to(() =>
+                                OrderPage(id: package.paketId.toString()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF75B6FF),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
 import 'package:mobile_umroh_v2/presentation/detail/transaction/result_transaction_page.dart';
 import 'package:mobile_umroh_v2/presentation/home/home.dart';
 
@@ -42,7 +43,7 @@ class DetailOrderPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Card Paket
               Container(
                 padding: const EdgeInsets.all(12),
@@ -82,7 +83,8 @@ class DetailOrderPage extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.star, size: 16, color: Colors.amber),
+                              const Icon(Icons.star,
+                                  size: 16, color: Colors.amber),
                               const SizedBox(width: 4),
                               const Text('VIP', style: TextStyle(fontSize: 12)),
                             ],
@@ -90,7 +92,8 @@ class DetailOrderPage extends StatelessWidget {
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              const Icon(Icons.flight_takeoff, size: 16),
+                              const Icon(Icons.flight_takeoff,
+                                  size: 16),
                               const SizedBox(width: 8),
                               const Icon(Icons.directions_bus, size: 16),
                               const SizedBox(width: 8),
@@ -146,7 +149,8 @@ class DetailOrderPage extends StatelessWidget {
                     _buildTransactionItem('Hotel', 'Hotel Hilton Makkah (B-5)'),
                     _buildTransactionItem('Penerbangan', 'Saudi Airlines'),
                     _buildTransactionItem('Bandara', 'Soekarno Hatta (CGK)'),
-                    _buildTransactionItem('Tanggal Keberangkatan', '11 Desember 2025'),
+                    _buildTransactionItem(
+                        'Tanggal Keberangkatan', '11 Desember 2025'),
                     _buildTransactionItem('Tanggal Pemesanan', '11 April 2025'),
                     const Divider(height: 24),
                     _buildTransactionItem('Sub Harga', 'Rp. 67.800.000'),
@@ -197,7 +201,7 @@ class DetailOrderPage extends StatelessWidget {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        Get.offAll(HomePage());
+                        Get.offAll(BottomMain());
                       },
                       child: const Text('Selesai'),
                     ),
@@ -217,9 +221,12 @@ class DetailOrderPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child:  Text('Lihat Transaksi', style: TextStyle(
-                        color: ColorConstant.secondary100,
-                      ),),
+                      child: Text(
+                        'Lihat Transaksi',
+                        style: TextStyle(
+                          color: ColorConstant.secondary100,
+                        ),
+                      ),
                     ),
                   ),
                 ],

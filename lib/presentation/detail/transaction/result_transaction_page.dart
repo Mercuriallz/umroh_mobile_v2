@@ -20,7 +20,8 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   children: [
                     IconButton(
@@ -30,7 +31,8 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
                     const SizedBox(width: 8),
                     const Text(
                       "Detail",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -84,43 +86,42 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           const SizedBox(height: 16),
           Center(
-            child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          "Jakarta",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(width: 6),
-         DotCircle(),
-        const SizedBox(width: 6),
-        const Flexible(
-          child: DottedLine(
-            dashColor: Colors.grey,
-            dashLength: 4,
-            lineThickness: 1,
-          ),
-        ),
-        const SizedBox(width: 6),
-        const Icon(Icons.flight, size: 20, color: Colors.black),
-        const SizedBox(width: 6),
-        const Flexible(
-          child: DottedLine(
-            dashColor: Colors.grey,
-            dashLength: 4,
-            lineThickness: 1,
-          ),
-        ),
-        const SizedBox(width: 6),
-        const DotCircle(),
-        const SizedBox(width: 6),
-        const Text(
-          "Mekah",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ],
-    )
-          ),
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Jakarta",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 6),
+              DotCircle(),
+              const SizedBox(width: 6),
+              const Flexible(
+                child: DottedLine(
+                  dashColor: Colors.grey,
+                  dashLength: 4,
+                  lineThickness: 1,
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Icon(Icons.flight_takeoff, size: 20, color: Colors.black),
+              const SizedBox(width: 6),
+              const Flexible(
+                child: DottedLine(
+                  dashColor: Colors.grey,
+                  dashLength: 4,
+                  lineThickness: 1,
+                ),
+              ),
+              const SizedBox(width: 6),
+              const DotCircle(),
+              const SizedBox(width: 6),
+              const Text(
+                "Mekah",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          )),
           const SizedBox(height: 16),
           _buildInfoItem("Harga Paket", "Rp. 33.900.000"),
           _buildInfoItem("Jenis Paket", "VIP"),
@@ -191,10 +192,8 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
 
   Widget _buildExpandableTileList() {
     final items = {
-      "Itinerary":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-      "Fasilitas":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "Itinerary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "Fasilitas": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
       "Persyaratan Peserta":
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
       "Syarat dan Ketentuan":
@@ -218,78 +217,78 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
     );
   }
 
- Widget _buildStatusDokumenTab() {
-  final List<Map<String, dynamic>> users = [
-    {
-      "name": "Anthony Simmons",
-      "role": "Pemesan",
-      "remainingDocs": 6,
-    },
-    {
-      "name": "Mozea Moo",
-      "role": null,
-      "remainingDocs": 0,
-    },
-  ];
+  Widget _buildStatusDokumenTab() {
+    final List<Map<String, dynamic>> users = [
+      {
+        "name": "Anthony Simmons",
+        "role": "Pemesan",
+        "remainingDocs": 6,
+      },
+      {
+        "name": "Mozea Moo",
+        "role": null,
+        "remainingDocs": 0,
+      },
+    ];
 
-  return ListView.separated(
-    padding: const EdgeInsets.all(16),
-    itemCount: users.length,
-    separatorBuilder: (_, __) => const SizedBox(height: 12),
-    itemBuilder: (context, index) {
-      final user = users[index];
-      final bool isComplete = user['remainingDocs'] == 0;
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: users.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final user = users[index];
+        final bool isComplete = user['remainingDocs'] == 0;
 
-      return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 0.5,
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    user['name'],
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  if (user['role'] != null)
+        return Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          elevation: 0.5,
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
-                      user['role'],
+                      user['name'],
                       style: const TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
                     ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  const Text("Kelengkapan Dokumen : "),
-                  Text(
-                    isComplete
-                        ? "Dokumen lengkap!"
-                        : "${user['remainingDocs']} Dokumen tersisa",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: isComplete ? Colors.green : Colors.orange,
+                    if (user['role'] != null)
+                      Text(
+                        user['role'],
+                        style: const TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 14,
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Text("Kelengkapan Dokumen : "),
+                    Text(
+                      isComplete
+                          ? "Dokumen lengkap!"
+                          : "${user['remainingDocs']} Dokumen tersisa",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: isComplete ? Colors.green : Colors.orange,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 }

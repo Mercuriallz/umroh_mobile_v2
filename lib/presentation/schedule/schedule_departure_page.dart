@@ -22,7 +22,6 @@ class ScheduleDeparturePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -38,7 +37,8 @@ class ScheduleDeparturePage extends StatelessWidget {
                           children: [
                             const Text(
                               "Paket Umrah Desa - Termasuk Madinah",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             const SizedBox(height: 4),
                             const Text(
@@ -52,21 +52,28 @@ class ScheduleDeparturePage extends StatelessWidget {
                                 Text("Jakarta"),
                                 SizedBox(width: 8),
                                 Expanded(
-                                  child: Divider(color: Colors.grey, thickness: 1),
+                                  child:
+                                      Divider(color: Colors.grey, thickness: 1),
                                 ),
-                                Icon(Icons.flight, size: 24, color: Colors.black54),
+                                Icon(Icons.flight_takeoff,
+                                    size: 24, color: Colors.black54),
                                 Expanded(
-                                  child: Divider(color: Colors.grey, thickness: 1),
+                                  child:
+                                      Divider(color: Colors.grey, thickness: 1),
                                 ),
                                 SizedBox(width: 8),
                                 Text("Mekah"),
                               ],
                             ),
                             const SizedBox(height: 16),
-                            _buildInfoRow("Estimasi Berangkat", "11 Desember 2025"),
+                            _buildInfoRow(
+                                "Estimasi Berangkat", "11 Desember 2025"),
                             _buildInfoRow("Jumlah Jema'ah", "2"),
-                            _buildInfoRow("Penerbangan", "Bandara Soekarno Hatta (CGK)", isBold: true),
-                            _buildInfoRow("Status Dokumen", "Belum Lengkap", isWarning: true),
+                            _buildInfoRow(
+                                "Penerbangan", "Bandara Soekarno Hatta (CGK)",
+                                isBold: true),
+                            _buildInfoRow("Status Dokumen", "Belum Lengkap",
+                                isWarning: true),
                           ],
                         ),
                       ),
@@ -83,7 +90,8 @@ class ScheduleDeparturePage extends StatelessWidget {
                           children: [
                             const Text(
                               "Status Pembayaran",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             const SizedBox(height: 16),
                             const Text(
@@ -106,25 +114,28 @@ class ScheduleDeparturePage extends StatelessWidget {
                                 value: 10000000 / 31000000,
                                 minHeight: 6,
                                 backgroundColor: Colors.blue.shade100,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.blue),
                               ),
                             ),
                             const SizedBox(height: 16),
                             _buildInfoRow("Terkumpul", "Rp. 2.824.000"),
-                            _buildInfoRow("Selesaikan Sebelum", "11 November 2025"),
+                            _buildInfoRow(
+                                "Selesaikan Sebelum", "11 November 2025"),
                             const SizedBox(height: 16),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                onPressed: () {
-                                },
+                                onPressed: () {},
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24)),
                                 ),
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 12),
-                                  child: Text("Transaksi", style: TextStyle(color: Colors.white)),
+                                  child: Text("Transaksi",
+                                      style: TextStyle(color: Colors.white)),
                                 ),
                               ),
                             ),
@@ -149,15 +160,16 @@ class ScheduleDeparturePage extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFF6A62D),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24)),
                           ),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 12),
-                            child: Text("Ajukan Pengembalian Dana", style: TextStyle(color: Colors.white)),
+                            child: Text("Ajukan Pengembalian Dana",
+                                style: TextStyle(color: Colors.white)),
                           ),
                         ),
                       ),
@@ -170,12 +182,11 @@ class ScheduleDeparturePage extends StatelessWidget {
           ),
         ),
       ),
-
-     
     );
   }
 
-  Widget _buildInfoRow(String title, String value, {bool isBold = false, bool isWarning = false}) {
+  Widget _buildInfoRow(String title, String value,
+      {bool isBold = false, bool isWarning = false}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

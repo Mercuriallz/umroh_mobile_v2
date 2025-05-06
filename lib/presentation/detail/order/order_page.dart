@@ -129,7 +129,8 @@ class _OrderPageState extends State<OrderPage> {
                                     if (package.arrFeature
                                             ?.contains("Pesawat") ??
                                         false)
-                                      _buildIconText(Icons.flight, "Pesawat"),
+                                      _buildIconText(
+                                          Icons.flight_takeoff, "Pesawat"),
                                     if (package.arrFeature?.contains("Antar") ??
                                         false)
                                       _buildIconText(
@@ -280,11 +281,10 @@ class _OrderPageState extends State<OrderPage> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                     "${rupiahConverter.formatToRupiah(int.parse(package.harga.toString()))} / Paket(Orang)",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextConfig.fontTitle
-                                    ),
+                                        "${rupiahConverter.formatToRupiah(int.parse(package.harga.toString()))} / Paket(Orang)",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextConfig.fontTitle),
                                   ],
                                 ),
                               ),
@@ -674,54 +674,85 @@ class _OrderPageState extends State<OrderPage> {
               return Container();
             })),
       ),
-      bottomSheet: Container(
-        padding: const EdgeInsets.all(16),
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Icon(Icons.download),
-            const Icon(Icons.chat_bubble_outline),
-            ElevatedButton(
-              onPressed: () {
-                if (nameController.text.isEmpty) {
-                  gets.Get.snackbar(
-                      "Nama Kosong", "Nama tidak boleh kosong, Harap diisi!",
-                      backgroundColor: Colors.red,
-                      colorText: ColorConstant.secondary100,
-                      snackPosition: SnackPosition.BOTTOM);
-                  return;
-                } else if (selectedGender == null) {
-                  gets.Get.snackbar("Jenis Kelamin Kosong",
-                      "Jenis kelamin tidak boleh kosong, Harap dipilih!",
-                      backgroundColor: Colors.red,
-                      colorText: ColorConstant.secondary100,
-                      snackPosition: SnackPosition.BOTTOM);
-                  return;
-                } else {
-                  Get.to(
-                      () => DataOrderPage(
-                            namaPemesan: nameController.text,
-                            jenisKelamin: selectedGender!,
-                            totalOrang: counter,
-                          ),
-                      transition: gets.Transition.rightToLeft);
-                }
-              },
-               style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF75B6FF),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 14),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                          child: const Text('Pesan Sekarang',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
-              
+      bottomSheet: BlocBuilder<PackageBloc, PackageState>(
+        builder: (context, state) {
+          if (state is PackageLoadedById) {
+            final package = state.packageId;
+
+            return Container(
+              padding: const EdgeInsets.all(16),
+              color: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Icon(Icons.download),
+                  const Icon(Icons.chat_bubble_outline),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (nameController.text.isEmpty) {
+                        gets.Get.snackbar("Nama Kosong",
+                            "Nama tidak boleh kosong, Harap diisi!",
+                            backgroundColor: Colors.red,
+                            colorText: ColorConstant.secondary100,
+                            snackPosition: SnackPosition.BOTTOM);
+                        return;
+                      } else if (selectedGender == null) {
+                        gets.Get.snackbar("Jenis Kelamin Kosong",
+                            "Jenis kelamin tidak boleh kosong, Harap dipilih!",
+                            backgroundColor: Colors.red,
+                            colorText: ColorConstant.secondary100,
+                            snackPosition: SnackPosition.BOTTOM);
+                        return;
+                      } else {
+                        Get.to(
+                            () => DataOrderPage(
+                                  namaPemesan: nameController.text,
+                                  jenisKelamin: selectedGender!,
+                                  totalOrang: counter,
+                                  id: package.paketId,
+                                ),
+                            transition: gets.Transition.rightToLeft);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF75B6FF),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                    child: const Text('Pesan Sekarang',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ),
+                ],
+              ),
+            );
+          }
+          // Show a loading indicator or empty container while waiting for the data
+          return Container(
+            padding: const EdgeInsets.all(16),
+            color: Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Icon(Icons.download),
+                const Icon(Icons.chat_bubble_outline),
+                ElevatedButton(
+                  onPressed: null, // Disabled while data is loading
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                  child: const Text('Pesan Sekarang',
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/loading_page.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/add_jemaah_page.dart';
@@ -11,6 +14,7 @@ class DataOrderPage extends StatefulWidget {
   final String? typeJemaah;
   final int? totalOrang;
   final int? totalDipilih;
+  final int? id;
 
   const DataOrderPage({
     super.key,
@@ -19,6 +23,7 @@ class DataOrderPage extends StatefulWidget {
     this.typeJemaah,
     required this.totalOrang,
     this.totalDipilih,
+    required this.id
   });
 
   @override
@@ -50,6 +55,12 @@ class _DataOrderPageState extends State<DataOrderPage> {
         jemaahList.add(result);
       });
     }
+  }
+
+  @override 
+  void initState() {
+    super.initState();
+    context.read<PackageBloc>().getPackageById(widget.id.toString());
   }
 
   @override
@@ -184,32 +195,44 @@ class _DataOrderPageState extends State<DataOrderPage> {
   }
 
   Widget _buildBookingInfoSection() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Informasi Pemesanan",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(height: 12),
-          _buildInfoItem("Kode Paket", "UMR000131", isLink: true),
-          _buildInfoItem(
-              "Nama Paket", "Paket Umrah Desa - Termasuk Madinah"),
-          _buildInfoItem("Jenis Paket", "VIP"),
-          _buildInfoItem("Pelaksanaan", "11 Desember 2025 - 14 Desember 2025"),
-          const SizedBox(height: 8),
-          const Align(
-            alignment: Alignment.center,
-            child: Text("Lihat Informasi Pemesanan",
-                style: TextStyle(color: Colors.blue)),
-          ),
-        ],
-      ),
-    );
+    return BlocBuilder<PackageBloc, PackageState>(
+      builder: (context, state) {
+        if(state is PackageLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is PackageLoadedById) {
+          final package = state.packageId;
+          return  Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Informasi Pemesanan",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            const SizedBox(height: 12),
+            _buildInfoItem("Kode Paket", package.kodePaket.toString(), isLink: true),
+            _buildInfoItem(
+                "Nama Paket", package.namaPaket.toString(), isLink: true),
+            _buildInfoItem("Jenis Paket", package.isVip == true ? "VIP" : "Reguler", isLink: true),
+            _buildInfoItem("Pelaksanaan", package.jadwalPerjalanan.toString(), isLink: true),
+            const SizedBox(height: 8),
+            const Align(
+              alignment: Alignment.center,
+              child: Text("Lihat Informasi Pemesanan",
+                  style: TextStyle(color: Colors.blue)),
+            ),
+          ],
+        ),
+      );
+    
+        } else {
+          return Container();
+        }
+      }
+     );
   }
 
   Widget _buildInfoItem(String title, String value, {bool isLink = false}) {

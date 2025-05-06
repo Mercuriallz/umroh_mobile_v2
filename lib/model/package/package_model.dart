@@ -61,6 +61,7 @@ class DataPackage {
   String? imgThumbnail;
   bool? isVip;
   int? planeSeat;
+  String? kodePaket;
   List<TPaketFasilitas>? tPaketFasilitas;
   List<THotel>? tHotel;
 
@@ -79,6 +80,7 @@ class DataPackage {
       this.imgThumbnail,
       this.isVip,
       this.planeSeat,
+      this.kodePaket,
       this.tPaketFasilitas,
       this.tHotel});
 
@@ -97,6 +99,7 @@ class DataPackage {
     imgThumbnail = json['img_thumbnail'];
     isVip = json['is_vip'];
     planeSeat = json['plane_seat'];
+    kodePaket = json['kode_paket'];
     if (json['t_paket_fasilitas'] != null) {
       tPaketFasilitas = <TPaketFasilitas>[];
       json['t_paket_fasilitas'].forEach((v) {
@@ -127,6 +130,7 @@ class DataPackage {
     data['img_thumbnail'] = imgThumbnail;
     data['is_vip'] = isVip;
     data['plane_seat'] = planeSeat;
+    data['kode_paket'] = kodePaket;
     if (tPaketFasilitas != null) {
       data['t_paket_fasilitas'] =
           tPaketFasilitas!.map((v) => v.toJson()).toList();
