@@ -8,7 +8,6 @@ class PackageBloc extends Cubit<PackageState> {
   PackageBloc() : super(PackageInitial());
 
   void getPackage() async {
-    emit(PackageLoading());
     try {
       final response = await PackageRepository().loadPackage();
       if (response.statusCode == 200) {
@@ -24,7 +23,6 @@ class PackageBloc extends Cubit<PackageState> {
   }
 
   void getPackageById(String id) async {
-    emit(PackageLoading());
     try {
       final response = await PackageRepository().loadPackageById(id);
       if (response.statusCode == 200) {

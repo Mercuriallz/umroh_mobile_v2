@@ -6,7 +6,6 @@ import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/shimmer.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
-import 'package:shimmer/shimmer.dart';
 
 class DetailPage extends StatefulWidget {
   final String? id;
@@ -17,11 +16,36 @@ class DetailPage extends StatefulWidget {
   State<DetailPage> createState() => _DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
+  void refreshId() {
+    setState(() {
+      widget.id.toString();
+    });
+  }
+
+  void refreshData() {
+    context.read<PackageBloc>().getPackageById(widget.id.toString());
+  }
+
   @override
   void initState() {
     super.initState();
-    context.read<PackageBloc>().getPackageById(widget.id.toString());
+    WidgetsBinding.instance.addObserver(this);
+    refreshData();
+    refreshId();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      refreshData();
+    }
   }
 
   @override
@@ -275,8 +299,9 @@ class _DetailPageState extends State<DetailPage> {
                 );
               } else if (state is PackageError) {
                 return Center(child: Text(state.message));
+              } else {
+                return const Center(child: CircularProgressIndicator());
               }
-              return Container();
             },
           ),
         ),

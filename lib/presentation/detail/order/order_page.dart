@@ -428,165 +428,165 @@ class _OrderPageState extends State<OrderPage> {
                     const SizedBox(height: 16),
 
                     // Form Data Pemesan
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Data Pemesan",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: nameController,
-                          decoration: InputDecoration(
-                            hintText: "Nama Lengkap",
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        DropdownButtonFormField<String>(
-                          items: genderItems.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(item,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                  )),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedGender = value;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            hintText: "Pilih Jenis Kelamin",
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextFormField(
-                          controller: phoneController,
-                          decoration: InputDecoration(
-                            hintText: "No Telp",
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextFormField(
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            hintText: "E-mail",
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextFormField(
-                          controller: noteController,
-                          decoration: InputDecoration(
-                            hintText: "Catatan (Opsional)",
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextFormField(
-                          controller: referralController,
-                          decoration: InputDecoration(
-                            hintText: "Referral (Opsional)",
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            suffixIcon:
-                                const Icon(Icons.person, color: Colors.blue),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     const Text(
+                    //       "Data Pemesan",
+                    //       style: TextStyle(
+                    //           fontWeight: FontWeight.bold, fontSize: 16),
+                    //     ),
+                    //     const SizedBox(height: 16),
+                    //     TextFormField(
+                    //       controller: nameController,
+                    //       decoration: InputDecoration(
+                    //         hintText: "Nama Lengkap",
+                    //         contentPadding: const EdgeInsets.symmetric(
+                    //             horizontal: 20, vertical: 16),
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //         enabledBorder: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(height: 12),
+                    //     DropdownButtonFormField<String>(
+                    //       items: genderItems.map((String item) {
+                    //         return DropdownMenuItem<String>(
+                    //           value: item,
+                    //           child: Text(item,
+                    //               style: const TextStyle(
+                    //                 color: Colors.black,
+                    //                 fontSize: 16,
+                    //               )),
+                    //         );
+                    //       }).toList(),
+                    //       onChanged: (value) {
+                    //         setState(() {
+                    //           selectedGender = value;
+                    //         });
+                    //       },
+                    //       decoration: InputDecoration(
+                    //         hintText: "Pilih Jenis Kelamin",
+                    //         contentPadding: const EdgeInsets.symmetric(
+                    //             horizontal: 20, vertical: 16),
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //         enabledBorder: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(height: 12),
+                    //     TextFormField(
+                    //       controller: phoneController,
+                    //       decoration: InputDecoration(
+                    //         hintText: "No Telp",
+                    //         contentPadding: const EdgeInsets.symmetric(
+                    //             horizontal: 20, vertical: 16),
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //         enabledBorder: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(height: 12),
+                    //     TextFormField(
+                    //       controller: emailController,
+                    //       decoration: InputDecoration(
+                    //         hintText: "E-mail",
+                    //         contentPadding: const EdgeInsets.symmetric(
+                    //             horizontal: 20, vertical: 16),
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //         enabledBorder: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(height: 12),
+                    //     TextFormField(
+                    //       controller: noteController,
+                    //       decoration: InputDecoration(
+                    //         hintText: "Catatan (Opsional)",
+                    //         contentPadding: const EdgeInsets.symmetric(
+                    //             horizontal: 20, vertical: 16),
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //         enabledBorder: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(height: 12),
+                    //     TextFormField(
+                    //       controller: referralController,
+                    //       decoration: InputDecoration(
+                    //         hintText: "Referral (Opsional)",
+                    //         contentPadding: const EdgeInsets.symmetric(
+                    //             horizontal: 20, vertical: 16),
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //         enabledBorder: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(30),
+                    //           borderSide: const BorderSide(color: Colors.grey),
+                    //         ),
+                    //         suffixIcon:
+                    //             const Icon(Icons.person, color: Colors.blue),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
 
-                    const SizedBox(height: 16),
+                    // const SizedBox(height: 16),
 
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Gabung Sekarang",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text(
-                            "Gabung dengan kami agar tidak perlu memasukan data pemesan kembali serta kemudahan registrasi umrah."),
-                        const SizedBox(height: 8),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.lightBlue,
-                            shape: StadiumBorder(),
-                          ),
-                          child: Text(
-                            "Daftar Sekarang",
-                            style: TextStyle(
-                              color: ColorConstant.secondary100,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                    // Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     const Text("Gabung Sekarang",
+                    //         style: TextStyle(fontWeight: FontWeight.bold)),
+                    //     const SizedBox(
+                    //       height: 8,
+                    //     ),
+                    //     const Text(
+                    //         "Gabung dengan kami agar tidak perlu memasukan data pemesan kembali serta kemudahan registrasi umrah."),
+                    //     const SizedBox(height: 8),
+                    //     ElevatedButton(
+                    //       onPressed: () {},
+                    //       style: ElevatedButton.styleFrom(
+                    //         backgroundColor: Colors.lightBlue,
+                    //         shape: StadiumBorder(),
+                    //       ),
+                    //       child: Text(
+                    //         "Daftar Sekarang",
+                    //         style: TextStyle(
+                    //           color: ColorConstant.secondary100,
+                    //         ),
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
 
-                    const SizedBox(height: 16),
+                    // const SizedBox(height: 16),
 
                     // Expandable Tile List
                     Column(
@@ -689,31 +689,16 @@ class _OrderPageState extends State<OrderPage> {
                   const Icon(Icons.chat_bubble_outline),
                   ElevatedButton(
                     onPressed: () {
-                      if (nameController.text.isEmpty) {
-                        gets.Get.snackbar("Nama Kosong",
-                            "Nama tidak boleh kosong, Harap diisi!",
-                            backgroundColor: Colors.red,
-                            colorText: ColorConstant.secondary100,
-                            snackPosition: SnackPosition.BOTTOM);
-                        return;
-                      } else if (selectedGender == null) {
-                        gets.Get.snackbar("Jenis Kelamin Kosong",
-                            "Jenis kelamin tidak boleh kosong, Harap dipilih!",
-                            backgroundColor: Colors.red,
-                            colorText: ColorConstant.secondary100,
-                            snackPosition: SnackPosition.BOTTOM);
-                        return;
-                      } else {
+                    
                         Get.to(
                             () => DataOrderPage(
-                                  namaPemesan: nameController.text,
-                                  jenisKelamin: selectedGender!,
+                                 
                                   totalOrang: counter,
                                   id: package.paketId,
                                 ),
                             transition: gets.Transition.rightToLeft);
-                      }
-                    },
+                      },
+                    
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF75B6FF),
                       padding: const EdgeInsets.symmetric(

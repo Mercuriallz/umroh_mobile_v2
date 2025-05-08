@@ -14,7 +14,6 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
   final phoneController = TextEditingController();
   final nikController = TextEditingController();
   final passwordController = TextEditingController();
-  
 
   String? selectedGender;
   String? selectedTypeJemaah;
@@ -26,7 +25,11 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
       Navigator.pop(context, {
         "nama": nameController.text,
         "jenis_kelamin": selectedGender!,
-        "type_jemaah": selectedTypeJemaah!
+        "type_jemaah": selectedTypeJemaah!,
+        "email": emailController.text,
+        "phone": phoneController.text,
+        "nik": nikController.text,
+        "password": passwordController.text
       });
     }
   }
@@ -35,110 +38,164 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 16),
-            Row(
-              children: const [
-                Icon(Icons.arrow_back),
-                SizedBox(width: 8),
-                Text("Jema'ah",
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            DropdownButtonFormField<String>(
-              items: typeJemaah.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                      )),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedTypeJemaah = value;
-                });
-              },
-              decoration: InputDecoration(
-                hintText: "Pilih Type Jemaah",
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(color: Colors.grey),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(color: Colors.grey),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              Row(
+                children: const [
+                  Icon(Icons.arrow_back),
+                  SizedBox(width: 8),
+                  Text("Jema'ah",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              DropdownButtonFormField<String>(
+                items: typeJemaah.map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        )),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedTypeJemaah = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: "Pilih Type Jemaah",
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: nameController,
-              decoration: InputDecoration(
-                hintText: "Nama Lengkap",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(color: Colors.grey),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  hintText: "Nama Lengkap",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            DropdownButtonFormField<String>(
-              items: genderItems.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                      )),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedGender = value;
-                });
-              },
-              decoration: InputDecoration(
-                hintText: "Pilih Jenis Kelamin",
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(color: Colors.grey),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(color: Colors.grey),
+              const SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  hintText: "Email",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorConstant.primaryBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 32),
-                ),
-                child:
-                    const Text("Tambah", style: TextStyle(color: Colors.white)),
+              const SizedBox(
+                height: 20,
               ),
-            )
-          ],
+              TextFormField(
+                controller: phoneController,
+                decoration: InputDecoration(
+                  hintText: "Nomor Telepon",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: nikController,
+                decoration: InputDecoration(
+                  hintText: "NIK",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: passwordController,
+                decoration: InputDecoration(
+                  hintText: "Password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                items: genderItems.map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        )),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedGender = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: "Pilih Jenis Kelamin",
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _submit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorConstant.primaryBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 14, horizontal: 32),
+                  ),
+                  child:
+                      const Text("Tambah", style: TextStyle(color: Colors.white)),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -9,21 +9,13 @@ import 'package:mobile_umroh_v2/presentation/detail/order/add_jemaah_page.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/detail_order_page.dart';
 
 class DataOrderPage extends StatefulWidget {
-  final String? namaPemesan;
-  final String? jenisKelamin;
-  final String? typeJemaah;
   final int? totalOrang;
-  final int? totalDipilih;
   final int? id;
 
   const DataOrderPage({
     super.key,
-    required this.namaPemesan,
-    required this.jenisKelamin,
-    this.typeJemaah,
     required this.totalOrang,
-    this.totalDipilih,
-    required this.id
+    required this.id,
   });
 
   @override
@@ -33,11 +25,17 @@ class DataOrderPage extends StatefulWidget {
 class _DataOrderPageState extends State<DataOrderPage> {
   List<Map<String, String>> jemaahList = [];
 
+  @override
+  void initState() {
+    super.initState();
+    context.read<PackageBloc>().getPackageById(widget.id.toString());   
+  }
+
   void navigateToTambahJemaah() async {
-    if ((1 + jemaahList.length) >= (widget.totalOrang ?? 0)) {
+    if (jemaahList.length >= (widget.totalOrang ?? 0)) {
       Get.snackbar(
         "Data jamaah sudah penuh",
-        "Data jamaah yang ditambahkan sudah maksimal dari yang anda tambahkan di halaman sebelumnya",
+        "Jumlah jamaah sudah sesuai dengan total orang yang dipilih.",
         snackPosition: SnackPosition.BOTTOM,
         colorText: ColorConstant.secondary100,
         backgroundColor: Colors.red,
@@ -57,15 +55,9 @@ class _DataOrderPageState extends State<DataOrderPage> {
     }
   }
 
-  @override 
-  void initState() {
-    super.initState();
-    context.read<PackageBloc>().getPackageById(widget.id.toString());
-  }
-
   @override
   Widget build(BuildContext context) {
-    final totalJemaah = 1 + jemaahList.length;
+    final totalJemaah = jemaahList.length;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
@@ -85,74 +77,236 @@ class _DataOrderPageState extends State<DataOrderPage> {
                 ],
               ),
               const SizedBox(height: 24),
-              _buildBookingInfoSection(),
-              const SizedBox(height: 24),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildSectionHeader(totalJemaah),
-                      const SizedBox(height: 12),
-                      _buildJemaahItem(widget.namaPemesan ?? "-",
-                          widget.jenisKelamin ?? "-", widget.typeJemaah ?? "-",
-                          isPemesan: true),
-                      const SizedBox(height: 8),
-                      ...jemaahList.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final jemaah = entry.value;
-                        return Dismissible(
-                          key: UniqueKey(),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(12)),
-                            child: const Icon(Icons.delete, color: Colors.white),
+              BlocBuilder<PackageBloc, PackageState>(
+                builder: (context, state) {
+                  if (state is PackageLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is PackageLoadedById) {
+                    final package = state.packageId;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Informasi Pemesanan Section
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                          onDismissed: (_) {
-                            setState(() {
-                              jemaahList.removeAt(index);
-                            });
-                            Get.snackbar("Jama'ah Dihapus",
-                                "${jemaah['nama']} telah dihapus",
-                                snackPosition: SnackPosition.BOTTOM,
-                                colorText: ColorConstant.secondary100,
-                                backgroundColor: Colors.red);
-                          },
-                          child: _buildJemaahItem(
-                              jemaah['nama'] ?? "-",
-                              jemaah['jenis_kelamin'] ?? "-",
-                              jemaah['type_jemaah'] ?? "-"),
-                        );
-                      }),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: navigateToTambahJemaah,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Informasi Pemesanan",
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                              const SizedBox(height: 12),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF9F9F9),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2,
+                                        child: Text("Kode Paket",
+                                            style: TextStyle(fontWeight: FontWeight.bold))),
+                                    Expanded(
+                                        flex: 3,
+                                        child: Text(package.kodePaket.toString(),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(color: Colors.blue))),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF9F9F9),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2,
+                                        child: Text("Nama Paket",
+                                            style: TextStyle(fontWeight: FontWeight.bold))),
+                                    Expanded(
+                                        flex: 3,
+                                        child: Text(package.namaPaket.toString(),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(color: Colors.blue))),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF9F9F9),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2,
+                                        child: Text("Jenis Paket",
+                                            style: TextStyle(fontWeight: FontWeight.bold))),
+                                    Expanded(
+                                        flex: 3,
+                                        child: Text(package.isVip == true ? "VIP" : "Reguler",
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(color: Colors.blue))),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF9F9F9),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2,
+                                        child: Text("Pelaksanaan",
+                                            style: TextStyle(fontWeight: FontWeight.bold))),
+                                    Expanded(
+                                        flex: 3,
+                                        child: Text(package.jadwalPerjalanan.toString(),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(color: Colors.blue))),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              const Align(
+                                alignment: Alignment.center,
+                                child: Text("Lihat Informasi Pemesanan",
+                                    style: TextStyle(color: Colors.blue)),
+                              ),
+                            ],
                           ),
-                          child: const Text("Tambah +",
-                              style: TextStyle(color: Colors.blue)),
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
-                ),
+                        const SizedBox(height: 24),
+                        
+                        // Data Jama'ah Section Header
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Data Jama'ah",
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            Text("$totalJemaah / ${widget.totalOrang}",
+                                style: const TextStyle(fontSize: 14)),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        
+                        ...jemaahList.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final jemaah = entry.value;
+                          return Dismissible(
+                            key: UniqueKey(),
+                            direction: index == 0
+                                ? DismissDirection.none
+                                : DismissDirection.endToStart,
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: const Icon(Icons.delete, color: Colors.white),
+                            ),
+                            onDismissed: (_) {
+                              setState(() {
+                                jemaahList.removeAt(index);
+                              });
+                              Get.snackbar("Jama'ah Dihapus",
+                                  "${jemaah['nama']} telah dihapus",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  colorText: ColorConstant.secondary100,
+                                  backgroundColor: Colors.red);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: Colors.grey.shade300),
+                                color: Colors.white,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start, 
+                                    children: [
+                                      Text(jemaah['nama'] ?? "-", 
+                                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                                      Text(jemaah['jenis_kelamin'] ?? "-"),
+                                      Text(jemaah['type_jemaah'] ?? "-"),
+                                      Text(jemaah['nik'] ?? "-"),
+                                      Text(jemaah['phone'] ?? "-"),
+                                      Text(jemaah['email'] ?? "-"),
+                                      Text(jemaah['password'] ?? "-"),
+                                    ]
+                                  ),
+                                  Text(index == 0 ? "Pemesan" : jemaah['type_jemaah'] ?? "-",
+                                      style: const TextStyle(color: Colors.blue)),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        
+                        // Tambah Jama'ah Button
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: navigateToTambahJemaah,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24)),
+                            ),
+                            child: const Text("Tambah +",
+                                style: TextStyle(color: Colors.blue)),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
               ),
+              const Spacer(),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () {
+                    if (jemaahList.length != widget.totalOrang) {
+                      Get.snackbar(
+                        "Jumlah belum sesuai",
+                        "Tambahkan semua data jamaah terlebih dahulu",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.orange,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+
+                    // Kirim ke API di sini kalau mau
+                    print("Data yang dikirim ke API: $jemaahList");
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -178,108 +332,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(int totalJemaah) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text("Data Jama’ah",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        Text("$totalJemaah / ${widget.totalOrang}",
-            style: const TextStyle(fontSize: 14)),
-      ],
-    );
-  }
-
-  Widget _buildBookingInfoSection() {
-    return BlocBuilder<PackageBloc, PackageState>(
-      builder: (context, state) {
-        if(state is PackageLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is PackageLoadedById) {
-          final package = state.packageId;
-          return  Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Informasi Pemesanan",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            const SizedBox(height: 12),
-            _buildInfoItem("Kode Paket", package.kodePaket.toString(), isLink: true),
-            _buildInfoItem(
-                "Nama Paket", package.namaPaket.toString(), isLink: true),
-            _buildInfoItem("Jenis Paket", package.isVip == true ? "VIP" : "Reguler", isLink: true),
-            _buildInfoItem("Pelaksanaan", package.jadwalPerjalanan.toString(), isLink: true),
-            const SizedBox(height: 8),
-            const Align(
-              alignment: Alignment.center,
-              child: Text("Lihat Informasi Pemesanan",
-                  style: TextStyle(color: Colors.blue)),
-            ),
-          ],
-        ),
-      );
-    
-        } else {
-          return Container();
-        }
-      }
-     );
-  }
-
-  Widget _buildInfoItem(String title, String value, {bool isLink = false}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF9F9F9),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 2,
-              child: Text(title,
-                  style: const TextStyle(fontWeight: FontWeight.bold))),
-          Expanded(
-              flex: 3,
-              child: Text(value,
-                  textAlign: TextAlign.right,
-                  style:
-                      TextStyle(color: isLink ? Colors.blue : Colors.black))),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildJemaahItem(String nama, String jenisKelamin, String typeJemaah,
-      {bool isPemesan = false}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade300),
-        color: Colors.white,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(nama, style: const TextStyle(fontWeight: FontWeight.bold)),
-            Text(jenisKelamin),
-          ]),
-          Text(isPemesan ? "Pemesan" : typeJemaah,
-              style: const TextStyle(color: Colors.blue)),
-        ],
       ),
     );
   }
