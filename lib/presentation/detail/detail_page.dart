@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
+import 'package:mobile_umroh_v2/constant/shimmer.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DetailPage extends StatefulWidget {
   final String? id;
@@ -65,14 +67,10 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ClipRRect(
+                    ShimmerImage(
+                      imageUrl: package.imgThumbnail ?? "",
+                      height: 180,
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        package.imgThumbnail ?? "",
-                        height: 180,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -99,7 +97,11 @@ class _DetailPageState extends State<DetailPage> {
                         if (features.contains("antar"))
                           _buildIconText(Icons.directions_car, "Antar"),
                         if (features.contains("hotel"))
-                          _buildIconText(Icons.hotel, "Hotel")
+                          _buildIconText(Icons.hotel, "Hotel"),
+                        if (features.contains("bis"))
+                          _buildIconText(Icons.directions_bus, "Bus"),
+                        if (features.contains("konsumsi"))
+                          _buildIconText(Icons.food_bank, "Konsumsi")
                       ],
                     ),
                     const SizedBox(height: 20),

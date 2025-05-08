@@ -9,7 +9,13 @@ class AddJemaahPage extends StatefulWidget {
 }
 
 class _AddJemaahPageState extends State<AddJemaahPage> {
-  final TextEditingController nameController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final nikController = TextEditingController();
+  final passwordController = TextEditingController();
+  
+
   String? selectedGender;
   String? selectedTypeJemaah;
   List<String> genderItems = ["Laki-laki", "Perempuan"];
@@ -31,17 +37,19 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
       body: SafeArea(
         child: Column(
           children: [
-              const SizedBox(height: 16),
-              Row(
-                children: const [
-                  Icon(Icons.arrow_back),
-                  SizedBox(width: 8),
-                  Text("Jema'ah",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                ],
-              ),
-              const SizedBox(height: 20,),
+            const SizedBox(height: 16),
+            Row(
+              children: const [
+                Icon(Icons.arrow_back),
+                SizedBox(width: 8),
+                Text("Jema'ah",
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             DropdownButtonFormField<String>(
               items: typeJemaah.map((String item) {
                 return DropdownMenuItem<String>(

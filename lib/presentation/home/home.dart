@@ -185,6 +185,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, i) {
                                     final package = packages[i];
+                                    final features = package.arrFeature
+                                            ?.map((e) => e.toLowerCase())
+                                            .toList() ??
+                                        [];
                                     return Container(
                                       width: size.width * 0.75,
                                       margin: const EdgeInsets.only(right: 16),
@@ -224,61 +228,34 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                         fontWeight:
                                                             FontWeight.bold)),
                                                 const SizedBox(height: 6),
-                                                Row(
-                                                  children: [
-                                                    if (package.arrFeature !=
-                                                            null &&
-                                                        package.arrFeature!
-                                                            .contains(
-                                                                "Pesawat"))
-                                                      Row(
-                                                        children: const [
-                                                          Icon(
-                                                              Icons
-                                                                  .flight_takeoff,
-                                                              size: 16),
-                                                          SizedBox(width: 4),
-                                                          Text("Pesawat",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12)),
-                                                        ],
-                                                      ),
-                                                    const SizedBox(width: 8),
-                                                    if (package.arrFeature !=
-                                                            null &&
-                                                        package.arrFeature!
-                                                            .contains("Antar"))
-                                                      Row(
-                                                        children: const [
-                                                          Icon(
-                                                              Icons
-                                                                  .directions_car,
-                                                              size: 16),
-                                                          SizedBox(width: 4),
-                                                          Text("Antar",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12)),
-                                                        ],
-                                                      ),
-                                                    const SizedBox(width: 8),
-                                                    if (package.arrFeature !=
-                                                            null &&
-                                                        package.arrFeature!
-                                                            .contains("Hotel"))
-                                                      Row(
-                                                        children: const [
-                                                          Icon(Icons.hotel,
-                                                              size: 16),
-                                                          SizedBox(width: 4),
-                                                          Text("Hotel",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12)),
-                                                        ],
-                                                      ),
-                                                  ],
+                                                SingleChildScrollView(
+                                                  scrollDirection: Axis.horizontal,
+                                                  child: Row(
+                                                    children: [
+                                                      if (features
+                                                          .contains("pesawat"))
+                                                        _buildIconText(
+                                                            Icons.flight_takeoff,
+                                                            "Pesawat"),
+                                                      if (features
+                                                          .contains("antar"))
+                                                        _buildIconText(
+                                                            Icons.directions_car,
+                                                            "Antar"),
+                                                      if (features
+                                                          .contains("hotel"))
+                                                        _buildIconText(
+                                                            Icons.hotel, "Hotel"),
+                                                      if (features
+                                                          .contains("bis"))
+                                                        _buildIconText(
+                                                            Icons.directions_bus, "Bus"),
+                                                      if (features
+                                                          .contains("konsumsi"))
+                                                        _buildIconText(
+                                                            Icons.food_bank, "Konsumsi")
+                                                    ],
+                                                  ),
                                                 ),
                                                 const SizedBox(height: 12),
                                                 const Row(
@@ -287,6 +264,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                           .spaceBetween,
                                                   children: [
                                                     Text("Mulai dari",
+                                                    
                                                         style: TextStyle(
                                                             fontSize: 12)),
                                                     Text("Seat / Bangku :",
@@ -472,4 +450,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
   }
+}
+
+Widget _buildIconText(IconData icon, String text) {
+  return Padding(
+    padding: const EdgeInsets.only(right: 12),
+    child: Row(
+      children: [
+        Icon(icon, size: 16),
+        const SizedBox(width: 4),
+        Text(text, style: const TextStyle(fontSize: 12)),
+      ],
+    ),
+  );
 }
