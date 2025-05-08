@@ -5,7 +5,6 @@ import 'package:get/get.dart' as gets;
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
 
-import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/text_constant.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/data_order_page.dart';
@@ -689,10 +688,9 @@ class _OrderPageState extends State<OrderPage> {
                   const Icon(Icons.chat_bubble_outline),
                   ElevatedButton(
                     onPressed: () {
-                    
                         Get.to(
                             () => DataOrderPage(
-                                 
+                                 priceFinal: int.parse(package.harga.toString()) * counter,
                                   totalOrang: counter,
                                   id: package.paketId,
                                 ),

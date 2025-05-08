@@ -11,47 +11,63 @@ class PaymentBloc extends Cubit<PaymentState> {
   final secureStorage = SecureStorageService();
 
   Future<void> sendPayment(PaymentModel formData) async {
-    emit(PaymentInitial());
-    final dio = Dio();
-    final token = secureStorage.read("token");
+  emit(PaymentInitial());
+  final dio = Dio();
+  final token = await secureStorage.read("token");
 
-    Map<String, dynamic> paymentData = {
-      "purchase_title": formData.purchaseTitle,
-      "paket_id": formData.paketId,
-      "price_final": formData.priceFinal,
-      "amount": formData.amount,
-      "type_payment": formData.typePayment,
-      "notes": formData.notes,
-      "user_reg": formData.userReg != null
-          ? formData.userReg!
-              .map((v) => {
-                    "name": v.name,
-                    "email": v.email,
-                    "phone_number": v.phoneNumber,
-                    "nik": v.nik,
-                    "password": v.password,
-                  })
-              .toList()
-          : [],
-    };
+  print("[PaymentBloc] Start sendPayment()");
+  print("[PaymentBloc] Token: $token");
 
-    try {
-      final response = await dio.post("$baseUrl/pay",
-          data: paymentData, options: Options(
-            validateStatus: (status) {
-              return status! < 500;
-            },
-            headers: {
-            "Authorization": "Bearer $token",
-          }));
+  Map<String, dynamic> paymentData = {
+    "purchase_title": formData.purchaseTitle,
+    "paket_id": formData.paketId,
+    "price_final": formData.priceFinal,
+    "amount": formData.amount,
+    "type_payment": formData.typePayment,
+    "notes": formData.notes,
+    "user_reg": formData.userReg != null
+        ? formData.userReg!
+            .map((v) => {
+                  "name": v.name,
+                  "email": v.email,
+                  "phone_number": v.phoneNumber,
+                  "nik": v.nik,
+                  "password": v.password,
+                })
+            .toList()
+        : [],
+  };
 
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            emit(PaymentSuccess());
-          } else {
-            emit(PaymentFailed(response.data["message"]));
-          }
-    } catch (e) {
-      emit(PaymentFailed("Error: $e"));
+  print("[PaymentBloc] Payload to be sent: $paymentData");
+
+  try {
+    final response = await dio.post(
+      "$baseUrl/pay",
+      data: paymentData,
+      options: Options(
+        validateStatus: (status) {
+          return status! < 500;
+        },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    print("[PaymentBloc] Response status: ${response.statusCode}");
+    print("[PaymentBloc] Response data: ${response.data}");
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      emit(PaymentSuccess());
+      print("[PaymentBloc] Payment successful");
+    } else {
+      emit(PaymentFailed(response.data["message"] ?? "Unknown error"));
+      print("[PaymentBloc] Payment failed: ${response.data["message"]}");
     }
+  } catch (e) {
+    emit(PaymentFailed("Error: $e"));
+    print("[PaymentBloc] Exception caught: $e");
   }
+}
 }

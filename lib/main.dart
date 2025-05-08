@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_umroh_v2/bloc/auth/login/login_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/register/register_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/payment/payment_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kabupaten/kabupaten_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kecamatan/kecamatan_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kelurahan/kelurahan_bloc.dart';
@@ -32,6 +33,7 @@ void main() async {
         BlocProvider(create: (_) => KecamatanBloc()),
         BlocProvider(create: (_) => KelurahanBloc()),
         BlocProvider(create: (_) => RegisterBloc()),
+        BlocProvider(create: (_) => PaymentBloc())
     
         ],
       child: GetMaterialApp(

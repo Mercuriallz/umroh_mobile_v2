@@ -43,7 +43,7 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed || state == AppLifecycleState.inactive) {
       refreshData();
     }
   }
