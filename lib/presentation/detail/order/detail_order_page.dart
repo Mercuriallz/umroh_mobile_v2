@@ -4,9 +4,14 @@ import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
 import 'package:mobile_umroh_v2/presentation/detail/transaction/result_transaction_page.dart';
 
-class DetailOrderPage extends StatelessWidget {
+class DetailOrderPage extends StatefulWidget {
   const DetailOrderPage({super.key});
 
+  @override
+  State<DetailOrderPage> createState() => _DetailOrderPageState();
+}
+
+class _DetailOrderPageState extends State<DetailOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

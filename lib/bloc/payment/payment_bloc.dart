@@ -11,12 +11,12 @@ class PaymentBloc extends Cubit<PaymentState> {
   final secureStorage = SecureStorageService();
 
   Future<void> sendPayment(PaymentModel formData) async {
-  emit(PaymentInitial());
+  emit(PaymentLoading());
   final dio = Dio();
   final token = await secureStorage.read("token");
 
-  print("[PaymentBloc] Start sendPayment()");
-  print("[PaymentBloc] Token: $token");
+  // print("[PaymentBloc] Start sendPayment()");
+  // print("[PaymentBloc] Token: $token");
 
   Map<String, dynamic> paymentData = {
     "purchase_title": formData.purchaseTitle,
@@ -36,9 +36,10 @@ class PaymentBloc extends Cubit<PaymentState> {
                 })
             .toList()
         : [],
+    "token": token,
   };
 
-  print("[PaymentBloc] Payload to be sent: $paymentData");
+  // print("[PaymentBloc] Payload to be sent: $paymentData");
 
   try {
     final response = await dio.post(
@@ -55,19 +56,18 @@ class PaymentBloc extends Cubit<PaymentState> {
       ),
     );
 
-    print("[PaymentBloc] Response status: ${response.statusCode}");
-    print("[PaymentBloc] Response data: ${response.data}");
+    // print("[PaymentBloc] Response status: ${response.statusCode}");
+    // print("[PaymentBloc] Response data: ${response.data}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       emit(PaymentSuccess());
-      print("[PaymentBloc] Payment successful");
     } else {
       emit(PaymentFailed(response.data["message"] ?? "Unknown error"));
-      print("[PaymentBloc] Payment failed: ${response.data["message"]}");
+      // print("[PaymentBloc] Payment failed: ${response.data["message"]}");
     }
   } catch (e) {
     emit(PaymentFailed("Error: $e"));
-    print("[PaymentBloc] Exception caught: $e");
+    // print("[PaymentBloc] Exception caught: $e");
   }
 }
 }

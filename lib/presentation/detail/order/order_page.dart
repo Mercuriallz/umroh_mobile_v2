@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get.dart' as gets;
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
+import 'package:mobile_umroh_v2/constant/payment_text_field.dart';
 
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/text_constant.dart';
@@ -23,6 +24,7 @@ class _OrderPageState extends State<OrderPage> {
   final emailController = TextEditingController();
   final noteController = TextEditingController();
   final referralController = TextEditingController();
+  final amountController = TextEditingController();
 
   List<String> genderItems = [
     'Laki-laki',
@@ -49,6 +51,35 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     super.initState();
     context.read<PackageBloc>().getPackageById(widget.id.toString());
+  }
+
+  bool validateAmount() {
+    if (amountController.text.isEmpty) {
+      Get.snackbar(
+        "Perhatian",
+        "Jumlah pembayaran harus diisi",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+      return false;
+    }
+    
+    String cleanedAmount = amountController.text.replaceAll(RegExp(r'[^\d]'), '');
+    if (cleanedAmount.isEmpty || int.parse(cleanedAmount) <= 0) {
+      Get.snackbar(
+        "Perhatian",
+        "Jumlah pembayaran tidak valid",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+      return false;
+    }
+    
+    return true;
   }
 
   @override
@@ -389,6 +420,8 @@ class _OrderPageState extends State<OrderPage> {
                       height: 16,
                     ),
 
+
+
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -426,167 +459,54 @@ class _OrderPageState extends State<OrderPage> {
 
                     const SizedBox(height: 16),
 
-                    // Form Data Pemesan
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     const Text(
-                    //       "Data Pemesan",
-                    //       style: TextStyle(
-                    //           fontWeight: FontWeight.bold, fontSize: 16),
-                    //     ),
-                    //     const SizedBox(height: 16),
-                    //     TextFormField(
-                    //       controller: nameController,
-                    //       decoration: InputDecoration(
-                    //         hintText: "Nama Lengkap",
-                    //         contentPadding: const EdgeInsets.symmetric(
-                    //             horizontal: 20, vertical: 16),
-                    //         border: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //         enabledBorder: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 12),
-                    //     DropdownButtonFormField<String>(
-                    //       items: genderItems.map((String item) {
-                    //         return DropdownMenuItem<String>(
-                    //           value: item,
-                    //           child: Text(item,
-                    //               style: const TextStyle(
-                    //                 color: Colors.black,
-                    //                 fontSize: 16,
-                    //               )),
-                    //         );
-                    //       }).toList(),
-                    //       onChanged: (value) {
-                    //         setState(() {
-                    //           selectedGender = value;
-                    //         });
-                    //       },
-                    //       decoration: InputDecoration(
-                    //         hintText: "Pilih Jenis Kelamin",
-                    //         contentPadding: const EdgeInsets.symmetric(
-                    //             horizontal: 20, vertical: 16),
-                    //         border: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //         enabledBorder: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 12),
-                    //     TextFormField(
-                    //       controller: phoneController,
-                    //       decoration: InputDecoration(
-                    //         hintText: "No Telp",
-                    //         contentPadding: const EdgeInsets.symmetric(
-                    //             horizontal: 20, vertical: 16),
-                    //         border: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //         enabledBorder: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 12),
-                    //     TextFormField(
-                    //       controller: emailController,
-                    //       decoration: InputDecoration(
-                    //         hintText: "E-mail",
-                    //         contentPadding: const EdgeInsets.symmetric(
-                    //             horizontal: 20, vertical: 16),
-                    //         border: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //         enabledBorder: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 12),
-                    //     TextFormField(
-                    //       controller: noteController,
-                    //       decoration: InputDecoration(
-                    //         hintText: "Catatan (Opsional)",
-                    //         contentPadding: const EdgeInsets.symmetric(
-                    //             horizontal: 20, vertical: 16),
-                    //         border: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //         enabledBorder: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 12),
-                    //     TextFormField(
-                    //       controller: referralController,
-                    //       decoration: InputDecoration(
-                    //         hintText: "Referral (Opsional)",
-                    //         contentPadding: const EdgeInsets.symmetric(
-                    //             horizontal: 20, vertical: 16),
-                    //         border: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //         enabledBorder: OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(30),
-                    //           borderSide: const BorderSide(color: Colors.grey),
-                    //         ),
-                    //         suffixIcon:
-                    //             const Icon(Icons.person, color: Colors.blue),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
+                    TextFormField(
+                      inputFormatters: [
+                        RupiahInputFormatter()
+                      ],
+                      keyboardType: TextInputType.number,
+                      controller: amountController,
+                      decoration: InputDecoration(
+                        hintText: "Jumlah Pembayaran",
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        // Adding a prefix icon for better UX
+                        prefixIcon: const Icon(Icons.payments_outlined),
+                        // Adding a suffix text for clarity
+                        suffixText: "IDR",
+                      ),
+                    ),
 
-                    // const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     const Text("Gabung Sekarang",
-                    //         style: TextStyle(fontWeight: FontWeight.bold)),
-                    //     const SizedBox(
-                    //       height: 8,
-                    //     ),
-                    //     const Text(
-                    //         "Gabung dengan kami agar tidak perlu memasukan data pemesan kembali serta kemudahan registrasi umrah."),
-                    //     const SizedBox(height: 8),
-                    //     ElevatedButton(
-                    //       onPressed: () {},
-                    //       style: ElevatedButton.styleFrom(
-                    //         backgroundColor: Colors.lightBlue,
-                    //         shape: StadiumBorder(),
-                    //       ),
-                    //       child: Text(
-                    //         "Daftar Sekarang",
-                    //         style: TextStyle(
-                    //           color: ColorConstant.secondary100,
-                    //         ),
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
+                    TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 5,
 
-                    // const SizedBox(height: 16),
+                      controller: noteController,
+                      decoration: InputDecoration(
+                        hintText: "Note",
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                      ),
+                    ),
 
+                  
                     // Expandable Tile List
                     Column(
                       children: [
@@ -688,15 +608,19 @@ class _OrderPageState extends State<OrderPage> {
                   const Icon(Icons.chat_bubble_outline),
                   ElevatedButton(
                     onPressed: () {
+                      // Validate amount before navigating
+                      if (validateAmount()) {
                         Get.to(
                             () => DataOrderPage(
-                                 priceFinal: int.parse(package.harga.toString()) * counter,
+                                  priceFinal: int.parse(package.harga.toString()) * counter,
                                   totalOrang: counter,
                                   id: package.paketId,
+                                  amount: amountController.text,
+                                  note: noteController.text,
                                 ),
                             transition: gets.Transition.rightToLeft);
-                      },
-                    
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF75B6FF),
                       padding: const EdgeInsets.symmetric(
@@ -711,7 +635,6 @@ class _OrderPageState extends State<OrderPage> {
               ),
             );
           }
-          // Show a loading indicator or empty container while waiting for the data
           return Container(
             padding: const EdgeInsets.all(16),
             color: Colors.transparent,

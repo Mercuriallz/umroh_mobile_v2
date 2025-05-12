@@ -6,6 +6,7 @@ class PaymentModel {
   String? typePayment;
   String? notes;
   List<UserReg>? userReg;
+  String? token;
 
   PaymentModel(
       {this.purchaseTitle,
@@ -14,7 +15,9 @@ class PaymentModel {
       this.amount,
       this.typePayment,
       this.notes,
-      this.userReg});
+      this.userReg,
+      this.token
+      });
 
   PaymentModel.fromJson(Map<String, dynamic> json) {
     purchaseTitle = json['purchase_title'];
@@ -29,6 +32,7 @@ class PaymentModel {
         userReg!.add(UserReg.fromJson(v));
       });
     }
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +46,7 @@ class PaymentModel {
     if (userReg != null) {
       data['user_reg'] = userReg!.map((v) => v.toJson()).toList();
     }
+    data['token'] = token;
     return data;
   }
 }

@@ -87,7 +87,9 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: nameController,
+                
                 decoration: InputDecoration(
+                  contentPadding:  const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                   hintText: "Nama Lengkap",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -103,6 +105,7 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
                 decoration: InputDecoration(
                   hintText: "Email",
                   border: OutlineInputBorder(
+                    
                     borderRadius: BorderRadius.circular(30),
                     borderSide: const BorderSide(color: Colors.grey),
                   ),
