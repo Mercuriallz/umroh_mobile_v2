@@ -6,11 +6,11 @@ import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
 import 'package:mobile_umroh_v2/bloc/payment/payment_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/payment/payment_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/loading.dart';
 import 'package:mobile_umroh_v2/model/payment/payment_model.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/add_jemaah_page.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/detail_order_page.dart';
-import 'package:mobile_umroh_v2/presentation/detail/transaction/result_transaction_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 
 class DataOrderPage extends StatefulWidget {
@@ -92,17 +92,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
           child: Column(
             children: [
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () => Navigator.pop(context)),
-                  SizedBox(width: 8),
-                  Text("Data Pemesanan",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                ],
-              ),
+            CustomBackHeader(title: "Data Pemesanan", onBack: () => Navigator.pop(context)),
               const SizedBox(height: 24),
               Expanded(child: SingleChildScrollView(
                 child: BlocListener<PaymentBloc, PaymentState>(
@@ -330,14 +320,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                   margin: const EdgeInsets.only(bottom: 12),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.1),
-                                        spreadRadius: 1,
-                                        blurRadius: 3,
-                                        offset: const Offset(0, 1),
-                                      ),
-                                    ],
+                                    
                                     color: Colors.white,
                                   ),
                                   child: Column(
@@ -348,7 +331,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                           decoration: BoxDecoration(
-                                            color: Colors.blue.withOpacity(0.08),
+                                            color: Colors.blue,
                                             borderRadius: BorderRadius.only(
                                               topLeft: const Radius.circular(16),
                                               topRight: const Radius.circular(16),
@@ -362,7 +345,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                               Row(
                                                 children: [
                                                   CircleAvatar(
-                                                    backgroundColor: Colors.blue.withOpacity(0.2),
+                                                    backgroundColor: Colors.blue,
                                                     radius: 16,
                                                     child: Text(
                                                       jemaah['nama']?.substring(0, 1).toUpperCase() ?? "J",
@@ -523,7 +506,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                   
                                   String cleanedAmount = widget.amount.toString().replaceAll(RegExp(r'[^\d]'), '');
                                   int parsedAmount = int.parse(cleanedAmount);
-                                  print("nilai parsedAmount: $parsedAmount");
                                   
                                   final secureStorage = SecureStorageService();
                                   final token = await secureStorage.read("token");

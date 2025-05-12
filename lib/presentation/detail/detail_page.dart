@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
+import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/shimmer.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
@@ -73,11 +74,7 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                           horizontal: 16, vertical: 16),
                       child: Row(
                         children: [
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: const Icon(Icons.arrow_back_ios,
-                                size: 20, color: Colors.black87),
-                          ),
+                         CustomBackHeader(title: "Pembayaran", onBack: () => Navigator.pop(context)),
                           const SizedBox(width: 8),
                           const Text(
                             "Detail Paket",

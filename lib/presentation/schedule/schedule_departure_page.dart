@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction_detail_page.dart';
 
-class ScheduleDeparturePage extends StatelessWidget {
+class ScheduleDeparturePage extends StatefulWidget {
   const ScheduleDeparturePage({super.key});
 
+  @override
+  State<ScheduleDeparturePage> createState() => _ScheduleDeparturePageState();
+}
+
+class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +133,9 @@ class ScheduleDeparturePage extends StatelessWidget {
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.to(TransactionDetailPage());
+                                },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue,
                                   shape: RoundedRectangleBorder(
