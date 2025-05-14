@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/payment/payment_state.dart';
 import 'package:mobile_umroh_v2/constant/constant.dart';
+import 'package:mobile_umroh_v2/model/payment/payment_data_model.dart';
 import 'package:mobile_umroh_v2/model/payment/payment_model.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 
@@ -15,8 +16,6 @@ class PaymentBloc extends Cubit<PaymentState> {
   final dio = Dio();
   final token = await secureStorage.read("token");
 
-  // print("[PaymentBloc] Start sendPayment()");
-  // print("[PaymentBloc] Token: $token");
 
   Map<String, dynamic> paymentData = {
     "purchase_title": formData.purchaseTitle,
@@ -36,7 +35,7 @@ class PaymentBloc extends Cubit<PaymentState> {
                 })
             .toList()
         : [],
-    "token": token,
+    // "token": token,
   };
 
   // print("[PaymentBloc] Payload to be sent: $paymentData");
@@ -56,11 +55,13 @@ class PaymentBloc extends Cubit<PaymentState> {
       ),
     );
 
-    // print("[PaymentBloc] Response status: ${response.statusCode}");
-    // print("[PaymentBloc] Response data: ${response.data}");
-
     if (response.statusCode == 200 || response.statusCode == 201) {
+      var paymentData = PaymentDataModel.fromJson(response.data).data!;
       emit(PaymentSuccess());
+      emit(PaymentDataLoaded(paymentData));
+      print("Response data --> ${response.data}");
+      print("Payment data nih --> $paymentData");
+    
     } else {
       emit(PaymentFailed(response.data["message"] ?? "Unknown error"));
       // print("[PaymentBloc] Payment failed: ${response.data["message"]}");

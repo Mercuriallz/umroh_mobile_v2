@@ -13,6 +13,7 @@ import 'package:mobile_umroh_v2/bloc/region/kabupaten/kabupaten_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kecamatan/kecamatan_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kelurahan/kelurahan_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/provinsi/provinsi_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_bloc.dart';
 import 'package:mobile_umroh_v2/constant/on_boarding/on_boarding_main.dart';
 
 void main() async {
@@ -33,7 +34,8 @@ void main() async {
         BlocProvider(create: (_) => KecamatanBloc()),
         BlocProvider(create: (_) => KelurahanBloc()),
         BlocProvider(create: (_) => RegisterBloc()),
-        BlocProvider(create: (_) => PaymentBloc())
+        BlocProvider(create: (_) => PaymentBloc()),
+        BlocProvider(create: (_) => TransactionDetailBloc())
     
         ],
       child: GetMaterialApp(
