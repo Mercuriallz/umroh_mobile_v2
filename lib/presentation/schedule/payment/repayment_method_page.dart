@@ -1,28 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/services.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/constant/header_page.dart';
+import 'package:mobile_umroh_v2/constant/payment_text_field.dart';
+import 'package:mobile_umroh_v2/presentation/schedule/payment/confirm_payment_page.dart';
 import 'package:mobile_umroh_v2/presentation/schedule/payment/payment_method_page.dart';
-
-class RupiahInputFormatter extends TextInputFormatter {
-  final NumberFormat _formatter = NumberFormat.currency(
-    locale: 'id_ID',
-    symbol: 'Rp. ',
-    decimalDigits: 0,
-  );
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    String cleaned = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
-    if (cleaned.isEmpty) cleaned = '0';
-    int value = int.parse(cleaned);
-    final newText = _formatter.format(value);
-    return TextEditingValue(
-      text: newText,
-      selection: TextSelection.collapsed(offset: newText.length),
-    );
-  }
-}
 
 class RepaymentMethodPage extends StatefulWidget {
   const RepaymentMethodPage({super.key});
@@ -38,6 +21,16 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
   String? selectedMethodCode;
   String? selectedMethodType;
 
+  bool isAmountValid() {
+    if (amountController.text.isEmpty) return false;
+    
+    String numericValue = amountController.text.replaceAll(RegExp(r'[^0-9]'), '');
+    
+    if (numericValue.isEmpty || int.parse(numericValue) <= 0) return false;
+    
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final formatter = NumberFormat.currency(
@@ -51,178 +44,208 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Custom Header
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  const Text(
-                    "Pembayaran",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // Target Section
-              Container(
+        child: Column(
+          children: [
+            // Body Content
+            Expanded(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Target'),
-                    Text(
-                      formatter.format(target),
-                      style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue),
+                    // Custom Header
+                    CustomBackHeader(
+                      title: "Metode Pembayaran",
+                      onBack: () => Navigator.pop(context),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Target Section
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text('Target'),
+                          Text(
+                            formatter.format(target),
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
+                          ),
+                          const SizedBox(height: 8),
+                          LinearProgressIndicator(
+                            value: collected / target,
+                            minHeight: 6,
+                            backgroundColor: const Color(0xFFE0ECFB),
+                            valueColor:
+                                const AlwaysStoppedAnimation<Color>(Colors.blue),
+                          ),
+                          const SizedBox(height: 16),
+                          _infoRow('Terkumpul', formatter.format(collected)),
+                          _infoRow('Persentase Terkumpul', '${percentage.toStringAsFixed(0)}%'),
+                          _infoRow('Selesaikan Sebelum', '11 November 2025'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    const Text(
+                      'Pembayaran',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     const SizedBox(height: 8),
-                    LinearProgressIndicator(
-                      value: collected / target,
-                      minHeight: 6,
-                      backgroundColor: const Color(0xFFE0ECFB),
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(Colors.blue),
+                    const Text(
+                      'Masukkan jumlah yang ingin dibayarkan',
+                      style: TextStyle(color: Colors.grey),
                     ),
-                    const SizedBox(height: 16),
-                    _infoRow('Terkumpul', formatter.format(collected)),
-                    _infoRow('Persentase Terkumpul',
-                        '${percentage.toStringAsFixed(0)}%'),
-                    _infoRow('Selesaikan Sebelum', '11 November 2025'),
+                    const SizedBox(height: 12),
+
+                    // Amount Input
+                    TextFormField(
+                      inputFormatters: [RupiahInputFormatter()],
+                      keyboardType: TextInputType.number,
+                      controller: amountController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "Jumlah Pembayaran",
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        prefixIcon: const Icon(Icons.payments_outlined),
+                        suffixText: "IDR",
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Voucher Input
+                    TextFormField(
+                      controller: voucherController,
+                      decoration: InputDecoration(
+                        hintText: 'Kode voucher (Opsional)',
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    InkWell(
+                      onTap: () async {
+                        final result = await Navigator.push<Map<String, String>>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PaymentMethodPage(),
+                          ),
+                        );
+                        if (result != null) {
+                          setState(() {
+                            selectedMethodCode = result['code'];
+                            selectedMethodType = result['type'];
+                          });
+                          print(
+                              "Selected method: ${result['type']} - ${result['code']}");
+                        }
+                      },
+                      child: Container(
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              selectedMethodCode != null
+                                  ? getBankDisplayName(selectedMethodCode!)
+                                  : 'Pilih metode pembayaran',
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(
+                              selectedMethodCode != null
+                                  ? Icons.check_circle
+                                  : Icons.chevron_right,
+                              color: selectedMethodCode != null
+                                  ? Colors.green
+                                  : Colors.grey,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+            ),
 
-              const Text(
-                'Pembayaran',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Masukkan jumlah yang ingin dibayarkan',
-                style: TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 12),
-
-              // Amount Input
-              TextFormField(
-                inputFormatters: [RupiahInputFormatter()],
-                keyboardType: TextInputType.number,
-                controller: amountController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: "Jumlah Pembayaran",
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  prefixIcon: const Icon(Icons.payments_outlined),
-                  suffixText: "IDR",
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // Voucher Input
-              TextFormField(
-                controller: voucherController,
-                decoration: InputDecoration(
-                  hintText: 'Kode voucher (Opsional)',
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Payment Method Selector
-              InkWell(
-                onTap: () async {
-                  final result = await Navigator.push<Map<String, String>>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const PaymentMethodPage(),
-                    ),
-                  );
-                  if (result != null) {
-                    setState(() {
-                      selectedMethodCode = result['code'];
-                      selectedMethodType = result['type'];
-                    });
-                    print(
-                        "Selected method: ${result['type']} - ${result['code']}");
-                  }
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        selectedMethodCode != null
-                            ? getBankDisplayName(selectedMethodCode!)
-                            : 'Pilih metode pembayaran',
-                        style: const TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Icon(
-                        selectedMethodCode != null
-                            ? Icons.check_circle
-                            : Icons.chevron_right,
-                        color: selectedMethodCode != null
-                            ? Colors.green
-                            : Colors.grey,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              SizedBox(
+            // Bottom Button
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    if (!isAmountValid()) {
+                      Get.snackbar(
+                        "Perhatian", 
+                        "Jumlah pembayaran belum diisi atau tidak valid",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                        duration: const Duration(seconds: 3),
+                      );
+                    } 
+                    else if (selectedMethodCode == null || selectedMethodType == null) {
+                      Get.snackbar(
+                        "Perhatian", 
+                        "Metode pembayaran belum dipilih",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                        duration: const Duration(seconds: 3),
+                      );
+                    }
+                    else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ConfirmPaymentPage(
+                            bankCode: selectedMethodCode!,
+                            type: selectedMethodType!,
+                            amount: amountController.text,
+                          ),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightBlue,
+                    backgroundColor: ColorConstant.primaryBlue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -230,8 +253,8 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                   child: const Text('Lanjutkan'),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

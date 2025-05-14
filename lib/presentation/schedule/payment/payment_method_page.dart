@@ -11,7 +11,7 @@ class PaymentMethodPage extends StatefulWidget {
 class _PaymentMethodPageState extends State<PaymentMethodPage> {
   String? selectedBank;
 
-  String? selectedType; 
+  String? selectedType;
 
   void onBankTap(String bankCode, String type, bool available) {
     if (!available) return;
@@ -53,59 +53,69 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Pilih metode pembayaran yang ingin Anda gunakan.",
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 24),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Pilih metode pembayaran yang ingin Anda gunakan.",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 24),
 
-              buildSectionTitle("Transfer Bank"),
-              buildBankTile(
-                asset: 'assets/image/bca.png',
-                code: 'BNK_TF_BCA',
-                type: 'BNK_TF',
-                available: true,
-              ),
-              buildBankTile(
-                asset: 'assets/image/bri.png',
-                code: 'BNK_TF_BRI',
-                type: 'BNK_TF',
-                available: true,
-              ),
-              buildBankTile(
-                asset: 'assets/image/bni.png',
-                code: 'BNK_TF_BNI',
-                type: 'BNK_TF',
-                available: false,
-              ),
+                      buildSectionTitle("Transfer Bank"),
+                      buildBankTile(
+                        asset: 'assets/image/bca.png',
+                        code: 'BNK_TF_BCA',
+                        type: 'BNK_TF',
+                        available: true,
+                      ),
+                      buildBankTile(
+                        asset: 'assets/image/bri.png',
+                        code: 'BNK_TF_BRI',
+                        type: 'BNK_TF',
+                        available: true,
+                      ),
+                      buildBankTile(
+                        asset: 'assets/image/bni.png',
+                        code: 'BNK_TF_BNI',
+                        type: 'BNK_TF',
+                        available: false,
+                      ),
 
-              buildSectionTitle("Virtual Account"),
-              buildBankTile(
-                asset: 'assets/image/ovo.png',
-                code: 'VA_OVO',
-                type: 'VA',
-                available: true,
+                      buildSectionTitle("Virtual Account"),
+                      buildBankTile(
+                        asset: 'assets/image/ovo.png',
+                        code: 'VA_OVO',
+                        type: 'VA',
+                        available: true,
+                      ),
+                      buildBankTile(
+                        asset: 'assets/image/dana.png',
+                        code: 'VA_DANA',
+                        type: 'VA',
+                        available: true,
+                      ),
+                      // buildBankTile(
+                      //   asset: 'assets/image/gopay.png',
+                      //   code: 'VA_GOPAY',
+                      //   type: 'VA',
+                      //   available: true,
+                      // ),
+                    ],
+                  ),
+                ),
               ),
-              buildBankTile(
-                asset: 'assets/image/dana.png',
-                code: 'VA_DANA',
-                type: 'VA',
-                available: true,
-              ),
-              // buildBankTile(
-              //   asset: 'assets/image/gopay.png',
-              //   code: 'VA_GOPAY',
-              //   type: 'VA',
-              //   available: true,
-              // ),
+            ),
 
-              const Spacer(),
-              SizedBox(
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: SizedBox(
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
@@ -124,8 +134,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   child: const Text("Pilih"),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
