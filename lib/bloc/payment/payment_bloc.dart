@@ -59,8 +59,8 @@ class PaymentBloc extends Cubit<PaymentState> {
       var paymentData = PaymentDataModel.fromJson(response.data).data!;
       emit(PaymentSuccess());
       emit(PaymentDataLoaded(paymentData));
-      print("Response data --> ${response.data}");
-      print("Payment data nih --> $paymentData");
+      // print("Response data --> ${response.data}");
+      // print("Payment data nih --> $paymentData");
     
     } else {
       emit(PaymentFailed(response.data["message"] ?? "Unknown error"));

@@ -7,7 +7,6 @@ import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_
 import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/dotted.dart';
-import 'package:mobile_umroh_v2/constant/rupiah.dart';
 
 class ResultTransactionPage extends StatefulWidget {
   const ResultTransactionPage({super.key});
@@ -105,11 +104,11 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
           return Center(child: Text('Error: ${state.message}'));
         } else if (state is TransactionDetailLoaded) {
           final transactionDetail = state.transactionDetailModel;
-          final rupiahConverter = RupiahConverter();
-          final features = transactionDetail.paketAdditionalFeature
-                  ?.map((e) => e.toLowerCase())
-                  .toList() ??
-              [];
+          // final rupiahConverter = RupiahConverter();
+          // final features = transactionDetail.paketAdditionalFeature
+          //         ?.map((e) => e.toLowerCase())
+          //         .toList() ??
+          //     [];
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
