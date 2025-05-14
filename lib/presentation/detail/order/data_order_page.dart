@@ -35,14 +35,12 @@ class DataOrderPage extends StatefulWidget {
 
 class _DataOrderPageState extends State<DataOrderPage> {
   List<Map<String, String>> jemaahList = [];
-  // Track expanded state for each jemaah card
   List<bool> expandedList = [];
 
   @override
   void initState() {
     super.initState();
     context.read<PackageBloc>().getPackageById(widget.id.toString());
-    // Initialize expandedList with the same length as jemaahList
     expandedList = List.generate(jemaahList.length, (_) => false);
   }
 
@@ -66,7 +64,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
     if (result != null && result is Map<String, String>) {
       setState(() {
         jemaahList.add(result);
-        // Add corresponding expansion state (default: collapsed)
         expandedList.add(false);
       });
     }

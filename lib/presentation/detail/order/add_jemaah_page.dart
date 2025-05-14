@@ -34,6 +34,16 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
     }
   }
 
+  @override 
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    nikController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

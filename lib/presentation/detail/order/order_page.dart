@@ -53,6 +53,17 @@ class _OrderPageState extends State<OrderPage> {
     context.read<PackageBloc>().getPackageById(widget.id.toString());
   }
 
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    noteController.dispose();
+    referralController.dispose();
+    amountController.dispose();
+    super.dispose();
+  }
+
   bool validateAmount() {
     if (amountController.text.isEmpty) {
       Get.snackbar(
@@ -65,8 +76,9 @@ class _OrderPageState extends State<OrderPage> {
       );
       return false;
     }
-    
-    String cleanedAmount = amountController.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    String cleanedAmount =
+        amountController.text.replaceAll(RegExp(r'[^\d]'), '');
     if (cleanedAmount.isEmpty || int.parse(cleanedAmount) <= 0) {
       Get.snackbar(
         "Perhatian",
@@ -78,7 +90,7 @@ class _OrderPageState extends State<OrderPage> {
       );
       return false;
     }
-    
+
     return true;
   }
 
@@ -420,8 +432,6 @@ class _OrderPageState extends State<OrderPage> {
                       height: 16,
                     ),
 
-
-
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -460,9 +470,7 @@ class _OrderPageState extends State<OrderPage> {
                     const SizedBox(height: 16),
 
                     TextFormField(
-                      inputFormatters: [
-                        RupiahInputFormatter()
-                      ],
+                      inputFormatters: [RupiahInputFormatter()],
                       keyboardType: TextInputType.number,
                       controller: amountController,
                       decoration: InputDecoration(
@@ -489,7 +497,6 @@ class _OrderPageState extends State<OrderPage> {
                     TextFormField(
                       keyboardType: TextInputType.multiline,
                       maxLines: 5,
-
                       controller: noteController,
                       decoration: InputDecoration(
                         hintText: "Note",
@@ -506,7 +513,6 @@ class _OrderPageState extends State<OrderPage> {
                       ),
                     ),
 
-                  
                     // Expandable Tile List
                     Column(
                       children: [
@@ -612,7 +618,9 @@ class _OrderPageState extends State<OrderPage> {
                       if (validateAmount()) {
                         Get.to(
                             () => DataOrderPage(
-                                  priceFinal: int.parse(package.harga.toString()) * counter,
+                                  priceFinal:
+                                      int.parse(package.harga.toString()) *
+                                          counter,
                                   totalOrang: counter,
                                   id: package.paketId,
                                   amount: amountController.text,
