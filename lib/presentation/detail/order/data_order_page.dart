@@ -394,7 +394,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                         ),
                                       ),
                                       
-                                      // Expandable content (only visible when expanded)
                                       if (isExpanded)
                                         Column(
                                           children: [
