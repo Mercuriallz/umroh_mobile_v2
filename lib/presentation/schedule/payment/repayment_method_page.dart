@@ -23,12 +23,20 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
 
   bool isAmountValid() {
     if (amountController.text.isEmpty) return false;
-    
-    String numericValue = amountController.text.replaceAll(RegExp(r'[^0-9]'), '');
-    
+
+    String numericValue =
+        amountController.text.replaceAll(RegExp(r'[^0-9]'), '');
+
     if (numericValue.isEmpty || int.parse(numericValue) <= 0) return false;
-    
+
     return true;
+  }
+
+  @override
+  void dispose() {
+    amountController.dispose();
+    voucherController.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,7 +74,9 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+                        boxShadow: [
+                          BoxShadow(color: Colors.black12, blurRadius: 6)
+                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,12 +94,13 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                             value: collected / target,
                             minHeight: 6,
                             backgroundColor: const Color(0xFFE0ECFB),
-                            valueColor:
-                                const AlwaysStoppedAnimation<Color>(Colors.blue),
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                Colors.blue),
                           ),
                           const SizedBox(height: 16),
                           _infoRow('Terkumpul', formatter.format(collected)),
-                          _infoRow('Persentase Terkumpul', '${percentage.toStringAsFixed(0)}%'),
+                          _infoRow('Persentase Terkumpul',
+                              '${percentage.toStringAsFixed(0)}%'),
                           _infoRow('Selesaikan Sebelum', '11 November 2025'),
                         ],
                       ),
@@ -98,7 +109,8 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
 
                     const Text(
                       'Pembayaran',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     const SizedBox(height: 8),
                     const Text(
@@ -116,8 +128,8 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: "Jumlah Pembayaran",
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: const BorderSide(color: Colors.grey),
@@ -137,8 +149,8 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                       controller: voucherController,
                       decoration: InputDecoration(
                         hintText: 'Kode voucher (Opsional)',
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 18, horizontal: 16),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -151,7 +163,8 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
 
                     InkWell(
                       onTap: () async {
-                        final result = await Navigator.push<Map<String, String>>(
+                        final result =
+                            await Navigator.push<Map<String, String>>(
                           context,
                           MaterialPageRoute(
                             builder: (_) => const PaymentMethodPage(),
@@ -162,13 +175,12 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                             selectedMethodCode = result['code'];
                             selectedMethodType = result['type'];
                           });
-                          print(
-                              "Selected method: ${result['type']} - ${result['code']}");
+                          // print("Selected method: ${result['type']} - ${result['code']}");
                         }
                       },
                       child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 18, horizontal: 16),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
@@ -213,25 +225,24 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                   onPressed: () {
                     if (!isAmountValid()) {
                       Get.snackbar(
-                        "Perhatian", 
+                        "Perhatian",
                         "Jumlah pembayaran belum diisi atau tidak valid",
                         snackPosition: SnackPosition.BOTTOM,
                         backgroundColor: Colors.red,
                         colorText: Colors.white,
                         duration: const Duration(seconds: 3),
                       );
-                    } 
-                    else if (selectedMethodCode == null || selectedMethodType == null) {
+                    } else if (selectedMethodCode == null ||
+                        selectedMethodType == null) {
                       Get.snackbar(
-                        "Perhatian", 
+                        "Perhatian",
                         "Metode pembayaran belum dipilih",
                         snackPosition: SnackPosition.BOTTOM,
                         backgroundColor: Colors.red,
                         colorText: Colors.white,
                         duration: const Duration(seconds: 3),
                       );
-                    }
-                    else {
+                    } else {
                       Navigator.push(
                         context,
                         MaterialPageRoute(

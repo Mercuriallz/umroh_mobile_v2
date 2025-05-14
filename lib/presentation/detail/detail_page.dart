@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/shimmer.dart';
@@ -280,7 +281,7 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                                 OrderPage(id: package.paketId.toString()));
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF75B6FF),
+                            backgroundColor: ColorConstant.primaryBlue,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 14),
                             shape: RoundedRectangleBorder(

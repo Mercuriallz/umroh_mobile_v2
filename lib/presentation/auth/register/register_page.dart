@@ -15,6 +15,7 @@ import 'package:mobile_umroh_v2/bloc/region/kelurahan/kelurahan_state.dart';
 import 'package:mobile_umroh_v2/bloc/region/provinsi/provinsi_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/provinsi/provinsi_state.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 
 import 'package:mobile_umroh_v2/presentation/auth/register/set_password_page.dart';
 
@@ -634,7 +635,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.lightBlue,
+                        backgroundColor: ColorConstant.primaryBlue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),

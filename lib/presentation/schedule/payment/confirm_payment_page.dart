@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 
 class ConfirmPaymentPage extends StatefulWidget {
   final String? bankCode;
@@ -13,9 +14,9 @@ class ConfirmPaymentPage extends StatefulWidget {
 class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
   @override
   Widget build(BuildContext context) {
-    print(widget.bankCode);
-    print(widget.type);
-    print(widget.amount);
+    // print(widget.bankCode);
+    // print(widget.type);
+    // print(widget.amount);
     return Scaffold(
       backgroundColor: const Color(0xFFFDFDFD),
       appBar: AppBar(
@@ -115,7 +116,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
             padding: const EdgeInsets.all(20),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF77B8FF),
+                backgroundColor: ColorConstant.primaryBlue,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),

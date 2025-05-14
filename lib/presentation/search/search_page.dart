@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -204,7 +205,7 @@ class SearchPage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF70B8FF),
+                          backgroundColor: ColorConstant.primaryBlue,
                           minimumSize: const Size.fromHeight(44),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32),

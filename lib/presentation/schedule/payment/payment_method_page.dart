@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_umroh_v2/constant/bank_option.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 
 class PaymentMethodPage extends StatefulWidget {
   const PaymentMethodPage({super.key});
@@ -126,7 +127,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                             "code": selectedBank ?? "",
                           }),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF73B1FF),
+                    backgroundColor: ColorConstant.primaryBlue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),

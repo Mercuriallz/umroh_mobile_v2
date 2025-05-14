@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction_detail_page.dart';
 
 class ScheduleDeparturePage extends StatefulWidget {
@@ -137,7 +138,7 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
                                   Get.to(TransactionDetailPage());
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: ColorConstant.primaryBlue,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(24)),
                                 ),

@@ -474,7 +474,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                               child: ElevatedButton(
                                 onPressed: navigateToTambahJemaah,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
+                                  backgroundColor: ColorConstant.primaryBlue,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(24)),
                                 ),
@@ -537,7 +537,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: ColorConstant.primaryBlue,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(28)),
                                 ),

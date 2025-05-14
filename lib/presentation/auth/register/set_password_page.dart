@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/bloc/auth/register/register_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/register/register_state.dart'; // Import state
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/loading.dart';
 import 'package:mobile_umroh_v2/model/auth/register_model.dart';
 import 'package:mobile_umroh_v2/presentation/auth/login_page.dart';
@@ -301,7 +302,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                                     : ElevatedButton(
                                         onPressed: _submitRegistration,
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.lightBlue,
+                                          backgroundColor: ColorConstant.primaryBlue,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(25),

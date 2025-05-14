@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get.dart' as gets;
 import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/payment_text_field.dart';
 
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
@@ -630,7 +631,7 @@ class _OrderPageState extends State<OrderPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF75B6FF),
+                      backgroundColor: ColorConstant.primaryBlue,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -652,7 +653,7 @@ class _OrderPageState extends State<OrderPage> {
                 const Icon(Icons.download),
                 const Icon(Icons.chat_bubble_outline),
                 ElevatedButton(
-                  onPressed: null, // Disabled while data is loading
+                  onPressed: null, 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
                     padding: const EdgeInsets.symmetric(
