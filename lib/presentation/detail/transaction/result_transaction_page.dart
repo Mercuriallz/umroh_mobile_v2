@@ -1,7 +1,13 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/payment/payment_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/payment/payment_state.dart';
+import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/dotted.dart';
+import 'package:mobile_umroh_v2/constant/rupiah.dart';
 
 class ResultTransactionPage extends StatefulWidget {
   const ResultTransactionPage({super.key});
@@ -11,6 +17,21 @@ class ResultTransactionPage extends StatefulWidget {
 }
 
 class _ResultTransactionPageState extends State<ResultTransactionPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final paymentState = context.read<PaymentBloc>().state;
+      if (paymentState is PaymentDataLoaded) {
+        final trx = paymentState.dataModel.trx;
+        if (trx != null) {
+          context.read<TransactionDetailBloc>().getTransactionDetail(trx);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -76,68 +97,96 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
   }
 
   Widget _buildDetailPaket(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 40),
-          const Text("Paket Umrah Desa - Termasuk Madinah",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 16),
-          Center(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Jakarta",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(width: 6),
-              DotCircle(),
-              const SizedBox(width: 6),
-              const Flexible(
-                child: DottedLine(
-                  dashColor: Colors.grey,
-                  dashLength: 4,
-                  lineThickness: 1,
-                ),
-              ),
-              const SizedBox(width: 6),
-              const Icon(Icons.flight_takeoff, size: 20, color: Colors.black),
-              const SizedBox(width: 6),
-              const Flexible(
-                child: DottedLine(
-                  dashColor: Colors.grey,
-                  dashLength: 4,
-                  lineThickness: 1,
-                ),
-              ),
-              const SizedBox(width: 6),
-              const DotCircle(),
-              const SizedBox(width: 6),
-              const Text(
-                "Mekah",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
-          )),
-          const SizedBox(height: 16),
-          _buildInfoItem("Harga Paket", "Rp. 33.900.000"),
-          _buildInfoItem("Jenis Paket", "VIP"),
-          _buildInfoItem("Jumlah Seat", "2 Seat"),
-          _buildInfoItem("Hotel", "Hotel Hilton Makkah (B-5)"),
-          _buildInfoItem("Penerbangan", "Saudi Airlines"),
-          _buildInfoItem("Bandara", "Soekarno Hatta (CGK)"),
-          _buildInfoItem("Tanggal Keberangkatan", "11 Desember 2025"),
-          _buildInfoItem("Tanggal Pemesanan", "11 April 2025"),
-          _buildInfoItem("Tanggal Pelunasan", "11 Oktober 2025"),
-          const SizedBox(height: 16),
-          _buildSectionCard("Catatan", "Tidak ada catatan"),
-          const SizedBox(height: 16),
-          _buildExpandableTileList(),
-        ],
-      ),
+    return BlocBuilder<TransactionDetailBloc, TransactionDetailState>(
+      builder: (context, state) {
+        if (state is TransactionDetailLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is TransactionDetailError) {
+          return Center(child: Text('Error: ${state.message}'));
+        } else if (state is TransactionDetailLoaded) {
+          final transactionDetail = state.transactionDetailModel;
+          final rupiahConverter = RupiahConverter();
+          final features = transactionDetail.paketAdditionalFeature
+                  ?.map((e) => e.toLowerCase())
+                  .toList() ??
+              [];
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 40),
+                const Text("Paket Umrah Desa - Termasuk Madinah",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                const SizedBox(height: 16),
+                Center(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Jakarta",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 6),
+                    DotCircle(),
+                    const SizedBox(width: 6),
+                    const Flexible(
+                      child: DottedLine(
+                        dashColor: Colors.grey,
+                        dashLength: 4,
+                        lineThickness: 1,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(Icons.flight_takeoff,
+                        size: 20, color: Colors.black),
+                    const SizedBox(width: 6),
+                    const Flexible(
+                      child: DottedLine(
+                        dashColor: Colors.grey,
+                        dashLength: 4,
+                        lineThickness: 1,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const DotCircle(),
+                    const SizedBox(width: 6),
+                    const Text(
+                      "Mekah",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                )),
+                const SizedBox(height: 16),
+                _buildInfoItem(
+                    "Harga Paket", transactionDetail.paketName ?? ""),
+                _buildInfoItem('Jenis Paket', transactionDetail.paketClass == "VIP" ? "VIP" : "Reguler"),
+                _buildInfoItem('Jumlah Seat',
+                    '${transactionDetail.amountSeat ?? '2'} seat'),
+                _buildInfoItem('Hotel',
+                    transactionDetail.hotelName ?? 'Hotel Hilton Makkah (B-5)'),
+                _buildInfoItem('Penerbangan',
+                    transactionDetail.airplaneName ?? 'Saudi Airlines'),
+                _buildInfoItem('Bandara',
+                    transactionDetail.airportName ?? 'Soekarno Hatta (CGK)'),
+                _buildInfoItem( 'Tanggal Keberangkatan',
+                    transactionDetail.tanggalKeberangkatan ??
+                        '11 Desember 2025'),
+                _buildInfoItem('Tanggal Pemesanan',
+                    transactionDetail.tanggalPemesanan ?? '11 April 2025'),
+                // _buildInfoItem("Tanggal Pelunasan", "11 Oktober 2025"),
+                const SizedBox(height: 16),
+                _buildSectionCard("Catatan", transactionDetail.notes ?? ""),
+                const SizedBox(height: 16),
+                _buildExpandableTileList(),
+              ],
+            ),
+          );
+        } else {
+          return const Center(child: Text('Unknown state'));
+        }
+      },
     );
   }
 
@@ -252,37 +301,20 @@ class _ResultTransactionPageState extends State<ResultTransactionPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      user['name'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    if (user['role'] != null)
-                      Text(
-                        user['role'],
-                        style: const TextStyle(
-                          color: Colors.blueAccent,
-                          fontSize: 14,
-                        ),
-                      ),
+                    Text(user['name'],
+                        style: const TextStyle(fontWeight: FontWeight.w600)),
+                    Text(user['role'] ?? 'N/A'),
                   ],
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Text("Kelengkapan Dokumen : "),
-                    Text(
-                      isComplete
-                          ? "Dokumen lengkap!"
-                          : "${user['remainingDocs']} Dokumen tersisa",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: isComplete ? Colors.green : Colors.orange,
-                      ),
-                    ),
-                  ],
+                Text(
+                  isComplete
+                      ? 'Dokumen sudah lengkap'
+                      : 'Sisa dokumen: ${user['remainingDocs']}',
+                  style: TextStyle(
+                    color: isComplete ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),

@@ -8,6 +8,7 @@ import 'package:mobile_umroh_v2/bloc/payment/payment_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/model/transaction/transaction_detail_model.dart';
 import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
 import 'package:mobile_umroh_v2/presentation/detail/transaction/result_transaction_page.dart';
@@ -20,23 +21,20 @@ class DetailOrderPage extends StatefulWidget {
 }
 
 class _DetailOrderPageState extends State<DetailOrderPage> {
-  
- @override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    final paymentState = context.read<PaymentBloc>().state;
-    if (paymentState is PaymentDataLoaded) {
-      final trx = paymentState.dataModel.trx;
-      if (trx != null) {
-        context.read<TransactionDetailBloc>().getTransactionDetail(trx);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final paymentState = context.read<PaymentBloc>().state;
+      if (paymentState is PaymentDataLoaded) {
+        final trx = paymentState.dataModel.trx;
+        if (trx != null) {
+          context.read<TransactionDetailBloc>().getTransactionDetail(trx);
+        }
       }
-    }
-  });
-}
-  
-
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ void initState() {
       body: SafeArea(
         child: BlocBuilder<TransactionDetailBloc, TransactionDetailState>(
           builder: (context, state) {
-             if (state is TransactionDetailLoading) {
+            if (state is TransactionDetailLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is TransactionDetailError) {
               return Center(child: Text('Error: ${state.message}'));
@@ -61,6 +59,12 @@ void initState() {
   }
 
   Widget _buildTransactionDetails(DataTransactionDetail transactionDetail) {
+    final rupiahConverter = RupiahConverter();
+    final features = transactionDetail.paketAdditionalFeature
+            ?.map((e) => e.toLowerCase())
+            .toList() ??
+        [];
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Column(
@@ -123,28 +127,38 @@ void initState() {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        transactionDetail.paketName ?? 'Paket Umrah Desa - Termasuk Madinah',
+                        transactionDetail.paketName ?? '-',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(Icons.star,
-                              size: 16, color: Colors.amber),
-                          const SizedBox(width: 4),
-                          Text(transactionDetail.paketClass ?? 'VIP', style: const TextStyle(fontSize: 12)),
-                        ],
-                      ),
+                      transactionDetail.paketClass == "VIP"
+                          ? Row(
+                              children: [
+                                const Icon(Icons.star,
+                                    size: 16, color: Colors.amber),
+                                const SizedBox(width: 4),
+                                Text(transactionDetail.paketClass ?? 'VIP',
+                                    style: const TextStyle(fontSize: 12)),
+                              ],
+                            )
+                          : Text("Reguler"),
                       const SizedBox(height: 8),
-                      Row(
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
                         children: [
-                          const Icon(Icons.flight_takeoff, size: 16),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.directions_bus, size: 16),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.hotel, size: 16),
+                          if (features.contains("pesawat"))
+                            _buildIconText(Icons.flight_takeoff, "Pesawat"),
+                          if (features.contains("antar"))
+                            _buildIconText(Icons.directions_car, "Antar"),
+                          if (features.contains("hotel"))
+                            _buildIconText(Icons.hotel, "Hotel"),
+                          if (features.contains("bis"))
+                            _buildIconText(Icons.directions_bus, "Bus"),
+                          if (features.contains("konsumsi"))
+                            _buildIconText(Icons.food_bank, "Konsumsi"),
                         ],
                       ),
                     ],
@@ -190,17 +204,33 @@ void initState() {
                   ],
                 ),
                 const Divider(height: 24),
-                _buildTransactionItem('Harga /Paket', 'Rp. ${transactionDetail.pricePaket ?? '33.900.000'}'),
-                _buildTransactionItem('Jenis Paket', transactionDetail.paketClass ?? 'VIP'),
-                _buildTransactionItem('Jumlah Seat', '${transactionDetail.amountSeat ?? '2'} seat'),
-                _buildTransactionItem('Hotel', transactionDetail.hotelName ?? 'Hotel Hilton Makkah (B-5)'),
-                _buildTransactionItem('Penerbangan', transactionDetail.airplaneName ?? 'Saudi Airlines'),
-                _buildTransactionItem('Bandara', transactionDetail.airportName ?? 'Soekarno Hatta (CGK)'),
                 _buildTransactionItem(
-                    'Tanggal Keberangkatan', transactionDetail.tanggalKeberangkatan ?? '11 Desember 2025'),
-                _buildTransactionItem('Tanggal Pemesanan', transactionDetail.tanggalPemesanan ?? '11 April 2025'),
+                    'Transaksi', transactionDetail.transaksiTrx ?? "-"),
+                _buildTransactionItem(
+                    'Harga /Paket',
+                    rupiahConverter.formatToRupiah(
+                        int.tryParse('${transactionDetail.pricePaket}') ?? 0)),
+                _buildTransactionItem(
+                    'Jenis Paket', transactionDetail.paketClass == "VIP" ? "VIP" : "Reguler"),
+                _buildTransactionItem('Jumlah Seat',
+                    '${transactionDetail.amountSeat ?? '2'} seat'),
+                _buildTransactionItem('Hotel',
+                    transactionDetail.hotelName ?? 'Hotel Hilton Makkah (B-5)'),
+                _buildTransactionItem('Penerbangan',
+                    transactionDetail.airplaneName ?? 'Saudi Airlines'),
+                _buildTransactionItem('Bandara',
+                    transactionDetail.airportName ?? 'Soekarno Hatta (CGK)'),
+                _buildTransactionItem(
+                    'Tanggal Keberangkatan',
+                    transactionDetail.tanggalKeberangkatan ??
+                        '11 Desember 2025'),
+                _buildTransactionItem('Tanggal Pemesanan',
+                    transactionDetail.tanggalPemesanan ?? '11 April 2025'),
                 const Divider(height: 24),
-                _buildTransactionItem('Sub Harga', 'Rp. ${transactionDetail.finalPrice ?? '67.800.000'}'),
+                _buildTransactionItem(
+                    'Sub Harga',
+                    rupiahConverter.formatToRupiah(
+                        int.tryParse('${transactionDetail.finalPrice}') ?? 0)),
                 // _buildTransactionItem('Promo', '-${transactionDetail.promo ?? '0'}'),
                 // _buildTransactionItem('Diskon', '-${transactionDetail.diskon ?? '0'}'),
                 const Divider(height: 24),
@@ -214,7 +244,8 @@ void initState() {
                       ),
                     ),
                     Text(
-                      'Rp. ${transactionDetail.finalPrice ?? '67.800.000'}',
+                      rupiahConverter.formatToRupiah(
+                          int.tryParse('${transactionDetail.finalPrice}') ?? 0),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -236,8 +267,8 @@ void initState() {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-              transactionDetail.notes?.isNotEmpty == true 
-                  ? transactionDetail.notes! 
+              transactionDetail.notes?.isNotEmpty == true
+                  ? transactionDetail.notes!
                   : 'Tidak ada catatan',
               style: const TextStyle(color: Colors.black54),
             ),
@@ -291,10 +322,47 @@ void initState() {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: const TextStyle(color: Colors.black87)),
-          Text(value, style: const TextStyle(color: Colors.black87)),
+          Expanded(
+            flex: 2,
+            child: Text(
+              title,
+              style: const TextStyle(color: Colors.black87),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            flex: 3,
+            child: Text(
+              value,
+              style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),
         ],
       ),
     );
   }
+}
+
+Widget _buildIconText(IconData icon, String text) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      color: Colors.white,
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 16),
+        const SizedBox(width: 4),
+        Text(
+          text,
+          style: const TextStyle(fontSize: 12),
+        ),
+      ],
+    ),
+  );
 }
