@@ -28,13 +28,26 @@ class _LoginPageState extends State<LoginPage> {
   bool obscureText = true;
   bool showLoading = false;
 
+  final List<String> roles = ['User', 'Kepala Desa'];
+  String? selectedRole = 'User';
+
   void _login() {
     if (formKey.currentState!.validate()) {
-      final loginRequest = LoginRequestModel(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      context.read<LoginBloc>().login(formData: loginRequest);
+      if (selectedRole == 'User') {
+        final loginRequest = LoginRequestModel(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        context.read<LoginBloc>().login(formData: loginRequest);
+      } else {
+        final loginRequest = LoginRequestModel(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        context.read<LoginBloc>().loginChief(formData: loginRequest);
+      }
+
+          print('Login sebagai: $selectedRole');
     }
   }
 
@@ -151,6 +164,44 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.black87,
                           ),
                         ),
+
+                        const SizedBox(height: 16),
+
+                        const Text(
+                          "Login Sebagai",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                                // Dropdown untuk memilih role
+
+                         DropdownButtonFormField<String>(
+                                  value: selectedRole,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 16),
+                                    filled: true,
+                                    fillColor: const Color(0xFFF2F4F7),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(32),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                  ),
+                                  items: roles
+                                      .map((role) => DropdownMenuItem(
+                                            value: role,
+                                            child: Text(role),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedRole = value;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 12),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: emailController,

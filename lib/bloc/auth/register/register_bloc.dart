@@ -48,6 +48,7 @@ class RegisterBloc extends Cubit<RegisterState> {
         emit(RegisterSuccess());
       } else {
         emit(RegisterFailed("Registrasi gagal: ${response.statusMessage}"));
+        print("Registrasi gagal: ${response.statusMessage}");
       }
     } catch (e) {
       String errorMessage = "Terjadi kesalahan saat registrasi";
@@ -58,8 +59,9 @@ class RegisterBloc extends Cubit<RegisterState> {
             final responseData = e.response!.data;
             if (responseData is Map && responseData.containsKey('message')) {
               errorMessage = responseData['message'];
+
             } else if (responseData is Map && responseData.containsKey('error')) {
-              errorMessage = responseData['error'];
+              errorMessage = responseData['error']; 
             }
           } catch (_) {
             errorMessage = e.response!.statusMessage ?? errorMessage;

@@ -19,6 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final secureStorage = SecureStorageService();
   String? username;
+  String? roles;
 
   void loadUsername() async {
     final name = await secureStorage.read("name");
@@ -26,6 +27,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       username = name.toString();
     });
   }
+
+  void loadRole() async {
+    final role = await secureStorage.read("role");
+    setState(() {
+      roles = role.toString();
+    });
+  }
+
+
 
   void refreshData() {
     context.read<PackageBloc>().getPackage();
@@ -54,6 +64,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    print("id role : $roles");
     final size = MediaQuery.of(context).size;
     final rupiahConverter = RupiahConverter();
 

@@ -14,6 +14,11 @@ class LoginSuccess extends LoginState {
   List<Object?> get props => [];
 }
 
+class LoginChief extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
+
 class LoginError extends LoginState {
   final String message;
 

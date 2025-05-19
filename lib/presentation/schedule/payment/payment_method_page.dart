@@ -22,6 +22,17 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     });
   }
 
+  // void onQrisTap() async {
+  //   final result = await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (_) => const QRISScannerPage()),
+  //   );
+
+  //   if (result != null) {
+  //     Navigator.pop(context, result);
+  //   }
+  // }
+
   Widget buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -102,18 +113,60 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         type: 'VA',
                         available: true,
                       ),
-                      // buildBankTile(
-                      //   asset: 'assets/image/gopay.png',
-                      //   code: 'VA_GOPAY',
-                      //   type: 'VA',
-                      //   available: true,
+
+                         buildSectionTitle("QR"),
+
+                      // GestureDetector(
+                      //   onTap: () async {
+                      //     final result = await Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => const QRISScannerPage(),
+                      //       ),
+                      //     );
+
+                      //     if (result != null && result is String) {
+                      //       // tampilkan hasil QR di dialog misalnya
+                      //       showDialog(
+                      //         context: context,
+                      //         builder: (_) => AlertDialog(
+                      //           title: const Text('Hasil Scan QRIS'),
+                      //           content: Text(result),
+                      //           actions: [
+                      //             TextButton(
+                      //               onPressed: () => Navigator.pop(context),
+                      //               child: const Text('OK'),
+                      //             )
+                      //           ],
+                      //         ),
+                      //       );
+                      //     }
+                      //   },
+                      //   child: Container(
+                      //     padding: const EdgeInsets.all(16),
+                      //     decoration: BoxDecoration(
+                      //       border: Border.all(color: Colors.grey.shade300),
+                      //       borderRadius: BorderRadius.circular(12),
+                      //     ),
+                      //     child: Row(
+                      //       children: [
+                      //         Image.asset('assets/image/qris_new.png', width: 40,),
+                      //         const SizedBox(width: 12),
+                      //       ],
+                      //     ),
+                      //   ),
                       // ),
+                      // // buildBankTile(
+                      // //   asset: 'assets/image/gopay.png',
+                      // //   code: 'VA_GOPAY',
+                      // //   type: 'VA',
+                      // //   available: true,
+                      // // ),
                     ],
                   ),
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: SizedBox(

@@ -10,6 +10,7 @@ import 'package:mobile_umroh_v2/constant/payment_text_field.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/text_constant.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/data_order_page.dart';
+import 'package:mobile_umroh_v2/services/storage.dart';
 
 class OrderPage extends StatefulWidget {
   final String? id;
@@ -35,6 +36,16 @@ class _OrderPageState extends State<OrderPage> {
   String? selectedGender;
 
   int counter = 1;
+  final secureStorage = SecureStorageService();
+
+  String? roleId;
+
+  void loadRoleId() async {
+    final role = await secureStorage.read("role");
+    setState(() {
+      roleId = role;
+    });
+  }
 
   void incrementCounter() {
     setState(() {
@@ -52,6 +63,7 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     super.initState();
     context.read<PackageBloc>().getPackageById(widget.id.toString());
+    loadRoleId();
   }
 
   @override
@@ -97,6 +109,7 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("Role ID: $roleId");
     final rupiahConverter = RupiahConverter();
 
     return Scaffold(
@@ -395,40 +408,43 @@ class _OrderPageState extends State<OrderPage> {
 
                     const SizedBox(height: 16),
 
-                    // Jumlah Orang Dan Total
-                    Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.circular(40), // Bulat seperti pill
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    roleId == "2"
+                        ? Column(
                             children: [
-                              InkWell(
-                                  onTap: decrementCounter,
-                                  child: Icon(
-                                    Icons.arrow_left,
-                                    size: 32,
-                                  )),
-                              SizedBox(width: 16),
-                              Text("$counter orang"),
-                              SizedBox(width: 16),
-                              InkWell(
-                                  onTap: incrementCounter,
-                                  child: Icon(
-                                    Icons.arrow_right,
-                                    size: 32,
-                                  )),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(
+                                      40),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    InkWell(
+                                        onTap: decrementCounter,
+                                        child: Icon(
+                                          Icons.arrow_left,
+                                          size: 32,
+                                        )),
+                                    SizedBox(width: 16),
+                                    Text("$counter orang"),
+                                    SizedBox(width: 16),
+                                    InkWell(
+                                        onTap: incrementCounter,
+                                        child: Icon(
+                                          Icons.arrow_right,
+                                          size: 32,
+                                        )),
+                                  ],
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
-                      ],
-                    ),
+                          )
+                        : SizedBox(),
+
                     const SizedBox(
                       height: 16,
                     ),
@@ -653,7 +669,7 @@ class _OrderPageState extends State<OrderPage> {
                 const Icon(Icons.download),
                 const Icon(Icons.chat_bubble_outline),
                 ElevatedButton(
-                  onPressed: null, 
+                  onPressed: null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
                     padding: const EdgeInsets.symmetric(

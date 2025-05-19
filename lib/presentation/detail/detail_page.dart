@@ -75,16 +75,9 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                           horizontal: 16, vertical: 16),
                       child: Row(
                         children: [
-                         CustomBackHeader(title: "Pembayaran", onBack: () => Navigator.pop(context)),
+                         CustomBackHeader(title: "Detail Paket", onBack: () => Navigator.pop(context)),
                           const SizedBox(width: 8),
-                          const Text(
-                            "Detail Paket",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
-                          ),
+                       
                         ],
                       ),
                     ),

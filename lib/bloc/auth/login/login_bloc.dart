@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/login/login_state.dart';
 import 'package:mobile_umroh_v2/constant/constant.dart';
+import 'package:mobile_umroh_v2/model/auth/login/login_chief_model.dart';
 import 'package:mobile_umroh_v2/model/auth/login/login_model.dart';
 import 'package:mobile_umroh_v2/model/auth/login/login_request_model.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
@@ -41,6 +42,7 @@ class LoginBloc extends Cubit<LoginState> {
         var loginModel = LoginModel.fromJson(response.data);
         var token = loginModel.token;
         var name = loginModel.data?.name;
+        var role = loginModel.data?.roleId;
 
         if (token == null || name == null) {
           emit(LoginError("Data token atau nama tidak ditemukan"));
@@ -48,7 +50,91 @@ class LoginBloc extends Cubit<LoginState> {
         }
         await secureStorage.write("token", token);
         await secureStorage.write("name", name);
-     
+        await secureStorage.write("role", role.toString());
+
+        print("Role id : $role");
+
+        emit(LoginSuccess());
+      } else if (response.statusCode == 400) {
+        String errorMessage =
+            response.data?['message'] ?? "Email atau password salah.";
+        emit(LoginError(errorMessage));
+      } else {
+        String errorMessage =
+            "Login gagal dengan status code: ${response.statusCode}";
+        emit(LoginError(errorMessage));
+      }
+    } catch (e) {
+      String errorMessage = "Terjadi kesalahan saat login";
+
+      if (e is DioException) {
+        if (e.response != null) {
+          try {
+            final responseData = e.response!.data;
+            if (responseData is Map && responseData.containsKey('message')) {
+              errorMessage = responseData['message'];
+            } else if (responseData is Map &&
+                responseData.containsKey('error')) {
+              errorMessage = responseData['error'];
+            }
+          } catch (_) {
+            errorMessage = e.response!.statusMessage ?? errorMessage;
+          }
+        } else if (e.type == DioExceptionType.connectionTimeout) {
+          errorMessage = "Koneksi timeout. Silakan coba lagi.";
+        } else if (e.type == DioExceptionType.connectionError) {
+          errorMessage =
+              "Tidak dapat terhubung ke server. Periksa koneksi internet Anda.";
+        }
+      }
+
+      emit(LoginError(errorMessage));
+      return;
+    }
+  }
+
+  Future<void> loginChief({LoginRequestModel? formData}) async {
+    if (formData == null) {
+      emit(LoginError("Data login tidak boleh kosong"));
+      return;
+    }
+
+    emit(LoginLoading());
+
+    final dio = Dio();
+    Map<String, dynamic> dataLogin = {
+      'email': formData.email,
+      'password': formData.password,
+    };
+
+    try {
+      final response = await dio.post(
+        "$baseUrl/kepdes/sign-in",
+        data: dataLogin,
+        options: Options(
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "umr_api_key": apiKey,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        var loginModel = LoginChiefModel.fromJson(response.data);
+        var token = loginModel.token;
+        var name = loginModel.data?.name;
+        var role = loginModel.data?.idRole;
+
+        if (token == null || name == null) {
+          emit(LoginError("Data token atau nama tidak ditemukan"));
+          return;
+        }
+        await secureStorage.write("token", token);
+        await secureStorage.write("name", name);
+        await secureStorage.write("role", role.toString());
+
+        print("Role id : $role");
+
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {
         String errorMessage =

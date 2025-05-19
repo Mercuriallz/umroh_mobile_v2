@@ -52,6 +52,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   dotted_line: ^3.2.3
   shimmer: ^3.0.0
+  qr_code_scanner_plus: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:

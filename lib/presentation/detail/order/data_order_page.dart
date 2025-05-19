@@ -36,11 +36,17 @@ class DataOrderPage extends StatefulWidget {
 class _DataOrderPageState extends State<DataOrderPage> {
   List<Map<String, String>> jemaahList = [];
   List<bool> expandedList = [];
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    context.read<PackageBloc>().getPackageById(widget.id.toString());
+    // Add a small delay before fetching package data for smoother UI transition
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        context.read<PackageBloc>().getPackageById(widget.id.toString());
+      }
+    });
     expandedList = List.generate(jemaahList.length, (_) => false);
   }
 
@@ -88,42 +94,85 @@ class _DataOrderPageState extends State<DataOrderPage> {
           child: Column(
             children: [
               const SizedBox(height: 16),
-            CustomBackHeader(title: "Data Pemesanan", onBack: () => Navigator.pop(context)),
+              CustomBackHeader(
+                  title: "Data Pemesanan",
+                  onBack: () => Navigator.pop(context)),
               const SizedBox(height: 24),
-              Expanded(child: SingleChildScrollView(
+              Expanded(
+                  child: SingleChildScrollView(
                 child: BlocListener<PaymentBloc, PaymentState>(
                   listener: (context, state) {
                     if (state is PaymentLoading) {
-                      LoadingOverlay(
-                      lottiePath: 'assets/lottie/loading_animation.json',
-                      message: 'Pesananmu sedang diproses',
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return LoadingOverlay(
+                            lottiePath: 'assets/lottie/loading_animation.json',
+                            message: 'Pesananmu sedang diproses',
+                          );
+                        },
                       );
+
+                      Future.delayed(const Duration(seconds: 2), () {
+                        if (mounted && isLoading) {}
+                      });
                     } else if (state is PaymentSuccess) {
-                      Get.snackbar(
-                        "Pesanan Berhasil Dibuat",
-                        "Pesanan Anda telah berhasil dibuat. Silahkan lakukan pembayaran.",
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.green,
-                        colorText: Colors.white,
-                        duration: const Duration(seconds: 3),
-                      );
-                      Get.offAll(DetailOrderPage());
+                      setState(() {
+                        isLoading = false;
+                      });
+
+                      // First dismiss the loading dialog if it's showing
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      }
+
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        Get.snackbar(
+                          "Pesanan Berhasil Dibuat",
+                          "Pesanan Anda telah berhasil dibuat. Silahkan lakukan pembayaran.",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.green,
+                          colorText: Colors.white,
+                          duration: const Duration(seconds: 3),
+                        );
+                        Get.offAll(DetailOrderPage());
+                      });
                     } else if (state is PaymentFailed) {
-                      Navigator.pop(context); //
-                      Get.snackbar(
-                        "Gagal Membuat Pesanan",
-                        state.message,
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                        duration: const Duration(seconds: 3),
-                      );
+                      setState(() {
+                        isLoading = false;
+                      });
+
+                      // Dismiss loading dialog
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      }
+
+                      // Show error message with slight delay for better UX
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        Get.snackbar(
+                          "Gagal Membuat Pesanan",
+                          state.message,
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                          duration: const Duration(seconds: 3),
+                        );
+                      });
                     }
                   },
                   child: BlocBuilder<PackageBloc, PackageState>(
                     builder: (context, state) {
                       if (state is PackageLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(
+                            child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 100),
+                          child: CircularProgressIndicator(),
+                        ));
                       } else if (state is PackageLoadedById) {
                         final package = state.packageId;
                         return Column(
@@ -284,7 +333,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                 expandedList.add(false);
                               }
                               final isExpanded = expandedList[index];
-                              
+
                               return Dismissible(
                                 key: UniqueKey(),
                                 direction: index == 0
@@ -292,12 +341,14 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                     : DismissDirection.endToStart,
                                 background: Container(
                                   alignment: Alignment.centerRight,
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   decoration: BoxDecoration(
                                     color: Colors.red.shade400,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: const Icon(Icons.delete, color: Colors.white),
+                                  child: const Icon(Icons.delete,
+                                      color: Colors.white),
                                 ),
                                 onDismissed: (_) {
                                   setState(() {
@@ -316,7 +367,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                   margin: const EdgeInsets.only(bottom: 12),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
-                                    
                                     color: Colors.white,
                                   ),
                                   child: Column(
@@ -325,37 +375,53 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                       InkWell(
                                         onTap: () => toggleExpansion(index),
                                         child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 12),
                                           decoration: BoxDecoration(
-                                            color: Colors.blue,
+                                            color: Colors.white,
                                             borderRadius: BorderRadius.only(
-                                              topLeft: const Radius.circular(16),
-                                              topRight: const Radius.circular(16),
-                                              bottomLeft: isExpanded ? Radius.zero : const Radius.circular(16),
-                                              bottomRight: isExpanded ? Radius.zero : const Radius.circular(16),
+                                              topLeft:
+                                                  const Radius.circular(16),
+                                              topRight:
+                                                  const Radius.circular(16),
+                                              bottomLeft: isExpanded
+                                                  ? Radius.zero
+                                                  : const Radius.circular(16),
+                                              bottomRight: isExpanded
+                                                  ? Radius.zero
+                                                  : const Radius.circular(16),
                                             ),
                                           ),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Row(
                                                 children: [
                                                   CircleAvatar(
-                                                    backgroundColor: Colors.blue,
+                                                    backgroundColor:
+                                                        ColorConstant
+                                                            .primaryBlue,
                                                     radius: 16,
                                                     child: Text(
-                                                      jemaah['nama']?.substring(0, 1).toUpperCase() ?? "J",
+                                                      jemaah['nama']
+                                                              ?.substring(0, 1)
+                                                              .toUpperCase() ??
+                                                          "J",
                                                       style: const TextStyle(
-                                                        color: Colors.blue,
-                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                   ),
                                                   const SizedBox(width: 12),
                                                   Text(
-                                                    jemaah['nama'] ?? "Nama Jamaah",
+                                                    jemaah['nama'] ??
+                                                        "Nama Jamaah",
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 16,
                                                     ),
                                                   ),
@@ -364,23 +430,40 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                               Row(
                                                 children: [
                                                   Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 4),
                                                     decoration: BoxDecoration(
-                                                      color: index == 0 ? Colors.blue : Colors.green,
-                                                      borderRadius: BorderRadius.circular(16),
+                                                      color: index == 0
+                                                          ? ColorConstant
+                                                              .primaryBlue
+                                                          : Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16),
                                                     ),
                                                     child: Text(
-                                                      index == 0 ? "Pemesan" : jemaah['type_jemaah'] ?? "Jamaah",
+                                                      index == 0
+                                                          ? "Pemesan"
+                                                          : jemaah[
+                                                                  'type_jemaah'] ??
+                                                              "Jamaah",
                                                       style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontWeight: FontWeight.w500,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                         fontSize: 12,
                                                       ),
                                                     ),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Icon(
-                                                    isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                                                    isExpanded
+                                                        ? Icons
+                                                            .keyboard_arrow_up
+                                                        : Icons
+                                                            .keyboard_arrow_down,
                                                     color: Colors.grey.shade600,
                                                   ),
                                                 ],
@@ -389,7 +472,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                           ),
                                         ),
                                       ),
-                                      
+
                                       if (isExpanded)
                                         Column(
                                           children: [
@@ -405,15 +488,17 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                     jemaah['nik'] ?? "-",
                                                   ),
                                                   _buildInfoRow(
-                                                    jemaah['jenis_kelamin'] == "Laki-laki" 
-                                                        ? Icons.male 
+                                                    jemaah['jenis_kelamin'] ==
+                                                            "Laki-laki"
+                                                        ? Icons.male
                                                         : Icons.female,
                                                     "Jenis Kelamin",
-                                                    jemaah['jenis_kelamin'] ?? "-",
+                                                    jemaah['jenis_kelamin'] ??
+                                                        "-",
                                                   ),
-                                                  
+
                                                   const Divider(height: 24),
-                                                  
+
                                                   // Contact info section
                                                   _buildInfoRow(
                                                     Icons.phone_outlined,
@@ -425,35 +510,53 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                     "Email",
                                                     jemaah['email'] ?? "-",
                                                   ),
-                                                  
+
                                                   // Only show password if needed (maybe hide by default)
-                                                  if (jemaah['password'] != null && jemaah['password']!.isNotEmpty)
+                                                  if (jemaah['password'] !=
+                                                          null &&
+                                                      jemaah['password']!
+                                                          .isNotEmpty)
                                                     _buildInfoRow(
                                                       Icons.lock_outlined,
                                                       "Password",
-                                                      "••••••••", 
+                                                      "••••••••",
                                                     ),
                                                 ],
                                               ),
                                             ),
-                                            
+
                                             // Footer with edit action
-                                            if (index != 0) // Only show this for non-lead jamaah
+                                            if (index !=
+                                                0) // Only show this for non-lead jamaah
                                               Container(
                                                 decoration: const BoxDecoration(
                                                   border: Border(
-                                                    top: BorderSide(color: Colors.black12),
+                                                    top: BorderSide(
+                                                        color: Colors.black12),
                                                   ),
                                                 ),
                                                 child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
                                                   children: [
                                                     TextButton.icon(
                                                       onPressed: () {
                                                         // Edit action would go here
+                                                        // Add delayed feedback when edit button is pressed
+                                                        Future.delayed(
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    100), () {
+                                                          // Show edit functionality or feedback
+                                                          // This is a placeholder for future implementation
+                                                        });
                                                       },
-                                                      icon: const Icon(Icons.edit_outlined, size: 16),
-                                                      label: const Text("Edit", style: TextStyle(fontSize: 12)),
+                                                      icon: const Icon(
+                                                          Icons.edit_outlined,
+                                                          size: 16),
+                                                      label: const Text("Edit",
+                                                          style: TextStyle(
+                                                              fontSize: 12)),
                                                     ),
                                                     const SizedBox(width: 8),
                                                   ],
@@ -471,14 +574,20 @@ class _DataOrderPageState extends State<DataOrderPage> {
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                onPressed: navigateToTambahJemaah,
+                                onPressed: () {
+                                  // Add a small delay to prevent button spamming
+                                  Future.delayed(
+                                      const Duration(milliseconds: 100), () {
+                                    navigateToTambahJemaah();
+                                  });
+                                },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: ColorConstant.primaryBlue,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(24)),
                                 ),
                                 child: const Text("Tambah +",
-                                    style: TextStyle(color: Colors.blue)),
+                                    style: TextStyle(color: Colors.white)),
                               ),
                             ),
 
@@ -488,6 +597,9 @@ class _DataOrderPageState extends State<DataOrderPage> {
                               height: 52,
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  // Check if already processing
+                                  if (isLoading) return;
+
                                   if (jemaahList.length != widget.totalOrang) {
                                     Get.snackbar(
                                       "Jumlah belum sesuai",
@@ -498,42 +610,59 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                     );
                                     return;
                                   }
-                                  
-                                  String cleanedAmount = widget.amount.toString().replaceAll(RegExp(r'[^\d]'), '');
-                                  int parsedAmount = int.parse(cleanedAmount);
-                                  
-                                  final secureStorage = SecureStorageService();
-                                  final token = await secureStorage.read("token");
-                                  final anggotaList = jemaahList
-                                      .map((jemaah) => UserReg(
-                                            name: jemaah['nama'],
-                                            email: jemaah['email'],
-                                            phoneNumber: jemaah['phone'],
-                                            nik: jemaah['nik'],
-                                            password: jemaah['password'],
-                                          ))
-                                      .toList();
 
-                                  // Mengecek apakah token kosong
-                                  if (token == null || token.isEmpty) {
-                                    Get.snackbar(
-                                      "Token Tidak Ditemukan",
-                                      "Harap login terlebih dahulu untuk melanjutkan",
-                                      snackPosition: SnackPosition.BOTTOM,
-                                      backgroundColor: Colors.red,
-                                      colorText: Colors.white,
-                                    );
-                                  } else {
-                                    var data = PaymentModel(
-                                        purchaseTitle: package.namaPaket,
-                                        paketId: package.paketId,
-                                        priceFinal: widget.priceFinal,
-                                        amount: parsedAmount,
-                                        typePayment: "BANK_TRANSFER",
-                                        notes: widget.note,
-                                        userReg: anggotaList);
-                                    paymentVM.sendPayment(data);
-                                  }
+                                  // Add a small feedback delay
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
+                                  // Process after a small delay for better UX
+                                  Future.delayed(
+                                      const Duration(milliseconds: 300),
+                                      () async {
+                                    String cleanedAmount = widget.amount
+                                        .toString()
+                                        .replaceAll(RegExp(r'[^\d]'), '');
+                                    int parsedAmount = int.parse(cleanedAmount);
+
+                                    final secureStorage =
+                                        SecureStorageService();
+                                    final token =
+                                        await secureStorage.read("token");
+                                    final anggotaList = jemaahList
+                                        .map((jemaah) => UserReg(
+                                              name: jemaah['nama'],
+                                              email: jemaah['email'],
+                                              phoneNumber: jemaah['phone'],
+                                              nik: jemaah['nik'],
+                                              password: jemaah['password'],
+                                            ))
+                                        .toList();
+
+                                    // Mengecek apakah token kosong
+                                    if (token == null || token.isEmpty) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      Get.snackbar(
+                                        "Token Tidak Ditemukan",
+                                        "Harap login terlebih dahulu untuk melanjutkan",
+                                        snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor: Colors.red,
+                                        colorText: Colors.white,
+                                      );
+                                    } else {
+                                      var data = PaymentModel(
+                                          purchaseTitle: package.namaPaket,
+                                          paketId: package.paketId,
+                                          priceFinal: widget.priceFinal,
+                                          amount: parsedAmount,
+                                          typePayment: "BANK_TRANSFER",
+                                          notes: widget.note,
+                                          userReg: anggotaList);
+                                      paymentVM.sendPayment(data);
+                                    }
+                                  });
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: ColorConstant.primaryBlue,

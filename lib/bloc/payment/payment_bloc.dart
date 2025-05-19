@@ -38,7 +38,6 @@ class PaymentBloc extends Cubit<PaymentState> {
     // "token": token,
   };
 
-  // print("[PaymentBloc] Payload to be sent: $paymentData");
 
   try {
     final response = await dio.post(
