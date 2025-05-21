@@ -6,7 +6,8 @@ import 'package:mobile_umroh_v2/presentation/schedule/schedule_departure_page.da
 import 'package:mobile_umroh_v2/presentation/search/search_page.dart';
 
 class BottomMain extends StatefulWidget {
-  const BottomMain({super.key});
+  final String? trx;
+  const BottomMain({super.key, this.trx});
 
   @override
   State<BottomMain> createState() => _BottomMainState();
@@ -15,12 +16,18 @@ class BottomMain extends StatefulWidget {
 class _BottomMainState extends State<BottomMain> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screen = [
-     HomePage(),
-    const SearchPage(),
-    const ScheduleDeparturePage(),
-    const ProfilePage(),
-  ];
+  late final List<Widget> _screen;
+
+  @override
+  void initState() {
+    super.initState();
+    _screen = [
+      HomePage(),
+      const SearchPage(),
+      ScheduleDeparturePage(trx: widget.trx),
+      const ProfilePage(),
+    ];
+  }
 
   void _onTapSelected(int index) {
     setState(() {

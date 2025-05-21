@@ -210,8 +210,8 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
                     'Harga /Paket',
                     rupiahConverter.formatToRupiah(
                         int.tryParse('${transactionDetail.pricePaket}') ?? 0)),
-                _buildTransactionItem(
-                    'Jenis Paket', transactionDetail.paketClass == "VIP" ? "VIP" : "Reguler"),
+                _buildTransactionItem('Jenis Paket',
+                    transactionDetail.paketClass == "VIP" ? "VIP" : "Reguler"),
                 _buildTransactionItem('Jumlah Seat',
                     '${transactionDetail.amountSeat ?? '2'} seat'),
                 _buildTransactionItem('Hotel',
@@ -281,7 +281,13 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {
-                    Get.offAll(BottomMain());
+                    final paymentState = context.read<PaymentBloc>().state;
+                    String? trx;
+                    if (paymentState is PaymentDataLoaded) {
+                      trx = paymentState.dataModel.trx;
+                    }
+
+                    Get.offAll(() => BottomMain(trx: trx));
                   },
                   child: const Text('Selesai'),
                 ),
@@ -334,7 +340,8 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
             flex: 3,
             child: Text(
               value,
-              style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: Colors.black87, fontWeight: FontWeight.bold),
               textAlign: TextAlign.right,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
