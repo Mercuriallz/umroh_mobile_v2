@@ -21,7 +21,6 @@ class SecureStorageService {
     return value.toLowerCase() == 'true';
   }
 
- 
 
   Future<void> delete(String key) async {
     await storage.delete(key: key);

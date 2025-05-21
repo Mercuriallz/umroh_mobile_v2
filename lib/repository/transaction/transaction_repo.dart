@@ -12,7 +12,7 @@ class TransactionRepo {
     final response = await dio.get("$baseUrl/trx/status/$id",
         options: Options(
           validateStatus: (status) {
-            return status! < 500;
+            return status! < 600;
           },
           headers: {"Authorization": "Bearer $token"}));
     return response;

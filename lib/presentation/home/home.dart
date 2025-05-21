@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    print("id role : $roles");
+    // print("id role : $roles");
     final size = MediaQuery.of(context).size;
     final rupiahConverter = RupiahConverter();
 

@@ -52,7 +52,7 @@ class LoginBloc extends Cubit<LoginState> {
         await secureStorage.write("name", name);
         await secureStorage.write("role", role.toString());
 
-        print("Role id : $role");
+        // print("Role id : $role");
 
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {
@@ -133,7 +133,7 @@ class LoginBloc extends Cubit<LoginState> {
         await secureStorage.write("name", name);
         await secureStorage.write("role", role.toString());
 
-        print("Role id : $role");
+        // print("Role id : $role");
 
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {

@@ -38,14 +38,26 @@ class _OrderPageState extends State<OrderPage> {
     "VIRTUAL ACCOUNT",
   ];
 
+  List<String> typePaymentUser = [
+    "Cicilan Bank",
+    "Bayar Lunas",
+  ];
+
   Map<String, String> typePaymentValues = {
     "BANK TRANSFER": "BANK_TRANSFER",
     "VIRTUAL ACCOUNT": "VIRTUAL_ACCOUNT",
   };
 
+  Map<String, int> typePaymentUserValues = {
+    "Cicilan Bank": 1,
+    "Bayar Lunas": 0,
+  };
+
   String? selectedGender;
   String? selectedTypePayment;
   String? selectedTypePaymentValue;
+  String? selectedTypePaymentUser;
+  int? selectedTypePaymentUserValue;
 
   int counter = 1;
   final secureStorage = SecureStorageService();
@@ -102,6 +114,30 @@ class _OrderPageState extends State<OrderPage> {
       return false;
     }
 
+    if(selectedTypePayment == null) {
+      Get.snackbar(
+        "Perhatian",
+        "Tipe pembayaran harus dipilih",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+      return false;
+    }
+
+    if (selectedTypePaymentUser == null) {
+      Get.snackbar(
+        "Perhatian",
+        "Tipe pembayaran user harus dipilih",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+      return false;
+    }
+
     String cleanedAmount =
         amountController.text.replaceAll(RegExp(r'[^\d]'), '');
     if (cleanedAmount.isEmpty || int.parse(cleanedAmount) <= 0) {
@@ -121,7 +157,7 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Role ID: $roleId");
+    // print("Role ID: $roleId");
     final rupiahConverter = RupiahConverter();
 
     return Scaffold(
@@ -499,6 +535,39 @@ class _OrderPageState extends State<OrderPage> {
 
                     DropdownButtonFormField<String>(
                       decoration: InputDecoration(
+                        hintText: "Pilih Tipe Pembayaran",
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                      ),
+                      value: selectedTypePaymentUser,
+                      items: typePaymentUser
+                          .map((String displayText) => DropdownMenuItem<String>(
+                                value: displayText,
+                                child: Text(displayText),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedTypePaymentUser = value;
+                          if (value != null) {
+                            selectedTypePaymentUserValue =
+                                typePaymentUserValues[value];
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
                         hintText: "Pilih Jenis Pembayaran",
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 16),
@@ -675,11 +744,11 @@ class _OrderPageState extends State<OrderPage> {
                   const Icon(Icons.chat_bubble_outline),
                   ElevatedButton(
                     onPressed: () {
-                      // Validate amount before navigating
                       if (validateAmount()) {
                         Get.to(
                             () => DataOrderPage(
-                              typePayment: selectedTypePaymentValue,
+                                  typePayment: selectedTypePaymentValue,
+                                  typePaymentUser: selectedTypePaymentUserValue,
                                   priceFinal:
                                       int.parse(package.harga.toString()) *
                                           counter,

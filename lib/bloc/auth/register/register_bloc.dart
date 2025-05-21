@@ -48,7 +48,7 @@ class RegisterBloc extends Cubit<RegisterState> {
         emit(RegisterSuccess());
       } else {
         emit(RegisterFailed("Registrasi gagal: ${response.statusMessage}"));
-        print("Registrasi gagal: ${response.statusMessage}");
+        // print("Registrasi gagal: ${response.statusMessage}");
       }
     } catch (e) {
       String errorMessage = "Terjadi kesalahan saat registrasi";
