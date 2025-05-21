@@ -33,7 +33,19 @@ class _OrderPageState extends State<OrderPage> {
     'Perempuan',
   ];
 
+  List<String> typePayment = [
+    "BANK TRANSFER",
+    "VIRTUAL ACCOUNT",
+  ];
+
+  Map<String, String> typePaymentValues = {
+    "BANK TRANSFER": "BANK_TRANSFER",
+    "VIRTUAL ACCOUNT": "VIRTUAL_ACCOUNT",
+  };
+
   String? selectedGender;
+  String? selectedTypePayment;
+  String? selectedTypePaymentValue;
 
   int counter = 1;
   final secureStorage = SecureStorageService();
@@ -416,8 +428,7 @@ class _OrderPageState extends State<OrderPage> {
                                     horizontal: 24, vertical: 16),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(
-                                      40),
+                                  borderRadius: BorderRadius.circular(40),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -483,6 +494,39 @@ class _OrderPageState extends State<OrderPage> {
 
                     const Text("Note : Satu kamar terdiri dari 4 orang",
                         style: TextStyle(fontSize: 12)),
+
+                    const SizedBox(height: 16),
+
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        hintText: "Pilih Jenis Pembayaran",
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                      ),
+                      value: selectedTypePayment,
+                      items: typePayment
+                          .map((String displayText) => DropdownMenuItem<String>(
+                                value: displayText,
+                                child: Text(displayText),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedTypePayment = value;
+                          if (value != null) {
+                            selectedTypePaymentValue = typePaymentValues[value];
+                          }
+                        });
+                      },
+                    ),
 
                     const SizedBox(height: 16),
 
@@ -635,6 +679,7 @@ class _OrderPageState extends State<OrderPage> {
                       if (validateAmount()) {
                         Get.to(
                             () => DataOrderPage(
+                              typePayment: selectedTypePaymentValue,
                                   priceFinal:
                                       int.parse(package.harga.toString()) *
                                           counter,

@@ -198,7 +198,7 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                             width: 70,
                             height: 70,
                             child: Image.network(
-                              'https://i.pravatar.cc/100', // Ganti dengan URL atau Image.asset sesuai kebutuhan
+                              'https://i.pravatar.cc/100',
                               fit: BoxFit.cover,
                             ),
                           ),

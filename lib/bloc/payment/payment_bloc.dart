@@ -23,6 +23,7 @@ class PaymentBloc extends Cubit<PaymentState> {
     "price_final": formData.priceFinal,
     "amount": formData.amount,
     "type_payment": formData.typePayment,
+    "type_payment_user": formData.typePaymentUser,
     "notes": formData.notes,
     "user_reg": formData.userReg != null
         ? formData.userReg!
@@ -32,6 +33,7 @@ class PaymentBloc extends Cubit<PaymentState> {
                   "phone_number": v.phoneNumber,
                   "nik": v.nik,
                   "password": v.password,
+                  "hubungan_kerabat": v.hubunganKerabat
                 })
             .toList()
         : [],
@@ -58,16 +60,16 @@ class PaymentBloc extends Cubit<PaymentState> {
       var paymentData = PaymentDataModel.fromJson(response.data).data!;
       emit(PaymentSuccess());
       emit(PaymentDataLoaded(paymentData));
-      // print("Response data --> ${response.data}");
-      // print("Payment data nih --> $paymentData");
+      print("Response data --> ${response.data}");
+      print("Payment data nih --> $paymentData");
     
     } else {
       emit(PaymentFailed(response.data["message"] ?? "Unknown error"));
-      // print("[PaymentBloc] Payment failed: ${response.data["message"]}");
+      print("[PaymentBloc] Payment failed: ${response.data["message"]}");
     }
   } catch (e) {
     emit(PaymentFailed("Error: $e"));
-    // print("[PaymentBloc] Exception caught: $e");
+    print("[PaymentBloc] Exception caught: $e");
   }
 }
 }

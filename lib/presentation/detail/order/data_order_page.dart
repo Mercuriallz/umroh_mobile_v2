@@ -16,6 +16,7 @@ import 'package:mobile_umroh_v2/services/storage.dart';
 class DataOrderPage extends StatefulWidget {
   final String? amount;
   final String? note;
+  final String? typePayment;
   final int? priceFinal;
   final int? totalOrang;
   final int? id;
@@ -24,6 +25,7 @@ class DataOrderPage extends StatefulWidget {
     super.key,
     this.amount,
     this.note,
+    this.typePayment,
     this.priceFinal,
     required this.totalOrang,
     required this.id,
@@ -83,6 +85,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.typePayment);
     final paymentVM = context.read<PaymentBloc>();
     final totalJemaah = jemaahList.length;
 
@@ -126,7 +129,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         isLoading = false;
                       });
 
-                      // First dismiss the loading dialog if it's showing
                       if (Navigator.canPop(context)) {
                         Navigator.pop(context);
                       }
@@ -147,12 +149,10 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         isLoading = false;
                       });
 
-                      // Dismiss loading dialog
                       if (Navigator.canPop(context)) {
                         Navigator.pop(context);
                       }
 
-                      // Show error message with slight delay for better UX
                       Future.delayed(const Duration(milliseconds: 300), () {
                         Get.snackbar(
                           "Gagal Membuat Pesanan",
@@ -511,16 +511,21 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                     jemaah['email'] ?? "-",
                                                   ),
 
+                                                  _buildInfoRow(Icons.person, "Hubungan", 
+                                                    jemaah['hubungan_kerabat'] ??
+                                                        "-",
+                                                  ),
+
                                                   // Only show password if needed (maybe hide by default)
-                                                  if (jemaah['password'] !=
-                                                          null &&
-                                                      jemaah['password']!
-                                                          .isNotEmpty)
-                                                    _buildInfoRow(
-                                                      Icons.lock_outlined,
-                                                      "Password",
-                                                      "••••••••",
-                                                    ),
+                                                  // if (jemaah['password'] !=
+                                                  //         null &&
+                                                  //     jemaah['password']!
+                                                  //         .isNotEmpty)
+                                                  //   _buildInfoRow(
+                                                  //     Icons.lock_outlined,
+                                                  //     "Password",
+                                                  //     "••••••••",
+                                                  //   ),
                                                 ],
                                               ),
                                             ),
@@ -541,14 +546,12 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                   children: [
                                                     TextButton.icon(
                                                       onPressed: () {
-                                                        // Edit action would go here
-                                                        // Add delayed feedback when edit button is pressed
+                                                      
                                                         Future.delayed(
                                                             const Duration(
                                                                 milliseconds:
                                                                     100), () {
-                                                          // Show edit functionality or feedback
-                                                          // This is a placeholder for future implementation
+                                              
                                                         });
                                                       },
                                                       icon: const Icon(
@@ -597,7 +600,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                               height: 52,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  // Check if already processing
                                   if (isLoading) return;
 
                                   if (jemaahList.length != widget.totalOrang) {
@@ -611,12 +613,10 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                     return;
                                   }
 
-                                  // Add a small feedback delay
                                   setState(() {
                                     isLoading = true;
                                   });
 
-                                  // Process after a small delay for better UX
                                   Future.delayed(
                                       const Duration(milliseconds: 300),
                                       () async {
@@ -636,6 +636,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                               phoneNumber: jemaah['phone'],
                                               nik: jemaah['nik'],
                                               password: jemaah['password'],
+                                              hubunganKerabat:
+                                                  jemaah['hubungan_kerabat'],
                                             ))
                                         .toList();
 
@@ -657,7 +659,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                           paketId: package.paketId,
                                           priceFinal: widget.priceFinal,
                                           amount: parsedAmount,
-                                          typePayment: "BANK_TRANSFER",
+                                          typePayment: widget.typePayment,
                                           notes: widget.note,
                                           userReg: anggotaList);
                                       paymentVM.sendPayment(data);

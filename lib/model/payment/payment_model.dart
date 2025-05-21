@@ -4,6 +4,7 @@ class PaymentModel {
   int? priceFinal;
   int? amount;
   String? typePayment;
+  int? typePaymentUser;
   String? notes;
   List<UserReg>? userReg;
   String? token;
@@ -14,6 +15,7 @@ class PaymentModel {
       this.priceFinal,
       this.amount,
       this.typePayment,
+      this.typePaymentUser,
       this.notes,
       this.userReg,
       this.token
@@ -25,6 +27,7 @@ class PaymentModel {
     priceFinal = json['price_final'];
     amount = json['amount'];
     typePayment = json['type_payment'];
+    typePaymentUser = json['type_payment_user'];
     notes = json['notes'];
     if (json['user_reg'] != null) {
       userReg = <UserReg>[];
@@ -42,6 +45,7 @@ class PaymentModel {
     data['price_final'] = priceFinal;
     data['amount'] = amount;
     data['type_payment'] = typePayment;
+    data['type_payment_user'] = typePaymentUser;
     data['notes'] = notes;
     if (userReg != null) {
       data['user_reg'] = userReg!.map((v) => v.toJson()).toList();
@@ -57,8 +61,9 @@ class UserReg {
   String? phoneNumber;
   String? nik;
   String? password;
+  String? hubunganKerabat;
 
-  UserReg({this.name, this.email, this.phoneNumber, this.nik, this.password});
+  UserReg({this.name, this.email, this.phoneNumber, this.nik, this.password, this.hubunganKerabat});
 
   UserReg.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -66,6 +71,7 @@ class UserReg {
     phoneNumber = json['phone_number'];
     nik = json['nik'];
     password = json['password'];
+    hubunganKerabat = json['hubungan_kerabat'];
   }
 
   Map<String, dynamic> toJson() {
@@ -75,6 +81,7 @@ class UserReg {
     data['phone_number'] = phoneNumber;
     data['nik'] = nik;
     data['password'] = password;
+    data['hubungan_kerabat'] = hubunganKerabat;
     return data;
   }
 }
