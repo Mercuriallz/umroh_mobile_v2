@@ -11,32 +11,31 @@ class SelfTransactionBloc extends Cubit<SelfTransactionState> {
     try {
       final response = await TransactionRepo().loadSelfTransaction();
 
-      // 🟡 Log status code dan data mentah dari response
-      print("[SelfTransactionBloc] Status Code: ${response.statusCode}");
-      print("[SelfTransactionBloc] Response Data: ${response.data}");
+      // print("[SelfTransactionBloc] Status Code: ${response.statusCode}");
+      // print("[SelfTransactionBloc] Response Data: ${response.data}");
 
       if (response.statusCode == 200) {
-        final model = SelfTransactionModel.fromJson(response.data);
+        final model = SelfTransactionModel.fromJson(response.data).dataTransaction;
+        final dataPay = SelfTransactionModel.fromJson(response.data).dataPay!;
 
-        // 🟢 Log hasil parsing model
-        print("[SelfTransactionBloc] Parsed Model: ${model.toJson()}");
+        // print("[SelfTransactionBloc] Parsed Model: ${model.toJson()}");
 
-        if (model.dataTransaction != null) {
-          emit(SelfTransactionLoaded(model.dataTransaction!));
+        if (model != null) {
+          emit(SelfTransactionLoaded(model, dataPay));
+         
         } else {
-          print("[SelfTransactionBloc] ❌ dataTransaction null");
+          // print("[SelfTransactionBloc] ❌ dataTransaction null");
           emit(SelfTransactionError("Data transaksi kosong"));
         }
       } else {
         String errorMessage =
             "Failed to load self transaction : ${response.statusCode}";
-        print("[SelfTransactionBloc] ❌ $errorMessage");
+        // print("[SelfTransactionBloc] ❌ $errorMessage");
         emit(SelfTransactionError(errorMessage));
       }
-    } catch (e, stacktrace) {
-      // 🔴 Tangkap error & cetak stacktrace
-      print("[SelfTransactionBloc] Exception: $e");
-      print("[SelfTransactionBloc] Stacktrace: $stacktrace");
+    } catch (e) {
+      // print("[SelfTransactionBloc] Exception: $e");
+      // print("[SelfTransactionBloc] Stacktrace: $stacktrace");
       emit(SelfTransactionError("Error: ${e.toString()}"));
     }
   }

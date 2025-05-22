@@ -20,7 +20,7 @@ class TransactionRepo {
 
   Future<Response> loadSelfTransaction() async {
     final token = await secureStorage.read("token");
-    final response = await dio.get("https://umroh-be.floxy-it.cloud/v1/trx/self",
+    final response = await dio.get("$baseUrl/trx/self",
         options: Options(
           validateStatus: (status) {
             return status! < 600;

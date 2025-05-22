@@ -414,8 +414,9 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                         color: Colors.white),
                                   ),
                                   onDismissed: (_) {
-                                    if (isLoading)
-                                      return; // Don't allow dismissal while loading
+                                    if (isLoading) {
+                                      return;
+                                    }
                                     setState(() {
                                       jemaahList.removeAt(index);
                                       expandedList.removeAt(index);

@@ -12,12 +12,14 @@ class SelfTransactionLoading extends SelfTransactionState {}
 
 class SelfTransactionLoaded extends SelfTransactionState {
   final List<DataTransaction> selfTransaction;
+  final DataPay dataPay;
 
-  SelfTransactionLoaded(this.selfTransaction);
+  SelfTransactionLoaded(this.selfTransaction, this.dataPay);
 
   @override
-  List<Object> get props => [selfTransaction];
+  List<Object> get props => [selfTransaction, dataPay];
 }
+
 
 class SelfTransactionError extends SelfTransactionState {
   final String message;

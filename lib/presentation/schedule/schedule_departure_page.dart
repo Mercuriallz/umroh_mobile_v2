@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/bloc/transaction/transaction/self_transaction_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/transaction/transaction/self_transaction_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction_detail_page.dart';
 
 class ScheduleDeparturePage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
 
   @override
   Widget build(BuildContext context) {
+    final rupiahConverter = RupiahConverter();
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8F8),
       body: SafeArea(
@@ -37,8 +39,10 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
                 itemCount: state.selfTransaction.length,
                 itemBuilder: (context, index) {
                   final data = state.selfTransaction[index];
+                  // final dataPay = state.dataPay;
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 12),
                     child: Column(
                       children: [
                         const SizedBox(height: 24),
@@ -95,8 +99,7 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
                                   data.tPaket?.jadwalPerjalanan ?? ""),
                               _buildInfoRow("Jumlah Jema'ah",
                                   data.tPaket?.planeSeat.toString() ?? ""),
-                              _buildInfoRow("Penerbangan",
-                                  data.id.toString(),
+                              _buildInfoRow("Penerbangan", data.id.toString(),
                                   isBold: true),
                               _buildInfoRow("Status Dokumen", "Belum Lengkap",
                                   isWarning: true),
@@ -116,8 +119,7 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
                               const Text(
                                 "Status Pembayaran",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16),
+                                    fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                               const SizedBox(height: 16),
                               const Text(
@@ -125,8 +127,9 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
                                 style: TextStyle(color: Colors.grey),
                               ),
                               const SizedBox(height: 4),
-                              const Text(
-                                "Rp. 31.000.000",
+                              Text(
+                                rupiahConverter.formatToRupiah(
+                                    int.parse(data.targetCompleted.toString())),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
@@ -137,37 +140,47 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: LinearProgressIndicator(
-                                  value: 10000000 / 31000000,
+                                  value: (int.tryParse(data.amount
+                                              .toString()) ??
+                                          0) /
+                                      (int.tryParse(data.targetCompleted.toString()) ??
+                                          1),
                                   minHeight: 6,
                                   backgroundColor: Colors.blue.shade100,
-                                  valueColor: const AlwaysStoppedAnimation<Color>(
-                                      Colors.blue),
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(
+                                          Colors.blue),
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              _buildInfoRow("Terkumpul", "Rp. 2.824.000"),
-                              _buildInfoRow("Selesaikan Sebelum",
-                                  "11 November 2025"),
+                              _buildInfoRow(
+                                  "Terkumpul",
+                                  rupiahConverter.formatToRupiah(
+                                      int.parse(data.amount.toString()))),
+                              _buildInfoRow(
+                                  "Selesaikan Sebelum", "11 November 2025"),
                               const SizedBox(height: 16),
                               SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Get.to(TransactionDetailPage());
+                                    Get.to(TransactionDetailPage(
+                                      trx: data.trxPay.toString(),
+                                      // percentage: dataPay.percentangePayment,
+                                      targetCompleted: data.targetCompleted,
+                                      totalPayment: int.parse(data.amount.toString()),
+                                    ));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        ColorConstant.primaryBlue,
+                                    backgroundColor: ColorConstant.primaryBlue,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(24)),
                                   ),
                                   child: const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 12),
+                                    padding: EdgeInsets.symmetric(vertical: 12),
                                     child: Text("Transaksi",
-                                        style:
-                                            TextStyle(color: Colors.white)),
+                                        style: TextStyle(color: Colors.white)),
                                   ),
                                 ),
                               ),
@@ -178,15 +191,13 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
                         const Text(
                           "Terdapat kesalahan pemesanan atau kebimbangan hati terhadap pesanan?",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 14, color: Colors.black87),
+                          style: TextStyle(fontSize: 14, color: Colors.black87),
                         ),
                         const SizedBox(height: 8),
                         const Text(
                           "Anda dapat melakukan pengembalian dana (refund). Jika anda mendapatkan kesalahan atau alasan lain.",
                           textAlign: TextAlign.center,
-                          style:
-                              TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                         const SizedBox(height: 16),
                         SizedBox(
