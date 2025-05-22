@@ -281,13 +281,13 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {
-                    final paymentState = context.read<PaymentBloc>().state;
-                    String? trx;
-                    if (paymentState is PaymentDataLoaded) {
-                      trx = paymentState.dataModel.trx;
-                    }
+                    // final paymentState = context.read<PaymentBloc>().state;
+                    // String? trx;
+                    // if (paymentState is PaymentDataLoaded) {
+                    //   trx = paymentState.dataModel.trx;
+                    // }
 
-                    Get.offAll(() => BottomMain(trx: trx));
+                    Get.offAll(() => BottomMain());
                   },
                   child: const Text('Selesai'),
                 ),

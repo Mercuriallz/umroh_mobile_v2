@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_bloc.dart';
-import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_state.dart';
+import 'package:mobile_umroh_v2/bloc/transaction/transaction/self_transaction_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/transaction/transaction/self_transaction_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction_detail_page.dart';
 
@@ -15,51 +15,42 @@ class ScheduleDeparturePage extends StatefulWidget {
 }
 
 class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
-
   @override
-void initState() {
-  super.initState();
-  
-  // Gunakan widget.trx untuk memuat data transaksi
-  if (widget.trx != null && widget.trx!.isNotEmpty) {
-    context.read<TransactionDetailBloc>().getTransactionDetail(widget.trx!);
-    
-   
+  void initState() {
+    super.initState();
+    context.read<SelfTransactionBloc>().getSelfTransaction();
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8F8),
       body: SafeArea(
-        child: BlocBuilder<TransactionDetailBloc, TransactionDetailState>(
+        child: BlocBuilder<SelfTransactionBloc, SelfTransactionState>(
           builder: (context, state) {
-            if (state is TransactionDetailLoading) {
+            if (state is SelfTransactionLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is TransactionDetailError) {
-              return Center(
-                child: Text("Error"),
-              );
-            } else if (state is TransactionDetailLoaded) {
-              final data = state.transactionDetailModel;
-              return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 24),
-                const Text(
-                  "Jadwal Keberangkatan",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Expanded(
-                  child: SingleChildScrollView(
+            } else if (state is SelfTransactionError) {
+              return const Center(child: Text("Error"));
+            } else if (state is SelfTransactionLoaded) {
+              return ListView.builder(
+                itemCount: state.selfTransaction.length,
+                itemBuilder: (context, index) {
+                  final data = state.selfTransaction[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
                     child: Column(
                       children: [
+                        const SizedBox(height: 24),
+                        const Text(
+                          "Jadwal Keberangkatan",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -69,9 +60,9 @@ void initState() {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                               Text(
-                                data.paketName ?? "",
-                                style: TextStyle(
+                              Text(
+                                data.tPaket?.namaPaket ?? "",
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                               const SizedBox(height: 4),
@@ -86,25 +77,26 @@ void initState() {
                                   Text("Jakarta"),
                                   SizedBox(width: 8),
                                   Expanded(
-                                    child:
-                                        Divider(color: Colors.grey, thickness: 1),
+                                    child: Divider(
+                                        color: Colors.grey, thickness: 1),
                                   ),
                                   Icon(Icons.flight_takeoff,
                                       size: 24, color: Colors.black54),
                                   Expanded(
-                                    child:
-                                        Divider(color: Colors.grey, thickness: 1),
+                                    child: Divider(
+                                        color: Colors.grey, thickness: 1),
                                   ),
                                   SizedBox(width: 8),
                                   Text("Mekah"),
                                 ],
                               ),
                               const SizedBox(height: 16),
-                              _buildInfoRow(
-                                  "Estimasi Berangkat", data.tanggalKeberangkatan ?? ""),
-                              _buildInfoRow("Jumlah Jema'ah", data.amountSeat.toString()),
-                              _buildInfoRow(
-                                  "Penerbangan", data.airportName ?? "",
+                              _buildInfoRow("Estimasi Berangkat",
+                                  data.tPaket?.jadwalPerjalanan ?? ""),
+                              _buildInfoRow("Jumlah Jema'ah",
+                                  data.tPaket?.planeSeat.toString() ?? ""),
+                              _buildInfoRow("Penerbangan",
+                                  data.id.toString(),
                                   isBold: true),
                               _buildInfoRow("Status Dokumen", "Belum Lengkap",
                                   isWarning: true),
@@ -112,7 +104,6 @@ void initState() {
                           ),
                         ),
                         const SizedBox(height: 24),
-          
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -125,7 +116,8 @@ void initState() {
                               const Text(
                                 "Status Pembayaran",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
                               ),
                               const SizedBox(height: 16),
                               const Text(
@@ -148,14 +140,14 @@ void initState() {
                                   value: 10000000 / 31000000,
                                   minHeight: 6,
                                   backgroundColor: Colors.blue.shade100,
-                                  valueColor:
-                                      AlwaysStoppedAnimation<Color>(Colors.blue),
+                                  valueColor: const AlwaysStoppedAnimation<Color>(
+                                      Colors.blue),
                                 ),
                               ),
                               const SizedBox(height: 16),
                               _buildInfoRow("Terkumpul", "Rp. 2.824.000"),
-                              _buildInfoRow(
-                                  "Selesaikan Sebelum", "11 November 2025"),
+                              _buildInfoRow("Selesaikan Sebelum",
+                                  "11 November 2025"),
                               const SizedBox(height: 16),
                               SizedBox(
                                 width: double.infinity,
@@ -164,14 +156,18 @@ void initState() {
                                     Get.to(TransactionDetailPage());
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: ColorConstant.primaryBlue,
+                                    backgroundColor:
+                                        ColorConstant.primaryBlue,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(24)),
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
                                   ),
                                   child: const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 12),
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 12),
                                     child: Text("Transaksi",
-                                        style: TextStyle(color: Colors.white)),
+                                        style:
+                                            TextStyle(color: Colors.white)),
                                   ),
                                 ),
                               ),
@@ -179,18 +175,18 @@ void initState() {
                           ),
                         ),
                         const SizedBox(height: 32),
-          
-                        // Refund Section
                         const Text(
                           "Terdapat kesalahan pemesanan atau kebimbangan hati terhadap pesanan?",
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 14, color: Colors.black87),
+                          style: TextStyle(
+                              fontSize: 14, color: Colors.black87),
                         ),
                         const SizedBox(height: 8),
                         const Text(
                           "Anda dapat melakukan pengembalian dana (refund). Jika anda mendapatkan kesalahan atau alasan lain.",
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style:
+                              TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                         const SizedBox(height: 16),
                         SizedBox(
@@ -212,21 +208,16 @@ void initState() {
                         const SizedBox(height: 32),
                       ],
                     ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        
+                  );
+                },
+              );
             }
-            return const Center(
-              child: Text("No Data"),
-            );
+
+            return const Center(child: Text("No Data"));
           },
-        )
-          ),
-      );
-    
+        ),
+      ),
+    );
   }
 
   Widget _buildInfoRow(String title, String value,
