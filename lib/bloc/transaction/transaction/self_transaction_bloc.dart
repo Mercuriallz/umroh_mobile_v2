@@ -11,32 +11,21 @@ class SelfTransactionBloc extends Cubit<SelfTransactionState> {
     try {
       final response = await TransactionRepo().loadSelfTransaction();
 
-      // print("[SelfTransactionBloc] Status Code: ${response.statusCode}");
-      // print("[SelfTransactionBloc] Response Data: ${response.data}");
-
       if (response.statusCode == 200) {
-        final model = SelfTransactionModel.fromJson(response.data).dataTransaction;
-        final dataPay = SelfTransactionModel.fromJson(response.data).dataPay!;
-
-        // print("[SelfTransactionBloc] Parsed Model: ${model.toJson()}");
+         final model = SelfTransactionModel.fromJson(response.data).data!.transactionList;
+        // final dataPay = SelfTransactionModel.fromJson(response.data).data!.transactionHistory!;
 
         if (model != null) {
-          emit(SelfTransactionLoaded(model, dataPay));
-         
+          emit(SelfTransactionLoaded(model));
         } else {
-          // print("[SelfTransactionBloc] ❌ dataTransaction null");
           emit(SelfTransactionError("Data transaksi kosong"));
         }
       } else {
-        String errorMessage =
-            "Failed to load self transaction : ${response.statusCode}";
-        // print("[SelfTransactionBloc] ❌ $errorMessage");
-        emit(SelfTransactionError(errorMessage));
+        emit(SelfTransactionError(
+            "Gagal memuat data transaksi: ${response.statusCode}"));
       }
     } catch (e) {
-      // print("[SelfTransactionBloc] Exception: $e");
-      // print("[SelfTransactionBloc] Stacktrace: $stacktrace");
-      emit(SelfTransactionError("Error: ${e.toString()}"));
+      emit(SelfTransactionError("Terjadi kesalahan: ${e.toString()}"));
     }
   }
 }

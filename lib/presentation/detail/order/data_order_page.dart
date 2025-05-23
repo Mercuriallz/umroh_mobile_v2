@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
-import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
+import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_state.dart';
 import 'package:mobile_umroh_v2/bloc/payment/payment_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/payment/payment_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
@@ -61,7 +61,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
     // Use a shorter delay for better UX
     Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) {
-        context.read<PackageBloc>().getPackageById(widget.id.toString());
+        context.read<PackageIdBloc>().getPackageById(widget.id.toString());
       }
     });
   }
@@ -227,9 +227,9 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         });
                       }
                     },
-                    child: BlocBuilder<PackageBloc, PackageState>(
+                    child: BlocBuilder<PackageIdBloc, PackageIdState>(
                       builder: (context, state) {
-                        if (state is PackageLoading) {
+                        if (state is PackageIdLoading) {
                           return const Center(
                               child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 100),
@@ -514,9 +514,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                       child: Text(
                                                         index == 0
                                                             ? "Pemesan"
-                                                            : jemaah[
-                                                                    'type_jemaah'] ??
-                                                                "Jamaah",
+                                                            : "Jemaah",
                                                         style: const TextStyle(
                                                           color: Colors.white,
                                                           fontWeight:

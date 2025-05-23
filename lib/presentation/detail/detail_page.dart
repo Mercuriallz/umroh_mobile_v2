@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
-import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
+
+import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
@@ -19,22 +20,15 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
-  void refreshId() {
-    setState(() {
-      widget.id.toString();
-    });
-  }
-
   void refreshData() {
-    context.read<PackageBloc>().getPackageById(widget.id.toString());
+    context.read<PackageIdBloc>().getPackageById(widget.id.toString());
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    refreshData();
-    refreshId();
+    refreshData(); // initial load
   }
 
   @override
@@ -45,8 +39,8 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed || state == AppLifecycleState.inactive) {
-      refreshData();
+    if (state == AppLifecycleState.resumed) {
+      refreshData(); // Only refresh when the app is resumed from background
     }
   }
 
@@ -57,9 +51,10 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: BlocBuilder<PackageBloc, PackageState>(
+          child: BlocBuilder<PackageIdBloc, PackageIdState>(
             builder: (context, state) {
-              if (state is PackageLoading) {
+              print("📦 State Sekarang: $state"); 
+              if (state is PackageIdInitial || state is PackageIdLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is PackageLoadedById) {
                 final package = state.packageId;
@@ -71,54 +66,44 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
-                      child: Row(
-                        children: [
-                         CustomBackHeader(title: "Detail Paket", onBack: () => Navigator.pop(context)),
-                          const SizedBox(width: 8),
-                       
-                        ],
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: CustomBackHeader(
+                        title: "Detail Paket",
+                        onBack: () => Navigator.pop(context),
                       ),
                     ),
-                    const SizedBox(height: 20),
                     ShimmerImage(
                       imageUrl: package.imgThumbnail ?? "",
                       height: 180,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     const SizedBox(height: 12),
-                    Text(
-                      package.namaPaket ?? "-",
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
+                    Text(package.namaPaket ?? "-",
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
                     package.isVip == true
-                        ? Row(
-                            children: [
-                              Icon(Icons.star, size: 18, color: Colors.amber),
-                              SizedBox(width: 4),
-                              Text("VIP",
-                                  style: TextStyle(color: Colors.amber)),
-                            ],
-                          )
-                        : Text("Reguler"),
+                        ? Row(children: [
+                            const Icon(Icons.star,
+                                size: 18, color: Colors.amber),
+                            const SizedBox(width: 4),
+                            const Text("VIP",
+                                style: TextStyle(color: Colors.amber))
+                          ])
+                        : const Text("Reguler"),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        if (features.contains("pesawat"))
-                          _buildIconText(Icons.flight_takeoff, "Pesawat"),
-                        if (features.contains("antar"))
-                          _buildIconText(Icons.directions_car, "Antar"),
-                        if (features.contains("hotel"))
-                          _buildIconText(Icons.hotel, "Hotel"),
-                        if (features.contains("bis"))
-                          _buildIconText(Icons.directions_bus, "Bus"),
-                        if (features.contains("konsumsi"))
-                          _buildIconText(Icons.food_bank, "Konsumsi")
-                      ],
-                    ),
+                    Row(children: [
+                      if (features.contains("pesawat"))
+                        _buildIconText(Icons.flight_takeoff, "Pesawat"),
+                      if (features.contains("antar"))
+                        _buildIconText(Icons.directions_car, "Antar"),
+                      if (features.contains("hotel"))
+                        _buildIconText(Icons.hotel, "Hotel"),
+                      if (features.contains("bis"))
+                        _buildIconText(Icons.directions_bus, "Bus"),
+                      if (features.contains("konsumsi"))
+                        _buildIconText(Icons.food_bank, "Konsumsi"),
+                    ]),
                     const SizedBox(height: 20),
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -134,49 +119,9 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                     Text(package.desc ?? "-",
                         style: const TextStyle(color: Colors.black87)),
                     const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.flight_takeoff,
-                              color: Colors.black, size: 24),
-                          const SizedBox(width: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text("Penerbangan",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
-                              SizedBox(height: 4),
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "Saudi Airlines",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    TextSpan(
-                                      text: " - Bandara Soekarno Hatta",
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                                style: TextStyle(fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    _buildFlightSection(),
                     const SizedBox(height: 16),
-                    const Text("Perjalanan",
+                    const Text("Estimasi Keberangkatan",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
                     Text(package.jadwalPerjalanan ?? "-"),
@@ -189,109 +134,15 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 12),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: SizedBox(
-                            width: 70,
-                            height: 70,
-                            child: Image.network(
-                              'https://i.pravatar.cc/100',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                package.tHotel![0].name ??
-                                    "Hotel Belum Ditemukan",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w700),
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: List.generate(5, (index) {
-                                  if (index < package.tHotel![0].rate!) {
-                                    return Icon(Icons.star,
-                                        color: Colors.amber);
-                                  } else {
-                                    return Icon(Icons.star_border,
-                                        color: Colors.amber);
-                                  }
-                                }),
-                              ),
-                              const SizedBox(height: 8),
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: [
-                                  _fasilitasItem(Icons.restaurant, "Konsumsi"),
-                                  _fasilitasItem(Icons.wifi, "Wi-Fi"),
-                                  _fasilitasItem(Icons.tv, "Hiburan"),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildHotelSection(package),
                     const SizedBox(height: 50),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Mulai dari',
-                                style: TextStyle(fontSize: 16)),
-                            const SizedBox(height: 4),
-                            Text(
-                              package.harga != null
-                                  ? RupiahConverter().formatToRupiah(
-                                      int.parse(package.harga.toString()))
-                                  : 'Rp. 0',
-                              style: const TextStyle(
-                                fontSize: 22,
-                                color: Color(0xFF75B6FF),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text("${package.planeSeat} Seat/Bangku",
-                                style: TextStyle(fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.to(() =>
-                                OrderPage(id: package.paketId.toString()));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorConstant.primaryBlue,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 14),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                          child: const Text('Pesan Sekarang',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
-                        ),
-                      ],
-                    ),
+                    _buildFooter(package),
                   ],
                 );
-              } else if (state is PackageError) {
+              } else if (state is PackageIdError) {
                 return Center(child: Text(state.message));
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return Text("Unknown State"); // Safe fallback: return empty widget
               }
             },
           ),
@@ -325,16 +176,154 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
         children: [
           Icon(icon, color: Colors.blue[700], size: 18),
           const SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.blue[700],
-              fontWeight: FontWeight.w500,
-            ),
+          Text(label,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.blue[700],
+                  fontWeight: FontWeight.w500)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFlightSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Row(
+        children: const [
+          Icon(Icons.flight_takeoff, color: Colors.black, size: 24),
+          SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Penerbangan",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+              SizedBox(height: 4),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Saudi Airlines",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w600),
+                    ),
+                    TextSpan(
+                      text: " - Bandara Soekarno Hatta",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildHotelSection(dynamic package) {
+    final hotel =
+        package.tHotel?.isNotEmpty == true ? package.tHotel![0] : null;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.network(
+              'https://al-ansar-new-palace-hotel-medina.hotelmix.id/data/Photos/450x450/16660/1666033/1666033047.JPEG',
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        if (hotel != null)
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  hotel.name ?? "Hotel Belum Ditemukan",
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: List.generate(5, (index) {
+                    return Icon(
+                      index < (hotel.rate ?? 0)
+                          ? Icons.star
+                          : Icons.star_border,
+                      color: Colors.amber,
+                    );
+                  }),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _fasilitasItem(Icons.restaurant, "Konsumsi"),
+                    _fasilitasItem(Icons.wifi, "Wi-Fi"),
+                    _fasilitasItem(Icons.tv, "Hiburan"),
+                  ],
+                ),
+              ],
+            ),
+          )
+        else
+          const Text("Informasi hotel tidak tersedia."),
+      ],
+    );
+  }
+
+  Widget _buildFooter(dynamic package) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Mulai dari', style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 4),
+            Text(
+              package.harga != null
+                  ? RupiahConverter()
+                      .formatToRupiah(int.parse(package.harga.toString()))
+                  : 'Rp. 0',
+              style: const TextStyle(
+                fontSize: 22,
+                color: Color(0xFF75B6FF),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text("${package.planeSeat} Seat/Bangku",
+                style: const TextStyle(fontWeight: FontWeight.w600)),
+          ],
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Get.to(() => OrderPage(id: package.paketId.toString()));
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: ColorConstant.primaryBlue,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          ),
+          child: const Text('Pesan Sekarang',
+              style: TextStyle(color: Colors.white, fontSize: 16)),
+        ),
+      ],
     );
   }
 }

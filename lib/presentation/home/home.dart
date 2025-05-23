@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart' as getx;
 
-import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
-import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
+import 'package:mobile_umroh_v2/bloc/package/package/package_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/package/package/package_state.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/presentation/detail/detail_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
@@ -382,79 +382,81 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   } else if (state is PackageError) {
                     return Text("Terjadi kesalahan: ${state.message}");
                   } else {
-                    return const SizedBox();
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
                 },
               ),
               const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.location_pin, size: 16, color: Colors.grey),
-                        SizedBox(width: 4),
-                        Text("Bojong", style: TextStyle(fontSize: 12)),
-                      ],
-                    ),
-                    Text("Isya", style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text("19:19 Malam",
-                        style: TextStyle(color: Colors.black54)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text("Panduan Umrah",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-              const SizedBox(height: 12),
-              Column(
-                children: List.generate(3, (index) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(color: Colors.black12, blurRadius: 6)
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          color: Colors.grey[300],
-                        ),
-                        const SizedBox(width: 12),
-                        const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                  "Tata Cara Menjalankan Umrah yang baik dan benar",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w500)),
-                              SizedBox(height: 6),
-                              Text("Durasi 10 jam",
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey)),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }),
-              ),
-              const SizedBox(height: 80),
+              // Container(
+              //   padding: const EdgeInsets.all(16),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(16),
+              //     boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+              //   ),
+              //   child: const Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Row(
+              //         children: [
+              //           Icon(Icons.location_pin, size: 16, color: Colors.grey),
+              //           SizedBox(width: 4),
+              //           Text("Bojong", style: TextStyle(fontSize: 12)),
+              //         ],
+              //       ),
+              //       Text("Isya", style: TextStyle(fontWeight: FontWeight.bold)),
+              //       Text("19:19 Malam",
+              //           style: TextStyle(color: Colors.black54)),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(height: 20),
+              // const Text("Panduan Umrah",
+              //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+              // const SizedBox(height: 12),
+              // Column(
+              //   children: List.generate(3, (index) {
+              //     return Container(
+              //       margin: const EdgeInsets.only(bottom: 10),
+              //       padding: const EdgeInsets.all(12),
+              //       decoration: BoxDecoration(
+              //         color: Colors.white,
+              //         borderRadius: BorderRadius.circular(16),
+              //         boxShadow: [
+              //           BoxShadow(color: Colors.black12, blurRadius: 6)
+              //         ],
+              //       ),
+              //       child: Row(
+              //         children: [
+              //           Container(
+              //             width: 60,
+              //             height: 60,
+              //             color: Colors.grey[300],
+              //           ),
+              //           const SizedBox(width: 12),
+              //           const Expanded(
+              //             child: Column(
+              //               crossAxisAlignment: CrossAxisAlignment.start,
+              //               children: [
+              //                 Text(
+              //                     "Tata Cara Menjalankan Umrah yang baik dan benar",
+              //                     style:
+              //                         TextStyle(fontWeight: FontWeight.w500)),
+              //                 SizedBox(height: 6),
+              //                 Text("Durasi 10 jam",
+              //                     style: TextStyle(
+              //                         fontSize: 12, color: Colors.grey)),
+              //               ],
+              //             ),
+              //           )
+              //         ],
+              //       ),
+              //     );
+              //   }),
+              // ),
+              // const SizedBox(height: 80),
             ],
           ),
         ),

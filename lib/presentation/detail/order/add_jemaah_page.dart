@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/constant/header_page.dart';
 
 class AddJemaahPage extends StatefulWidget {
   const AddJemaahPage({super.key});
@@ -38,7 +39,7 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
       Navigator.pop(context, {
         "nama": nameController.text,
         "jenis_kelamin": selectedGender!,
-        "type_jemaah": selectedTypeJemaah!,
+        // "type_jemaah": selectedTypeJemaah!,
         "email": emailController.text,
         "phone": phoneController.text,
         "nik": nikController.text,
@@ -71,52 +72,55 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
           child: Column(
             children: [
               const SizedBox(height: 16),
-              Row(
-                children: const [
-                  Icon(Icons.arrow_back),
-                  SizedBox(width: 8),
-                  Text("Jema'ah",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                ],
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Row(
+                  children: [
+                    CustomBackHeader(
+                        title: "Tambah Jamaah",
+                        onBack: () => Navigator.pop(context)),
+                    const SizedBox(width: 8),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: DropdownButtonFormField<String>(
-                  items: typeJemaah.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                          )),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedTypeJemaah = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: "Pilih Type Jemaah",
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(color: Colors.grey),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 20, right: 20),
+              //   child: DropdownButtonFormField<String>(
+              //     items: typeJemaah.map((String item) {
+              //       return DropdownMenuItem<String>(
+              //         value: item,
+              //         child: Text(item,
+              //             style: const TextStyle(
+              //               color: Colors.black,
+              //               fontSize: 16,
+              //             )),
+              //       );
+              //     }).toList(),
+              //     onChanged: (value) {
+              //       setState(() {
+              //         selectedTypeJemaah = value;
+              //       });
+              //     },
+              //     decoration: InputDecoration(
+              //       hintText: "Pilih Type Jemaah",
+              //       contentPadding: const EdgeInsets.symmetric(
+              //           horizontal: 20, vertical: 16),
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(30),
+              //         borderSide: const BorderSide(color: Colors.grey),
+              //       ),
+              //       enabledBorder: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(30),
+              //         borderSide: const BorderSide(color: Colors.grey),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: TextFormField(
@@ -170,36 +174,31 @@ class _AddJemaahPageState extends State<AddJemaahPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
-                child:
-                    TextFormField(
-                      
-                      keyboardType: TextInputType.number,
-                      controller: nikController,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(16),
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      onChanged: (value) {
-                        setState(() {}); // Untuk update counter secara realtime
-                      },
-                      decoration: InputDecoration(
-                        counterText: "${nikController.text.length}/16",
-                        counterStyle: TextStyle(
-                        fontSize: 12,
-                        color: nikController.text.length < 16
-                            ? Colors.red
-                            : Colors.green,
-                      ),
-                         
-                        hintText: "NIK",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(color: Colors.grey),
-                        ),
-                      ),
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: nikController,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(16),
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChanged: (value) {
+                    setState(() {}); // Untuk update counter secara realtime
+                  },
+                  decoration: InputDecoration(
+                    counterText: "${nikController.text.length}/16",
+                    counterStyle: TextStyle(
+                      fontSize: 12,
+                      color: nikController.text.length < 16
+                          ? Colors.red
+                          : Colors.green,
                     ),
-                   
-                 
+                    hintText: "NIK",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 20,

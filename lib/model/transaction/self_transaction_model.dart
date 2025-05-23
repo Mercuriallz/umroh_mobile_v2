@@ -1,32 +1,15 @@
 class SelfTransactionModel {
   int? status;
   bool? error;
-  List<DataTransaction>? dataTransaction;
-  DataPay? dataPay;
-  TPaket? dataPaket;
+  DataTransaction? data;
   String? message;
 
-  SelfTransactionModel(
-      {this.status,
-      this.error,
-      this.dataTransaction,
-      this.dataPay,
-      this.dataPaket,
-      this.message});
+  SelfTransactionModel({this.status, this.error, this.data, this.message});
 
   SelfTransactionModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     error = json['error'];
-    if (json['data_transaction'] != null) {
-      dataTransaction = <DataTransaction>[];
-      json['data_transaction'].forEach((v) {
-        dataTransaction!.add(DataTransaction.fromJson(v));
-      });
-    }
-    dataPay =
-        json['data_pay'] != null ? DataPay.fromJson(json['data_pay']) : null;
-    dataPaket =
-        json['data_paket'] != null ? TPaket.fromJson(json['data_paket']) : null;
+    data = json['data'] != null ? DataTransaction.fromJson(json['data']) : null;
     message = json['message'];
   }
 
@@ -34,15 +17,8 @@ class SelfTransactionModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['error'] = error;
-    if (dataTransaction != null) {
-      data['data_transaction'] =
-          dataTransaction!.map((v) => v.toJson()).toList();
-    }
-    if (dataPay != null) {
-      data['data_pay'] = dataPay!.toJson();
-    }
-    if (dataPaket != null) {
-      data['data_paket'] = dataPaket!.toJson();
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
     }
     data['message'] = message;
     return data;
@@ -50,6 +26,143 @@ class SelfTransactionModel {
 }
 
 class DataTransaction {
+  TransactionList? transactionList;
+  List<TransactionHistory>? transactionHistory;
+  UserChildrenLog? matchedChild;
+
+  DataTransaction({this.transactionList, this.transactionHistory, this.matchedChild});
+
+  DataTransaction.fromJson(Map<String, dynamic> json) {
+    transactionList = json['transaction_list'] != null
+        ? TransactionList.fromJson(json['transaction_list'])
+        : null;
+    if (json['transaction_history'] != null) {
+      transactionHistory = <TransactionHistory>[];
+      json['transaction_history'].forEach((v) {
+        transactionHistory!.add(TransactionHistory.fromJson(v));
+      });
+    }
+    matchedChild = json['matched_child'] != null
+        ? UserChildrenLog.fromJson(json['matched_child'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (transactionList != null) {
+      data['transaction_list'] = transactionList!.toJson();
+    }
+    if (transactionHistory != null) {
+      data['transaction_history'] =
+          transactionHistory!.map((v) => v.toJson()).toList();
+    }
+    if (matchedChild != null) {
+      data['matched_child'] = matchedChild!.toJson();
+    }
+    return data;
+  }
+}
+
+class TransactionList {
+  int? id;
+  String? purchaseTitle;
+  String? trx;
+  String? proofPaymentImage;
+  int? statusPayPaket;
+  int? createdBy;
+  String? approvedBy;
+  String? createdAt;
+  int? userId;
+  int? paketId;
+  String? priceFinal;
+  List<UserChildrenLog>? userChildrenLog;
+  String? typePaymentUser;
+  String? statusCreditPayment;
+
+  TransactionList(
+      {this.id,
+      this.purchaseTitle,
+      this.trx,
+      this.proofPaymentImage,
+      this.statusPayPaket,
+      this.createdBy,
+      this.approvedBy,
+      this.createdAt,
+      this.userId,
+      this.paketId,
+      this.priceFinal,
+      this.userChildrenLog,
+      this.typePaymentUser,
+      this.statusCreditPayment});
+
+  TransactionList.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    purchaseTitle = json['purchase_title'];
+    trx = json['trx'];
+    proofPaymentImage = json['proof_payment_image'];
+    statusPayPaket = json['status_pay_paket'];
+    createdBy = json['created_by'];
+    approvedBy = json['approved_by'];
+    createdAt = json['created_at'];
+    userId = json['user_id'];
+    paketId = json['paket_id'];
+    priceFinal = json['price_final'];
+    if (json['user_children_log'] != null) {
+      userChildrenLog = <UserChildrenLog>[];
+      json['user_children_log'].forEach((v) {
+        userChildrenLog!.add(UserChildrenLog.fromJson(v));
+      });
+    }
+    typePaymentUser = json['type_payment_user'];
+    statusCreditPayment = json['status_credit_payment'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['purchase_title'] = purchaseTitle;
+    data['trx'] = trx;
+    data['proof_payment_image'] = proofPaymentImage;
+    data['status_pay_paket'] = statusPayPaket;
+    data['created_by'] = createdBy;
+    data['approved_by'] = approvedBy;
+    data['created_at'] = createdAt;
+    data['user_id'] = userId;
+    data['paket_id'] = paketId;
+    data['price_final'] = priceFinal;
+    if (userChildrenLog != null) {
+      data['user_children_log'] =
+          userChildrenLog!.map((v) => v.toJson()).toList();
+    }
+    data['type_payment_user'] = typePaymentUser;
+    data['status_credit_payment'] = statusCreditPayment;
+    return data;
+  }
+}
+
+class UserChildrenLog {
+  int? userId;
+  String? status;
+  int? transactionId;
+
+  UserChildrenLog({this.userId, this.status, this.transactionId});
+
+  UserChildrenLog.fromJson(Map<String, dynamic> json) {
+    userId = json['user_id'];
+    status = json['status'];
+    transactionId = json['transaction_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['user_id'] = userId;
+    data['status'] = status;
+    data['transaction_id'] = transactionId;
+    return data;
+  }
+}
+
+class TransactionHistory {
   int? id;
   String? trxPay;
   int? userId;
@@ -64,13 +177,11 @@ class DataTransaction {
   String? details;
   String? payAt;
   String? payTime;
-  List<int>? userInsert;
+  String? userInsert;
   String? trxInv;
   String? vaNumber;
-  TPaket? tPaket;
-  UserPendaftar? userPendaftar;
 
-  DataTransaction(
+  TransactionHistory(
       {this.id,
       this.trxPay,
       this.userId,
@@ -87,11 +198,9 @@ class DataTransaction {
       this.payTime,
       this.userInsert,
       this.trxInv,
-      this.vaNumber,
-      this.tPaket,
-      this.userPendaftar});
+      this.vaNumber});
 
-  DataTransaction.fromJson(Map<String, dynamic> json) {
+  TransactionHistory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     trxPay = json['trx_pay'];
     userId = json['user_id'];
@@ -106,15 +215,9 @@ class DataTransaction {
     details = json['details'];
     payAt = json['pay_at'];
     payTime = json['pay_time'];
-    userInsert = json['user_insert'] != null
-        ? List<int>.from(json['user_insert'])
-        : null;
+    userInsert = json['user_insert'];
     trxInv = json['trx_inv'];
     vaNumber = json['va_number'];
-    tPaket = json['t_paket'] != null ? TPaket.fromJson(json['t_paket']) : null;
-    userPendaftar = json['user_pendaftar'] != null
-        ? UserPendaftar.fromJson(json['user_pendaftar'])
-        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -136,134 +239,6 @@ class DataTransaction {
     data['user_insert'] = userInsert;
     data['trx_inv'] = trxInv;
     data['va_number'] = vaNumber;
-    if (tPaket != null) {
-      data['t_paket'] = tPaket!.toJson();
-    }
-    if (userPendaftar != null) {
-      data['user_pendaftar'] = userPendaftar!.toJson();
-    }
-    return data;
-  }
-}
-
-class TPaket {
-  int? paketId;
-  String? namaPaket;
-  String? desc;
-  String? harga;
-  bool? isActive;
-  String? createdAt;
-  String? updatedAt;
-  String? durasiPerjalanan;
-  String? jadwalPerjalanan;
-  int? typePaket;
-  List<String>? arrFeature;
-  String? imgThumbnail;
-  bool? isVip;
-  int? planeSeat;
-  String? kodePaket;
-  int? airplaneTypeId;
-  int? airportId;
-
-  TPaket(
-      {this.paketId,
-      this.namaPaket,
-      this.desc,
-      this.harga,
-      this.isActive,
-      this.createdAt,
-      this.updatedAt,
-      this.durasiPerjalanan,
-      this.jadwalPerjalanan,
-      this.typePaket,
-      this.arrFeature,
-      this.imgThumbnail,
-      this.isVip,
-      this.planeSeat,
-      this.kodePaket,
-      this.airplaneTypeId,
-      this.airportId});
-
-  TPaket.fromJson(Map<String, dynamic> json) {
-    paketId = json['paket_id'];
-    namaPaket = json['nama_paket'];
-    desc = json['desc'];
-    harga = json['harga'];
-    isActive = json['is_active'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    durasiPerjalanan = json['durasi_perjalanan'];
-    jadwalPerjalanan = json['jadwal_perjalanan'];
-    typePaket = json['type_paket'];
-    arrFeature = json['arr_feature'].cast<String>();
-    imgThumbnail = json['img_thumbnail'];
-    isVip = json['is_vip'];
-    planeSeat = json['plane_seat'];
-    kodePaket = json['kode_paket'];
-    airplaneTypeId = json['airplane_type_id'];
-    airportId = json['airport_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['paket_id'] = paketId;
-    data['nama_paket'] = namaPaket;
-    data['desc'] = desc;
-    data['harga'] = harga;
-    data['is_active'] = isActive;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['durasi_perjalanan'] = durasiPerjalanan;
-    data['jadwal_perjalanan'] = jadwalPerjalanan;
-    data['type_paket'] = typePaket;
-    data['arr_feature'] = arrFeature;
-    data['img_thumbnail'] = imgThumbnail;
-    data['is_vip'] = isVip;
-    data['plane_seat'] = planeSeat;
-    data['kode_paket'] = kodePaket;
-    data['airplane_type_id'] = airplaneTypeId;
-    data['airport_id'] = airportId;
-    return data;
-  }
-}
-
-class UserPendaftar {
-  int? userId;
-  String? name;
-
-  UserPendaftar({this.userId, this.name});
-
-  UserPendaftar.fromJson(Map<String, dynamic> json) {
-    userId = json['user_id'];
-    name = json['name'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['user_id'] = userId;
-    data['name'] = name;
-    return data;
-  }
-}
-
-class DataPay {
-  int? totalPayment;
-  String? targetCompleted;
-  String? percentangePayment;
-
-  DataPay({this.totalPayment, this.targetCompleted, this.percentangePayment});
-
-  DataPay.fromJson(Map<String, dynamic> json) {
-    totalPayment = json['total_payment'];
-    targetCompleted = json['target_completed'];
-    percentangePayment = json['percentange_payment'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['total_payment'] = totalPayment;
-    data['target_completed'] = targetCompleted;
-    data['percentange_payment'] = percentangePayment;
     return data;
   }
 }

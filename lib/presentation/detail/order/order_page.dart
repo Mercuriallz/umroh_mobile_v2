@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart' as gets;
-import 'package:mobile_umroh_v2/bloc/package/package_bloc.dart';
-import 'package:mobile_umroh_v2/bloc/package/package_state.dart';
+
+import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/payment_text_field.dart';
 
@@ -39,7 +40,7 @@ class _OrderPageState extends State<OrderPage> {
   ];
 
   List<String> typePaymentUser = [
-    "Cicilan Bank",
+    "Dana Talangan",
     "Bayar Lunas",
   ];
 
@@ -49,7 +50,7 @@ class _OrderPageState extends State<OrderPage> {
   };
 
   Map<String, int> typePaymentUserValues = {
-    "Cicilan Bank": 1,
+    "Dana Talangan": 1,
     "Bayar Lunas": 0,
   };
 
@@ -86,7 +87,7 @@ class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
     super.initState();
-    context.read<PackageBloc>().getPackageById(widget.id.toString());
+    context.read<PackageIdBloc>().getPackageById(widget.id.toString());
     loadRoleId();
   }
 
@@ -102,19 +103,19 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   bool validateAmount() {
-    if (amountController.text.isEmpty) {
-      Get.snackbar(
-        "Perhatian",
-        "Jumlah pembayaran harus diisi",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 3),
-      );
-      return false;
-    }
+    // if (amountController.text.isEmpty) {
+    //   Get.snackbar(
+    //     "Perhatian",
+    //     "Jumlah pembayaran harus diisi",
+    //     snackPosition: SnackPosition.BOTTOM,
+    //     backgroundColor: Colors.red,
+    //     colorText: Colors.white,
+    //     duration: const Duration(seconds: 3),
+    //   );
+    //   return false;
+    // }
 
-    if(selectedTypePayment == null) {
+    if (selectedTypePayment == null) {
       Get.snackbar(
         "Perhatian",
         "Tipe pembayaran harus dipilih",
@@ -138,19 +139,19 @@ class _OrderPageState extends State<OrderPage> {
       return false;
     }
 
-    String cleanedAmount =
-        amountController.text.replaceAll(RegExp(r'[^\d]'), '');
-    if (cleanedAmount.isEmpty || int.parse(cleanedAmount) <= 0) {
-      Get.snackbar(
-        "Perhatian",
-        "Jumlah pembayaran tidak valid",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 3),
-      );
-      return false;
-    }
+    // String cleanedAmount =
+    //     amountController.text.replaceAll(RegExp(r'[^\d]'), '');
+    // if (cleanedAmount.isEmpty || int.parse(cleanedAmount) <= 0) {
+    //   Get.snackbar(
+    //     "Perhatian",
+    //     "Jumlah pembayaran tidak valid",
+    //     snackPosition: SnackPosition.BOTTOM,
+    //     backgroundColor: Colors.red,
+    //     colorText: Colors.white,
+    //     duration: const Duration(seconds: 3),
+    //   );
+    //   return false;
+    // }
 
     return true;
   }
@@ -164,9 +165,9 @@ class _OrderPageState extends State<OrderPage> {
       body: SafeArea(
         child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
-            child: BlocBuilder<PackageBloc, PackageState>(
+            child: BlocBuilder<PackageIdBloc, PackageIdState>(
                 builder: (context, state) {
-              if (state is PackageLoading) {
+              if (state is PackageIdLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is PackageLoadedById) {
                 final package = state.packageId;
@@ -599,28 +600,28 @@ class _OrderPageState extends State<OrderPage> {
 
                     const SizedBox(height: 16),
 
-                    TextFormField(
-                      inputFormatters: [RupiahInputFormatter()],
-                      keyboardType: TextInputType.number,
-                      controller: amountController,
-                      decoration: InputDecoration(
-                        hintText: "Jumlah Pembayaran",
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(color: Colors.grey),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(color: Colors.grey),
-                        ),
-                        // Adding a prefix icon for better UX
-                        prefixIcon: const Icon(Icons.payments_outlined),
-                        // Adding a suffix text for clarity
-                        suffixText: "IDR",
-                      ),
-                    ),
+                    // TextFormField(
+                    //   inputFormatters: [RupiahInputFormatter()],
+                    //   keyboardType: TextInputType.number,
+                    //   controller: amountController,
+                    //   decoration: InputDecoration(
+                    //     hintText: "Jumlah Pembayaran",
+                    //     contentPadding: const EdgeInsets.symmetric(
+                    //         horizontal: 20, vertical: 16),
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(30),
+                    //       borderSide: const BorderSide(color: Colors.grey),
+                    //     ),
+                    //     enabledBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(30),
+                    //       borderSide: const BorderSide(color: Colors.grey),
+                    //     ),
+                    //     // Adding a prefix icon for better UX
+                    //     prefixIcon: const Icon(Icons.payments_outlined),
+                    //     // Adding a suffix text for clarity
+                    //     suffixText: "IDR",
+                    //   ),
+                    // ),
 
                     const SizedBox(height: 16),
 
@@ -729,7 +730,7 @@ class _OrderPageState extends State<OrderPage> {
               return Container();
             })),
       ),
-      bottomSheet: BlocBuilder<PackageBloc, PackageState>(
+      bottomSheet: BlocBuilder<PackageIdBloc, PackageIdState>(
         builder: (context, state) {
           if (state is PackageLoadedById) {
             final package = state.packageId;
@@ -754,7 +755,7 @@ class _OrderPageState extends State<OrderPage> {
                                           counter,
                                   totalOrang: counter,
                                   id: package.paketId,
-                                  amount: amountController.text,
+                                  amount: "0",
                                   note: noteController.text,
                                 ),
                             transition: gets.Transition.rightToLeft);

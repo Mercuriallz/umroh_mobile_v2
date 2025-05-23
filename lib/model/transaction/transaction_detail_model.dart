@@ -8,7 +8,9 @@ class TransactionDetailModel {
   TransactionDetailModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     error = json['error'];
-    data = json['data'] != null ? DataTransactionDetail.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? DataTransactionDetail.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -57,7 +59,15 @@ class DataTransactionDetail {
   DataTransactionDetail.fromJson(Map<String, dynamic> json) {
     transaksiTrx = json['transaksi_trx'];
     paketName = json['paket_name'];
-    paketAdditionalFeature = json['paket_additional_feature'].cast<String>();
+
+    // Fix for the cast error - handle null safely
+    if (json['paket_additional_feature'] != null) {
+      paketAdditionalFeature =
+          List<String>.from(json['paket_additional_feature']);
+    } else {
+      paketAdditionalFeature = null;
+    }
+
     paketClass = json['paket_class'];
     pricePaket = json['price_paket'];
     amountSeat = json['amount_seat'];

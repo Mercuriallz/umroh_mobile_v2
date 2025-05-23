@@ -10,16 +10,24 @@ class SelfTransactionInitial extends SelfTransactionState {}
 
 class SelfTransactionLoading extends SelfTransactionState {}
 
+// class SelfTransactionLoaded extends SelfTransactionState {
+//   final List<DataTransaction> selfTransaction;
+//   final DataPay dataPay;
+
+//   SelfTransactionLoaded(this.selfTransaction, this.dataPay);
+
+//   @override
+//   List<Object> get props => [selfTransaction, dataPay];
+// }
+
 class SelfTransactionLoaded extends SelfTransactionState {
-  final List<DataTransaction> selfTransaction;
-  final DataPay dataPay;
+  final TransactionList selfTransaction;
+  // final List<TransactionHistory> transactionHistory;
 
-  SelfTransactionLoaded(this.selfTransaction, this.dataPay);
-
+  SelfTransactionLoaded(this.selfTransaction);
   @override
-  List<Object> get props => [selfTransaction, dataPay];
+  List<Object> get props => [selfTransaction];
 }
-
 
 class SelfTransactionError extends SelfTransactionState {
   final String message;
