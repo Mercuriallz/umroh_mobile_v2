@@ -6,7 +6,7 @@ import 'package:get/get.dart' as gets;
 import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
-import 'package:mobile_umroh_v2/constant/payment_text_field.dart';
+// import 'package:mobile_umroh_v2/constant/payment_text_field.dart';
 
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/text_constant.dart';
@@ -171,6 +171,10 @@ class _OrderPageState extends State<OrderPage> {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is PackageLoadedById) {
                 final package = state.packageId;
+                 final features = package.arrFeature
+                                            ?.map((e) => e.toLowerCase())
+                                            .toList() ??
+                                        [];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -229,22 +233,42 @@ class _OrderPageState extends State<OrderPage> {
                                       )
                                     : Text("Reguler"),
                                 const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    if (package.arrFeature
-                                            ?.contains("Pesawat") ??
-                                        false)
-                                      _buildIconText(
-                                          Icons.flight_takeoff, "Pesawat"),
-                                    if (package.arrFeature?.contains("Antar") ??
-                                        false)
-                                      _buildIconText(
-                                          Icons.directions_car, "Antar"),
-                                    if (package.arrFeature?.contains("Hotel") ??
-                                        false)
-                                      _buildIconText(Icons.hotel, "Hotel"),
-                                  ],
-                                ),
+                               SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: Row(
+                                                    children: [
+                                                      if (features
+                                                          .contains("pesawat"))
+                                                        _buildIconText(
+                                                            Icons
+                                                                .flight_takeoff,
+                                                            "Pesawat"),
+                                                      if (features
+                                                          .contains("antar"))
+                                                        _buildIconText(
+                                                            Icons
+                                                                .directions_car,
+                                                            "Antar"),
+                                                      if (features
+                                                          .contains("hotel"))
+                                                        _buildIconText(
+                                                            Icons.hotel,
+                                                            "Hotel"),
+                                                      if (features
+                                                          .contains("bis"))
+                                                        _buildIconText(
+                                                            Icons
+                                                                .directions_bus,
+                                                            "Bus"),
+                                                      if (features
+                                                          .contains("konsumsi"))
+                                                        _buildIconText(
+                                                            Icons.food_bank,
+                                                            "Konsumsi")
+                                                    ],
+                                                  ),
+                                                ),
                               ],
                             ),
                           )
@@ -755,7 +779,7 @@ class _OrderPageState extends State<OrderPage> {
                                           counter,
                                   totalOrang: counter,
                                   id: package.paketId,
-                                  amount: "0",
+                                  amount: "2000000",
                                   note: noteController.text,
                                 ),
                             transition: gets.Transition.rightToLeft);

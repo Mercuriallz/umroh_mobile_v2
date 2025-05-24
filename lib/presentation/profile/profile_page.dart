@@ -3,8 +3,40 @@ import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/presentation/auth/login_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final secureStorage = SecureStorageService();
+
+  String? username;
+    String? roles;
+
+
+  void loadUsername() async {
+    final name = await secureStorage.read("name");
+    setState(() {
+      username = name.toString();
+    });
+  }
+
+  void loadRoles() async {
+    final role = await secureStorage.read("role");
+    setState(() {
+      roles = role.toString();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUsername();
+    loadRoles();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +58,16 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 12),
               _buildStatusCard(),
               const SizedBox(height: 20),
-              _buildMenuItem('Pengaturan Akun', ['Detail Akun', 'Status'], Icons.person),
-              _buildMenuItem('Bimbingan Manasik', ['Vidio', 'Jadwal Manasik', 'Lokasi'], Icons.video_call),
-              _buildMenuItem('Visa & Dokumen', ['Status Pengurusan', 'E-ticket'], Icons.document_scanner),
-              _buildMenuItem('Fitur Selama Perjalanan', ['Jadwal', 'Real Time Itinerary'], Icons.calendar_today),
-              _buildMenuItem('Informasi Paket Internet', ['Roaming', 'Pengecekan'], Icons.wifi),
+              _buildMenuItem(
+                  'Pengaturan Akun', ['Detail Akun', 'Status'], Icons.person),
+              _buildMenuItem('Bimbingan Manasik',
+                  ['Vidio', 'Jadwal Manasik', 'Lokasi'], Icons.video_call),
+              _buildMenuItem('Visa & Dokumen',
+                  ['Status Pengurusan', 'E-ticket'], Icons.document_scanner),
+              _buildMenuItem('Fitur Selama Perjalanan',
+                  ['Jadwal', 'Real Time Itinerary'], Icons.calendar_today),
+              _buildMenuItem('Informasi Paket Internet',
+                  ['Roaming', 'Pengecekan'], Icons.wifi),
               const SizedBox(height: 24),
               _buildLogoutButton(context),
               const SizedBox(height: 16),
@@ -38,7 +75,6 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
       ),
-      
     );
   }
 
@@ -48,13 +84,26 @@ class ProfilePage extends StatelessWidget {
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children:  [
               Text(
-                'Bleks ',
+                username ?? 'Loading...',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 4),
-              Text('123424'),
+              roles == "11"
+                  ? Text(
+                      'User',
+                      style: TextStyle(color: Colors.grey),
+                    )
+                  : roles == "2"
+                      ? Text(
+                          'Kepala Desa',
+                          style: TextStyle(color: Colors.grey),
+                        )
+                      : Text(
+                          'Super Admin',
+                          style: TextStyle(color: Colors.grey),
+                        ),
             ],
           ),
         ),

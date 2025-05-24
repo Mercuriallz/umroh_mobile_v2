@@ -57,16 +57,16 @@
 //   }
 // }
 
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 
 class SocketService {
-  late IO.Socket socket;
+  late io.Socket socket;
 
   void connect({required String token, required int userId}) {
-    socket = IO.io(
+    socket = io.io(
       'https://umroh-be.floxy-it.cloud',
-      IO.OptionBuilder()
+      io.OptionBuilder()
           .setTransports(['websocket']) // wajib websocket
           .enableAutoConnect()
           .setAuth({'token': token}) // kirim JWT
@@ -74,17 +74,17 @@ class SocketService {
     );
 
     socket.onConnect((_) {
-      print('✅ Connected to socket server');
+      // print('✅ Connected to socket server');
       socket.emit('join', userId); // join ke room
     });
 
     socket.on('payment_success', (data) {
-      print('📨 Payment success received: $data');
-      // TODO: tampilkan notifikasi ke UI / Bloc / Provider
+      // print('📨 Payment success received: $data');
+      // 
     });
 
-    socket.onDisconnect((_) => print('❌ Disconnected'));
-    socket.onConnectError((err) => print('❗ Connect error: $err'));
+    // socket.onDisconnect((_) => print('❌ Disconnected'));
+    // socket.onConnectError((err) => print('❗ Connect error: $err'));
   }
 
   void disconnect() {

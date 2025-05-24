@@ -53,7 +53,7 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
           padding: const EdgeInsets.all(20),
           child: BlocBuilder<PackageIdBloc, PackageIdState>(
             builder: (context, state) {
-              print("📦 State Sekarang: $state"); 
+              // print("📦 State Sekarang: $state"); 
               if (state is PackageIdInitial || state is PackageIdLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is PackageLoadedById) {
@@ -125,10 +125,10 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
                     Text(package.jadwalPerjalanan ?? "-"),
-                    const Text(
-                      "Normal: 3 - 4 Jam (Tergantung situasi dan kondisi)",
-                      style: TextStyle(color: Colors.grey),
-                    ),
+                    // const Text(
+                    //   "Normal: 3 - 4 Jam (Tergantung situasi dan kondisi)",
+                    //   style: TextStyle(color: Colors.grey),
+                    // ),
                     const SizedBox(height: 25),
                     const Text("Fasilitas Hotel",
                         style: TextStyle(
@@ -235,8 +235,8 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
         ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: SizedBox(
-            width: 100,
-            height: 100,
+            width: 85,
+            height: 85,
             child: Image.network(
               'https://al-ansar-new-palace-hotel-medina.hotelmix.id/data/Photos/450x450/16660/1666033/1666033047.JPEG',
               fit: BoxFit.cover,

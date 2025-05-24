@@ -45,7 +45,7 @@ class PaymentBloc extends Cubit<PaymentState> {
     };
 
     try {
-      print("[PaymentBloc] Sending payment data: $paymentData");
+      // print("[PaymentBloc] Sending payment data: $paymentData");
 
       final response = await dio.post(
         "$baseUrl/reg-schedule-pay-kepdes",
@@ -61,9 +61,9 @@ class PaymentBloc extends Cubit<PaymentState> {
         ),
       );
 
-      print("[PaymentBloc] Response status: ${response.statusCode}");
-      print("[PaymentBloc] Response data: ${response.data}");
-      print("Token nih --< $token");
+      // print("[PaymentBloc] Response status: ${response.statusCode}");
+      // print("[PaymentBloc] Response data: ${response.data}");
+      // print("Token nih --< $token");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         var paymentData = PaymentDataModel.fromJson(response.data).data!;
@@ -71,16 +71,16 @@ class PaymentBloc extends Cubit<PaymentState> {
         emit(PaymentDataLoaded(paymentData));
       } else {
         emit(PaymentFailed(response.data["message"] ?? "Terjadi kesalahan dari server."));
-        print("[PaymentBloc] Payment failed: ${response.data["message"]}");
+        // print("[PaymentBloc] Payment failed: ${response.data["message"]}");
       }
     } on DioException catch (dioError) {
       final statusCode = dioError.response?.statusCode;
       final message = dioError.message;
       emit(PaymentFailed("Gagal menghubungi server. Status: $statusCode. Pesan: $message"));
-      print("[PaymentBloc] DioException caught: $dioError");
+      // print("[PaymentBloc] DioException caught: $dioError");
     } catch (e) {
       emit(PaymentFailed("Terjadi kesalahan: $e"));
-      print("[PaymentBloc] Exception caught: $e");
+      // print("[PaymentBloc] Exception caught: $e");
     }
   }
 }

@@ -35,8 +35,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     });
   }
 
-
-
   void refreshData() {
     context.read<PackageBloc>().getPackage();
   }
@@ -57,14 +55,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.resumed ||
+        state == AppLifecycleState.inactive) {
       refreshData();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // print("id role : $roles");
+    print("id role : $roles");
     final size = MediaQuery.of(context).size;
     final rupiahConverter = RupiahConverter();
 
@@ -122,25 +121,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 ),
                 itemBuilder: (context, i) {
                   final menu = [
-                    {"title": "Umrah", "icon": "assets/icons/blocks 1.png"},
-                    {"title": "Bimbingan", "icon": "assets/icons/blocks 1.png"},
+                    {
+                    "title": "Umrah", 
+                    "icon": "assets/image/Ka'bah.png"
+                    },
+                    {
+                      "title": "Bimbingan", 
+                      "icon": "assets/image/Bimbingan.png"},
                     {
                       "title": "Fitur Haji",
-                      "icon": "assets/icons/blocks 1.png"
+                      "icon": "assets/image/Fitur Haji.png"
                     },
                     {
                       "title": "Kurs & Mata Uang",
-                      "icon": "assets/icons/blocks 1.png"
+                      "icon": "assets/image/Mata Uang.png"
                     },
                     {
-                      "title": "Info Cuaca",
-                      "icon": "assets/icons/blocks 1.png"
+                      "title": "Paket Data",
+                      "icon": "assets/image/Paket Data.png"
                     },
                     {
                       "title": "Jadwal Sholat",
-                      "icon": "assets/icons/blocks 1.png"
+                      "icon": "assets/image/Jadwal Sholat.png"
                     },
-                    {"title": "Al-qur'an", "icon": "assets/icons/blocks 1.png"},
+                    {"title": "Al-qur'an", "icon": "assets/image/Al-Qur'an.png"},
                     {"title": "Lainnya", "icon": "assets/icons/blocks 1.png"},
                   ];
                   return Column(
@@ -148,11 +152,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.transparent,
                           shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 6),
-                          ],
+                          // boxShadow: [
+                          //   BoxShadow(color: Colors.black12, blurRadius: 6),
+                          // ],
                         ),
                         child: Image.asset(menu[i]['icon']!,
                             width: 28, height: 28),
@@ -240,31 +244,38 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                             FontWeight.bold)),
                                                 const SizedBox(height: 6),
                                                 SingleChildScrollView(
-                                                  scrollDirection: Axis.horizontal,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
                                                   child: Row(
                                                     children: [
                                                       if (features
                                                           .contains("pesawat"))
                                                         _buildIconText(
-                                                            Icons.flight_takeoff,
+                                                            Icons
+                                                                .flight_takeoff,
                                                             "Pesawat"),
                                                       if (features
                                                           .contains("antar"))
                                                         _buildIconText(
-                                                            Icons.directions_car,
+                                                            Icons
+                                                                .directions_car,
                                                             "Antar"),
                                                       if (features
                                                           .contains("hotel"))
                                                         _buildIconText(
-                                                            Icons.hotel, "Hotel"),
+                                                            Icons.hotel,
+                                                            "Hotel"),
                                                       if (features
                                                           .contains("bis"))
                                                         _buildIconText(
-                                                            Icons.directions_bus, "Bus"),
+                                                            Icons
+                                                                .directions_bus,
+                                                            "Bus"),
                                                       if (features
                                                           .contains("konsumsi"))
                                                         _buildIconText(
-                                                            Icons.food_bank, "Konsumsi")
+                                                            Icons.food_bank,
+                                                            "Konsumsi")
                                                     ],
                                                   ),
                                                 ),
@@ -275,7 +286,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                           .spaceBetween,
                                                   children: [
                                                     Text("Mulai dari",
-                                                    
                                                         style: TextStyle(
                                                             fontSize: 12)),
                                                     Text("Seat / Bangku :",

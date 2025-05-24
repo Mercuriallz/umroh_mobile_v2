@@ -50,7 +50,7 @@ class LoginBloc extends Cubit<LoginState> {
         }
         await secureStorage.write("token", token);
         await secureStorage.write("name", name);
-        await secureStorage.write("role", role.toString());
+        await secureStorage.write("role", role!.toString());
 
         // print("Role id : $role");
 
@@ -131,7 +131,7 @@ class LoginBloc extends Cubit<LoginState> {
         }
         await secureStorage.write("token", token);
         await secureStorage.write("name", name);
-        await secureStorage.write("role", role.toString());
+        await secureStorage.write("role", role!.toString());
 
         // print("Role id : $role");
 

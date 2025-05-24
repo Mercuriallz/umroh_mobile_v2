@@ -27,7 +27,7 @@ void main() async {
   }
 
   // final wsUrl = 'wss://ws.ifelse.io';
-  final wsUrl = 'ws://umroh-be.floxy-it.cloud';
+  // final wsUrl = 'ws://umroh-be.floxy-it.cloud';
   // SocketService().connect(wsUrl);
   // SocketService.connect(wsUrl);
 
