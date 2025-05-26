@@ -1,96 +1,47 @@
-// import 'package:mobile_umroh_v2/services/storage.dart';
-// import 'package:web_socket_channel/web_socket_channel.dart';
-// import 'package:web_socket_channel/io.dart';
-// import 'package:web_socket_channel/status.dart' as status;
-
-// class WebSocketService {
-//   static final WebSocketService _instance = WebSocketService._internal();
-//   factory WebSocketService() => _instance;
-
-//   late WebSocketChannel _channel;
-
-//   WebSocketService._internal();
-
-//   Future<void> connect(String url) async {
-//     final secureStorage = SecureStorageService();
-//     final token = await secureStorage.read("token");
-
-//     try {
-//       _channel = IOWebSocketChannel.connect(
-//         Uri.parse(url),
-//         headers: {
-//           "auth": "$token",
-//         },
-//       );
-
-//       // Logging koneksi WebSocket
-//       print('🔌 Mencoba koneksi ke WebSocket...');
-
-//       // Dengarkan stream untuk status koneksi
-//       _channel.stream.listen(
-//         (event) {
-//           print('✅ WebSocket terhubung dan menerima data: $event');
-//         },
-//         onDone: () {
-//           print('❌ WebSocket telah ditutup.');
-//         },
-//         onError: (error) {
-//           print('⚠️ WebSocket error: $error');
-//         },
-//       );
-
-//       // Tunggu sampai siap (opsional)
-//       await _channel.ready;
-//     } catch (e) {
-//       print('🚫 Gagal konek ke WebSocket: $e');
-//     }
-//   }
-
-//   Stream get stream => _channel.stream;
-
-//   void send(String message) {
-//     _channel.sink.add(message);
-//   }
-
-//   void disconnect() {
-//     _channel.sink.close(status.goingAway);
-//   }
-// }
-
 import 'package:socket_io_client/socket_io_client.dart' as io;
-
+import 'package:flutter/foundation.dart';
 
 class SocketService {
   late io.Socket socket;
 
-  void connect({required String token, required int userId}) {
+  void connect({required String token}) {
+    debugPrint("🔌 Mencoba menghubungkan ke WebSocket dengan token...");
+    
     socket = io.io(
       'https://umroh-be.floxy-it.cloud',
       io.OptionBuilder()
           .setTransports(['websocket']) // wajib websocket
           .enableAutoConnect()
-          .setAuth({'token': token}) // kirim JWT
+          .setAuth({'auth': token}) // kirim token JWT
           .build(),
     );
 
     socket.onConnect((_) {
-      // print('✅ Connected to socket server');
-      socket.emit('join', userId); // join ke room
+      debugPrint('✅ Terhubung ke server WebSocket');
+    });
+
+    socket.onDisconnect((_) {
+      debugPrint('❌ Terputus dari server WebSocket');
+    });
+
+    socket.onConnectError((err) {
+      debugPrint('❗ Terjadi kesalahan saat menghubungkan: $err');
+    });
+
+    socket.onError((err) {
+      debugPrint('🔥 Error umum WebSocket: $err');
     });
 
     socket.on('payment_success', (data) {
-      // print('📨 Payment success received: $data');
-      // 
+      debugPrint('📨 Notifikasi pembayaran diterima: $data');
     });
 
-    // socket.onDisconnect((_) => print('❌ Disconnected'));
-    // socket.onConnectError((err) => print('❗ Connect error: $err'));
+    // Panggil connect manual agar koneksi benar-benar dimulai
+    socket.connect();
   }
 
   void disconnect() {
     socket.disconnect();
+    debugPrint('🔌 Koneksi WebSocket dihentikan manual');
   }
 }
-
-
-

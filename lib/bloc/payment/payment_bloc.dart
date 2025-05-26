@@ -45,7 +45,7 @@ class PaymentBloc extends Cubit<PaymentState> {
     };
 
     try {
-      // print("[PaymentBloc] Sending payment data: $paymentData");
+      print("[PaymentBloc] Sending payment data: $paymentData");
 
       final response = await dio.post(
         "$baseUrl/reg-schedule-pay-kepdes",
@@ -61,9 +61,9 @@ class PaymentBloc extends Cubit<PaymentState> {
         ),
       );
 
-      // print("[PaymentBloc] Response status: ${response.statusCode}");
-      // print("[PaymentBloc] Response data: ${response.data}");
-      // print("Token nih --< $token");
+      print("[PaymentBloc] Response status: ${response.statusCode}");
+      print("[PaymentBloc] Response data: ${response.data}");
+      print("Token nih --< $token");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         var paymentData = PaymentDataModel.fromJson(response.data).data!;

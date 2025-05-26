@@ -9,6 +9,8 @@ import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/shimmer.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
+import 'package:mobile_umroh_v2/services/storage.dart';
+import 'package:mobile_umroh_v2/services/web_socket.dart';
 
 class DetailPage extends StatefulWidget {
   final String? id;
@@ -20,15 +22,27 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
+  final secureStorage = SecureStorageService();
+  String? token;
+
   void refreshData() {
     context.read<PackageIdBloc>().getPackageById(widget.id.toString());
+  }
+
+  void getToken() async {
+    final tokens = await secureStorage.read("token");
+    setState(() {
+     token = tokens.toString();
+    });
+    // SocketService().connect(token: token!);
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    refreshData(); // initial load
+    refreshData();
+    getToken(); 
   }
 
   @override
@@ -40,7 +54,7 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      refreshData(); // Only refresh when the app is resumed from background
+      refreshData();
     }
   }
 

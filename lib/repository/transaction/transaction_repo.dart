@@ -24,7 +24,19 @@ class TransactionRepo {
   Future<Response> loadSelfTransaction() async {
     final token = await secureStorage.read("token");
     final response = await dio.get(
-        "https://umroh-be.floxy-it.cloud/v1/trx/schedule-assign-user",
+        "$baseUrl/trx/schedule-assign-user",
+        options: Options(
+            validateStatus: (status) {
+              return status! < 600;
+            },
+            headers: {"Authorization": "Bearer $token"}));
+    return response;
+  }
+
+  Future<Response> loadSelfTransactionDetail() async {
+    final token = await secureStorage.read("token");
+    final response = await dio.get(
+        "$baseUrl/trx/self",
         options: Options(
             validateStatus: (status) {
               return status! < 600;

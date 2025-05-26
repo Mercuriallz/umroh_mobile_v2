@@ -16,6 +16,8 @@ import 'package:mobile_umroh_v2/bloc/region/provinsi/provinsi_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/transaction/transaction/self_transaction_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_bloc.dart';
 import 'package:mobile_umroh_v2/constant/on_boarding/on_boarding_main.dart';
+import 'package:mobile_umroh_v2/services/storage.dart';
+import 'package:mobile_umroh_v2/services/web_socket.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,10 +28,15 @@ void main() async {
     await dotenv.load(fileName: ".env.development");
   }
 
-  // final wsUrl = 'wss://ws.ifelse.io';
-  // final wsUrl = 'ws://umroh-be.floxy-it.cloud';
-  // SocketService().connect(wsUrl);
-  // SocketService.connect(wsUrl);
+  final secureStorage = SecureStorageService();
+  final token = await secureStorage.read("token");
+
+  if (token != null) {
+    debugPrint("📦 Token ditemukan: $token");
+    SocketService().connect(token: token);
+  } else {
+    debugPrint("🔒 Token belum tersedia, user belum login");
+  }
 
   runApp(MultiBlocProvider(
     providers: [

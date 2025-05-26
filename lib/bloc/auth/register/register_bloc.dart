@@ -9,8 +9,10 @@ class RegisterBloc extends Cubit<RegisterState> {
 
   void register(RegisterModel formData) async {
     emit(RegisterLoading());
-    
+
     try {
+      print("[RegisterBloc] Mulai proses registrasi...");
+
       final data = FormData.fromMap({
         "email": formData.email,
         "password": formData.password,
@@ -31,7 +33,13 @@ class RegisterBloc extends Cubit<RegisterState> {
         "id_kelurahan": formData.idKelurahan
       });
 
+      print("[RegisterBloc] Data Form berhasil dikonversi ke FormData.");
+      print("[RegisterBloc] Data: ${data.fields.map((e) => '${e.key}: ${e.value}').toList()}");
+
       final dio = Dio();
+
+      print("[RegisterBloc] Mengirim request POST ke: $baseUrl/auth/user/sign-up");
+
       final response = await dio.post(
         "$baseUrl/auth/user/sign-up",
         data: data,
@@ -43,36 +51,54 @@ class RegisterBloc extends Cubit<RegisterState> {
         ),
       );
 
+      print("[RegisterBloc] Response status: ${response.statusCode}");
+      print("[RegisterBloc] Response data: ${response.data}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        print("[RegisterBloc] Registrasi berhasil.");
         emit(RegisterSuccess());
       } else {
+        print("[RegisterBloc] Registrasi gagal. Status Message: ${response.statusMessage}");
         emit(RegisterFailed("Registrasi gagal: ${response.statusMessage}"));
-        // print("Registrasi gagal: ${response.statusMessage}");
       }
+
     } catch (e) {
-      String errorMessage = "Terjadi kesalahan saat registrasi";
-      
+      String errorMessage = "Terjadi kesalahan saat registrasi: $e";
+      print("[RegisterBloc] Exception ditangkap: $e");
+
       if (e is DioException) {
+        print("[RegisterBloc] DioException Type: ${e.type}");
+
         if (e.response != null) {
+          print("[RegisterBloc] Response error: ${e.response!.data}");
           try {
             final responseData = e.response!.data;
             if (responseData is Map && responseData.containsKey('message')) {
               errorMessage = responseData['message'];
-
+              print("[RegisterBloc] Error message dari response: $errorMessage");
             } else if (responseData is Map && responseData.containsKey('error')) {
-              errorMessage = responseData['error']; 
+              errorMessage = responseData['error'];
+              print("[RegisterBloc] Error dari response key 'error': $errorMessage");
+            } else {
+              print("[RegisterBloc] Tidak ada key 'message' atau 'error' ditemukan.");
             }
           } catch (_) {
+            print("[RegisterBloc] Gagal parsing error response, fallback ke status message.");
             errorMessage = e.response!.statusMessage ?? errorMessage;
           }
         } else if (e.type == DioExceptionType.connectionTimeout) {
           errorMessage = "Koneksi timeout. Silakan coba lagi.";
+          print("[RegisterBloc] Koneksi timeout.");
         } else if (e.type == DioExceptionType.connectionError) {
           errorMessage = "Tidak dapat terhubung ke server. Periksa koneksi internet Anda.";
+          print("[RegisterBloc] Tidak ada koneksi internet.");
+        } else {
+          print("[RegisterBloc] Tipe error Dio lainnya: ${e.message}");
         }
+      } else {
+        print("[RegisterBloc] Error non-DioException: $e");
       }
-      
+
       emit(RegisterFailed(errorMessage));
     }
   }

@@ -9,8 +9,8 @@ import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/loading.dart';
 import 'package:mobile_umroh_v2/model/payment/payment_model.dart';
+import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/add_jemaah_page.dart';
-import 'package:mobile_umroh_v2/presentation/detail/order/detail_order_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 
 class DataOrderPage extends StatefulWidget {
@@ -196,7 +196,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                       } else if (state is PaymentSuccess) {
                         _dismissDialogs();
 
-                        Get.offAll(DetailOrderPage());
+                        Get.offAll(BottomMain());
 
                         Future.delayed(const Duration(milliseconds: 300), () {
                           Get.snackbar(

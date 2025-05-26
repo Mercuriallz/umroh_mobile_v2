@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
         :
     
     Scaffold(
-      backgroundColor: const Color(0xFFF9FAFF),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                   // Logo dan Judul
                   SizedBox(height: size.height * 0.05),
                   Image.asset(
-                    'assets/image/fa-solid_kaaba.png', // Ganti dengan nama file logo kamu
+                    'assets/image/logo-desa.jpg', 
                     height: 100,
                   ),
                   const SizedBox(height: 16),
