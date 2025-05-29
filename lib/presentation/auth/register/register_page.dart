@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' as flutter_bloc;
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+// import 'package:image_picker/image_picker.dart';
+// import 'package:intl/intl.dart';
 import 'package:mobile_umroh_v2/bloc/region/kabupaten/kabupaten_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kabupaten/kabupaten_state.dart';
 import 'package:mobile_umroh_v2/bloc/region/kecamatan/kecamatan_bloc.dart';
@@ -47,6 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final addressController = TextEditingController();
   final ktpController = TextEditingController();
   final birthdayController = TextEditingController();
+  final usernameController = TextEditingController();
 
   String? selectedGender;
 
@@ -63,67 +64,67 @@ class _RegisterPageState extends State<RegisterPage> {
   bool validateForm() {
     bool isValid = true;
 
-    setState(() {
-      ktpFileError = null;
-      kkFileError = null;
-      pasporFileError = null;
-      vaksinFileError = null;
-      bpjsFileError = null;
-      passPhotoError = null;
-    });
+    // setState(() {
+    //   ktpFileError = null;
+    //   kkFileError = null;
+    //   pasporFileError = null;
+    //   vaksinFileError = null;
+    //   bpjsFileError = null;
+    //   passPhotoError = null;
+    // });
 
     if (_formKey.currentState?.saveAndValidate() != true) {
       isValid = false;
     }
 
-    if (ktpFile == null) {
-      setState(() {
-        ktpFileError = 'Foto KTP wajib diupload';
-      });
-      isValid = false;
-    }
+    // if (ktpFile == null) {
+    //   setState(() {
+    //     ktpFileError = 'Foto KTP wajib diupload';
+    //   });
+    //   isValid = false;
+    // }
 
-    if (bpjsFile == null) {
-      setState(() {
-        bpjsFileError = 'Bpjs wajib di upload';
-      });
-      isValid = false;
-    }
+    // if (bpjsFile == null) {
+    //   setState(() {
+    //     bpjsFileError = 'Bpjs wajib di upload';
+    //   });
+    //   isValid = false;
+    // }
 
-    if (passPhotoFile == null) {
-      setState(() {
-        passPhotoError = 'Pass Foto Wajib di Upload';
-      });
-      isValid = false;
-    }
+    // if (passPhotoFile == null) {
+    //   setState(() {
+    //     passPhotoError = 'Pass Foto Wajib di Upload';
+    //   });
+    //   isValid = false;
+    // }
 
-    if (kkFile == null) {
-      setState(() {
-        kkFileError = 'Kartu Keluarga wajib diupload';
-      });
-      isValid = false;
-    }
+    // if (kkFile == null) {
+    //   setState(() {
+    //     kkFileError = 'Kartu Keluarga wajib diupload';
+    //   });
+    //   isValid = false;
+    // }
 
-    if (pasporFile == null) {
-      setState(() {
-        pasporFileError = 'Paspor wajib diupload';
-      });
-      isValid = false;
-    }
+    // if (pasporFile == null) {
+    //   setState(() {
+    //     pasporFileError = 'Paspor wajib diupload';
+    //   });
+    //   isValid = false;
+    // }
 
-    if (vaksinFile == null) {
-      setState(() {
-        vaksinFileError = 'Sertifikat Vaksin wajib diupload';
-      });
-      isValid = false;
-    }
+    // if (vaksinFile == null) {
+    //   setState(() {
+    //     vaksinFileError = 'Sertifikat Vaksin wajib diupload';
+    //   });
+    //   isValid = false;
+    // }
 
-    if (selectedGender == null) {
-      isValid = false;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Jenis Kelamin wajib dipilih')),
-      );
-    }
+    // if (selectedGender == null) {
+    //   isValid = false;
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Jenis Kelamin wajib dipilih')),
+    //   );
+    // }
 
     if (selectedProvince == null) {
       isValid = false;
@@ -163,108 +164,108 @@ class _RegisterPageState extends State<RegisterPage> {
     return isValid;
   }
 
-  Future<void> _showImageSourceDialog(String label) async {
-    final picker = ImagePicker();
+  // Future<void> _showImageSourceDialog(String label) async {
+  //   final picker = ImagePicker();
 
-    await showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                  leading: const Icon(Icons.camera_alt),
-                  title: const Text('Ambil dari Kamera'),
-                  onTap: () async {
-                    final XFile? photo =
-                        await picker.pickImage(source: ImageSource.camera);
+  //   await showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+  //     ),
+  //     builder: (context) {
+  //       return SafeArea(
+  //         child: Wrap(
+  //           children: [
+  //             ListTile(
+  //                 leading: const Icon(Icons.camera_alt),
+  //                 title: const Text('Ambil dari Kamera'),
+  //                 onTap: () async {
+  //                   final XFile? photo =
+  //                       await picker.pickImage(source: ImageSource.camera);
 
-                    if (!context.mounted) {
-                      return;
-                    }
-                    Navigator.pop(context);
+  //                   if (!context.mounted) {
+  //                     return;
+  //                   }
+  //                   Navigator.pop(context);
 
-                    if (photo != null) {
-                      _handlePickedFile(File(photo.path), label);
-                    }
-                  }),
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Pilih dari Galeri'),
-                onTap: () async {
-                  final XFile? image =
-                      await picker.pickImage(source: ImageSource.gallery);
-                  if(!context.mounted) {
-                    return;
-                  }
-                  Navigator.pop(context);
-                  if (image != null) {
-                    _handlePickedFile(File(image.path), label);
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.upload_file),
-                title: const Text('Pilih File (PDF, dll)'),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final result = await FilePicker.platform.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
-                  );
-                  if (result != null && result.files.isNotEmpty) {
-                    final file = File(result.files.first.path!);
-                    _handlePickedFile(file, label);
-                  }
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  //                   if (photo != null) {
+  //                     _handlePickedFile(File(photo.path), label);
+  //                   }
+  //                 }),
+  //             ListTile(
+  //               leading: const Icon(Icons.photo_library),
+  //               title: const Text('Pilih dari Galeri'),
+  //               onTap: () async {
+  //                 final XFile? image =
+  //                     await picker.pickImage(source: ImageSource.gallery);
+  //                 if(!context.mounted) {
+  //                   return;
+  //                 }
+  //                 Navigator.pop(context);
+  //                 if (image != null) {
+  //                   _handlePickedFile(File(image.path), label);
+  //                 }
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: const Icon(Icons.upload_file),
+  //               title: const Text('Pilih File (PDF, dll)'),
+  //               onTap: () async {
+  //                 Navigator.pop(context);
+  //                 final result = await FilePicker.platform.pickFiles(
+  //                   type: FileType.custom,
+  //                   allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+  //                 );
+  //                 if (result != null && result.files.isNotEmpty) {
+  //                   final file = File(result.files.first.path!);
+  //                   _handlePickedFile(file, label);
+  //                 }
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
 
 
-  void _handlePickedFile(File file, String label) {
-    setState(() {
-      switch (label) {
-        case 'Upload Foto KTP':
-          ktpFile = file;
-          ktpFileError = null;
-          break;
-        case 'Kartu Keluarga':
-          kkFile = file;
-          kkFileError = null;
-          break;
-        case 'Paspor':
-          pasporFile = file;
-          pasporFileError = null;
-          break;
-        case 'Sertifikat Vaksin':
-          vaksinFile = file;
-          vaksinFileError = null;
-          break;
-        case 'Bpjs':
-          bpjsFile = file;
-          bpjsFileError = null;
-          break;
-        case 'Pass Foto':
-          passPhotoFile = file;
-          passPhotoError = null;
-          break;
-      }
-    });
-  }
+  // void _handlePickedFile(File file, String label) {
+  //   setState(() {
+  //     switch (label) {
+  //       case 'Upload Foto KTP':
+  //         ktpFile = file;
+  //         ktpFileError = null;
+  //         break;
+  //       case 'Kartu Keluarga':
+  //         kkFile = file;
+  //         kkFileError = null;
+  //         break;
+  //       case 'Paspor':
+  //         pasporFile = file;
+  //         pasporFileError = null;
+  //         break;
+  //       case 'Sertifikat Vaksin':
+  //         vaksinFile = file;
+  //         vaksinFileError = null;
+  //         break;
+  //       case 'Bpjs':
+  //         bpjsFile = file;
+  //         bpjsFileError = null;
+  //         break;
+  //       case 'Pass Foto':
+  //         passPhotoFile = file;
+  //         passPhotoError = null;
+  //         break;
+  //     }
+  //   });
+  // }
 
-  String? _getFileName(File? file) {
-    if (file == null) return null;
-    return file.path.split('/').last;
-  }
+  // String? _getFileName(File? file) {
+  //   if (file == null) return null;
+  //   return file.path.split('/').last;
+  // }
 
   @override
   void initState() {
@@ -277,6 +278,8 @@ class _RegisterPageState extends State<RegisterPage> {
     nameController.dispose();
     phoneNumberController.dispose();
     emailController.dispose();
+    usernameController.dispose();
+    
     addressController.dispose();
     ktpController.dispose();
     birthdayController.dispose();
@@ -326,34 +329,26 @@ class _RegisterPageState extends State<RegisterPage> {
                     return null;
                   },
                 ),
-                _buildDropdown(label: 'Pilih Jenis Kelamin'),
-                _buildDatePicker(context),
+                // _buildDropdown(label: 'Pilih Jenis Kelamin'),
+                // _buildDatePicker(context),
+                // _buildTextField(
+                //   name: 'phone',
+                //   label: 'No Telp',
+                //   keyboardType: TextInputType.phone,
+                //   controller: phoneNumberController,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'No Telp wajib diisi';
+                //     }
+                //     return null;
+                //   },
+                // ),
                 _buildTextField(
-                  name: 'phone',
-                  label: 'No Telp',
-                  keyboardType: TextInputType.phone,
-                  controller: phoneNumberController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'No Telp wajib diisi';
-                    }
-                    return null;
-                  },
-                ),
-                _buildTextField(
-                  name: 'email',
-                  label: 'E-mail',
-                  keyboardType: TextInputType.emailAddress,
-                  controller: emailController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email wajib diisi';
-                    }
-                    if (!GetUtils.isEmail(value)) {
-                      return 'Format email tidak valid';
-                    }
-                    return null;
-                  },
+                  name: 'username',
+                  label: 'Username',
+                 
+                  controller: usernameController,
+                 
                 ),
                 const SizedBox(height: 12),
 
@@ -536,69 +531,69 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 20),
 
-                _buildTextField(
-                  name: 'address',
-                  label: 'Alamat Lengkap (jalan, nomor, dan lainnya)',
-                  controller: addressController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Alamat wajib diisi';
-                    }
-                    return null;
-                  },
-                ),
-                _buildTextField(
-                  name: 'ktp',
-                  label: 'Nomor KTP',
-                  keyboardType: TextInputType.number,
-                  controller: ktpController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nomor KTP wajib diisi';
-                    }
-                    if (value.length != 16) {
-                      return 'Nomor KTP harus 16 digit';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                _buildUploadButton(
-                  'Upload Foto KTP',
-                  ktpFile,
-                  () => _showImageSourceDialog('Upload Foto KTP'),
-                  ktpFileError,
-                ),
-                _buildUploadButton(
-                  'Kartu Keluarga',
-                  kkFile,
-                  () => _showImageSourceDialog('Kartu Keluarga'),
-                  kkFileError,
-                ),
-                _buildUploadButton(
-                  'Paspor',
-                  pasporFile,
-                  () => _showImageSourceDialog('Paspor'),
-                  pasporFileError,
-                ),
-                _buildUploadButton(
-                  'Sertifikat Vaksin',
-                  vaksinFile,
-                  () => _showImageSourceDialog('Sertifikat Vaksin'),
-                  vaksinFileError,
-                ),
-                _buildUploadButton(
-                  'Bpjs',
-                  bpjsFile,
-                  () => _showImageSourceDialog('Bpjs'),
-                  bpjsFileError,
-                ),
-                _buildUploadButton(
-                  'Pass Foto',
-                  passPhotoFile,
-                  () => _showImageSourceDialog('Pass Foto'),
-                  passPhotoError,
-                ),
+                // _buildTextField(
+                //   name: 'address',
+                //   label: 'Alamat Lengkap (jalan, nomor, dan lainnya)',
+                //   controller: addressController,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Alamat wajib diisi';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // _buildTextField(
+                //   name: 'ktp',
+                //   label: 'Nomor KTP',
+                //   keyboardType: TextInputType.number,
+                //   controller: ktpController,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Nomor KTP wajib diisi';
+                //     }
+                //     if (value.length != 16) {
+                //       return 'Nomor KTP harus 16 digit';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // const SizedBox(height: 16),
+                // _buildUploadButton(
+                //   'Upload Foto KTP',
+                //   ktpFile,
+                //   () => _showImageSourceDialog('Upload Foto KTP'),
+                //   ktpFileError,
+                // ),
+                // _buildUploadButton(
+                //   'Kartu Keluarga',
+                //   kkFile,
+                //   () => _showImageSourceDialog('Kartu Keluarga'),
+                //   kkFileError,
+                // ),
+                // _buildUploadButton(
+                //   'Paspor',
+                //   pasporFile,
+                //   () => _showImageSourceDialog('Paspor'),
+                //   pasporFileError,
+                // ),
+                // _buildUploadButton(
+                //   'Sertifikat Vaksin',
+                //   vaksinFile,
+                //   () => _showImageSourceDialog('Sertifikat Vaksin'),
+                //   vaksinFileError,
+                // ),
+                // _buildUploadButton(
+                //   'Bpjs',
+                //   bpjsFile,
+                //   () => _showImageSourceDialog('Bpjs'),
+                //   bpjsFileError,
+                // ),
+                // _buildUploadButton(
+                //   'Pass Foto',
+                //   passPhotoFile,
+                //   () => _showImageSourceDialog('Pass Foto'),
+                //   passPhotoError,
+                // ),
                 const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -614,22 +609,23 @@ class _RegisterPageState extends State<RegisterPage> {
                           Get.to(
                               () => SetPasswordPage(
                                     name: nameController.text,
-                                    address: addressController.text,
-                                    email: emailController.text,
-                                    kkFile: kkFile,
-                                    ktpFile: ktpFile,
-                                    ktp: ktpController.text,
-                                    pasporFile: pasporFile,
-                                    vaksinFile: vaksinFile,
-                                    phoneNumber: phoneNumberController.text,
-                                    selectedDate: birthdayController.text,
-                                    selectedGender: selectedGender,
+                                    username: usernameController.text,
+                                    // address: addressController.text,
+                                    // email: emailController.text,
+                                    // kkFile: kkFile,
+                                    // ktpFile: ktpFile,
+                                    // ktp: ktpController.text,
+                                    // pasporFile: pasporFile,
+                                    // vaksinFile: vaksinFile,
+                                    // phoneNumber: phoneNumberController.text,
+                                    // selectedDate: birthdayController.text,
+                                    // selectedGender: selectedGender,
                                     selectedProvinsi: selectedProvince,
                                     selectedKabupaten: selectedRegency,
                                     selectedKecamatan: selectedDistrict,
                                     selectedKelurahan: selectedSubDistrict,
-                                    bpjsFile: bpjsFile,
-                                    passPhotoFile: passPhotoFile,
+                                    // bpjsFile: bpjsFile,
+                                    // passPhotoFile: passPhotoFile,
                                   ),
                               transition: Transition.rightToLeft);
                         }
@@ -679,146 +675,146 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildDropdown({required String label}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: DropdownButtonFormField<String>(
-        decoration: InputDecoration(
-          hintText: "Pilih Jenis Kelamin",
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: Colors.grey),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: Colors.grey),
-          ),
-        ),
-        items: genderItems.map((String item) {
-          return DropdownMenuItem<String>(
-            value: item,
-            child: Text(item),
-          );
-        }).toList(),
-        value: selectedGender,
-        onChanged: (value) {
-          setState(() {
-            selectedGender = value;
-          });
-        },
-      ),
-    );
-  }
+  // Widget _buildDropdown({required String label}) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 8),
+  //     child: DropdownButtonFormField<String>(
+  //       decoration: InputDecoration(
+  //         hintText: "Pilih Jenis Kelamin",
+  //         contentPadding:
+  //             const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+  //         border: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(30),
+  //           borderSide: const BorderSide(color: Colors.grey),
+  //         ),
+  //         enabledBorder: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(30),
+  //           borderSide: const BorderSide(color: Colors.grey),
+  //         ),
+  //       ),
+  //       items: genderItems.map((String item) {
+  //         return DropdownMenuItem<String>(
+  //           value: item,
+  //           child: Text(item),
+  //         );
+  //       }).toList(),
+  //       value: selectedGender,
+  //       onChanged: (value) {
+  //         setState(() {
+  //           selectedGender = value;
+  //         });
+  //       },
+  //     ),
+  //   );
+  // }
 
-  Widget _buildDatePicker(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: FormBuilderTextField(
-        name: 'birthday',
-        controller: birthdayController,
-        readOnly: true,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Tanggal Lahir wajib diisi';
-          }
-          return null;
-        },
-        onTap: () async {
-          DateTime? pickedDate = await showDatePicker(
-            context: context,
-            firstDate: DateTime(1900),
-            lastDate: DateTime.now(),
-            initialDate: DateTime(2000),
-          );
+  // Widget _buildDatePicker(BuildContext context) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 8),
+  //     child: FormBuilderTextField(
+  //       name: 'birthday',
+  //       controller: birthdayController,
+  //       readOnly: true,
+  //       validator: (value) {
+  //         if (value == null || value.isEmpty) {
+  //           return 'Tanggal Lahir wajib diisi';
+  //         }
+  //         return null;
+  //       },
+  //       onTap: () async {
+  //         DateTime? pickedDate = await showDatePicker(
+  //           context: context,
+  //           firstDate: DateTime(1900),
+  //           lastDate: DateTime.now(),
+  //           initialDate: DateTime(2000),
+  //         );
 
-          if (pickedDate != null) {
-            String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-            setState(() {
-              birthdayController.text = formattedDate;
-            });
-          }
-        },
-        decoration: InputDecoration(
-          labelText: 'Tanggal Lahir',
-          suffixIcon: const Icon(Icons.calendar_today),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        ),
-      ),
-    );
-  }
+  //         if (pickedDate != null) {
+  //           String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+  //           setState(() {
+  //             birthdayController.text = formattedDate;
+  //           });
+  //         }
+  //       },
+  //       decoration: InputDecoration(
+  //         labelText: 'Tanggal Lahir',
+  //         suffixIcon: const Icon(Icons.calendar_today),
+  //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+  //         contentPadding:
+  //             const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildUploadButton(
-    String label,
-    File? file,
-    VoidCallback onTap,
-    String? errorText,
-  ) {
-    String? fileName = _getFileName(file);
-    String extension = fileName?.split('.').last.toLowerCase() ?? '';
-    IconData icon;
+//   Widget _buildUploadButton(
+//     String label,
+//     File? file,
+//     VoidCallback onTap,
+//     String? errorText,
+//   ) {
+//     String? fileName = _getFileName(file);
+//     String extension = fileName?.split('.').last.toLowerCase() ?? '';
+//     IconData icon;
 
-    if (extension == 'pdf') {
-      icon = Icons.picture_as_pdf;
-    } else if (extension == 'jpg' ||
-        extension == 'jpeg' ||
-        extension == 'png') {
-      icon = Icons.image;
-    } else {
-      icon = Icons.insert_drive_file;
-    }
+//     if (extension == 'pdf') {
+//       icon = Icons.picture_as_pdf;
+//     } else if (extension == 'jpg' ||
+//         extension == 'jpeg' ||
+//         extension == 'png') {
+//       icon = Icons.image;
+//     } else {
+//       icon = Icons.insert_drive_file;
+//     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: onTap,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: 56,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: errorText != null ? Colors.red : Colors.grey.shade400,
-                ),
-                borderRadius: BorderRadius.circular(25),
-                color: Colors.grey.shade100,
-              ),
-              child: Row(
-                children: [
-                  Icon(icon, color: errorText != null ? Colors.red : null),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      fileName ?? label,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: errorText != null ? Colors.red : null,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (errorText != null)
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 4),
-              child: Text(
-                errorText,
-                style: const TextStyle(color: Colors.red, fontSize: 12),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           GestureDetector(
+//             onTap: onTap,
+//             child: Container(
+//               padding: const EdgeInsets.symmetric(horizontal: 16),
+//               height: 56,
+//               decoration: BoxDecoration(
+//                 border: Border.all(
+//                   color: errorText != null ? Colors.red : Colors.grey.shade400,
+//                 ),
+//                 borderRadius: BorderRadius.circular(25),
+//                 color: Colors.grey.shade100,
+//               ),
+//               child: Row(
+//                 children: [
+//                   Icon(icon, color: errorText != null ? Colors.red : null),
+//                   const SizedBox(width: 12),
+//                   Expanded(
+//                     child: Text(
+//                       fileName ?? label,
+//                       style: TextStyle(
+//                         fontSize: 16,
+//                         color: errorText != null ? Colors.red : null,
+//                       ),
+//                       overflow: TextOverflow.ellipsis,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           if (errorText != null)
+//             Padding(
+//               padding: const EdgeInsets.only(left: 16, top: 4),
+//               child: Text(
+//                 errorText,
+//                 style: const TextStyle(color: Colors.red, fontSize: 12),
+//               ),
+//             ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 InputDecoration _dropdownDecoration({String? errorText}) {
   return InputDecoration(
@@ -826,4 +822,5 @@ InputDecoration _dropdownDecoration({String? errorText}) {
     contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     errorText: errorText,
   );
+}
 }

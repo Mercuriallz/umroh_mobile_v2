@@ -36,7 +36,7 @@ class TransactionRepo {
   Future<Response> loadSelfTransactionDetail() async {
     final token = await secureStorage.read("token");
     final response = await dio.get(
-        "$baseUrl/trx/self",
+        "$baseUrl/trx/user-trx",
         options: Options(
             validateStatus: (status) {
               return status! < 600;

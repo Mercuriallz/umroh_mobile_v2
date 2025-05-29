@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobile_umroh_v2/model/transaction/self_transaction_detail_model.dart';
+import 'package:mobile_umroh_v2/model/transaction/self/self_transaction_detail_model.dart';
 
 abstract class SelfTransactionDetailState extends Equatable {
   @override
@@ -11,13 +11,13 @@ class SelfTransactionDetailLoading extends SelfTransactionDetailState {}
 
 class SelfTransactionDetailLoaded extends SelfTransactionDetailState {
   final List<DataTransaction> dataTransaction;
-  final DataPay dataPay;
-  final TPaket dataPaket;
+  // final DataPay dataPay;
+  // final TPaket dataPaket;
 
-  SelfTransactionDetailLoaded(this.dataTransaction, this.dataPay, this.dataPaket);
+  SelfTransactionDetailLoaded(this.dataTransaction);
 
   @override
-  List<Object> get props => [dataTransaction, dataPay, dataPaket];
+  List<Object> get props => [dataTransaction];
 }
 
 class SelfTransactionDetailError extends SelfTransactionDetailState {

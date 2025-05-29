@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/login/login_state.dart';
 import 'package:mobile_umroh_v2/constant/constant.dart';
 import 'package:mobile_umroh_v2/model/auth/login/login_chief_model.dart';
+import 'package:mobile_umroh_v2/model/auth/login/login_chief_request_model.dart';
 import 'package:mobile_umroh_v2/model/auth/login/login_model.dart';
 import 'package:mobile_umroh_v2/model/auth/login/login_request_model.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
@@ -93,7 +94,7 @@ class LoginBloc extends Cubit<LoginState> {
     }
   }
 
-  Future<void> loginChief({LoginRequestModel? formData}) async {
+  Future<void> loginChief({LoginChiefRequestModel? formData}) async {
     if (formData == null) {
       emit(LoginError("Data login tidak boleh kosong"));
       return;
@@ -103,7 +104,7 @@ class LoginBloc extends Cubit<LoginState> {
 
     final dio = Dio();
     Map<String, dynamic> dataLogin = {
-      'email': formData.email,
+      'username': formData.username,
       'password': formData.password,
     };
 
@@ -122,7 +123,7 @@ class LoginBloc extends Cubit<LoginState> {
       if (response.statusCode == 200) {
         var loginModel = LoginChiefModel.fromJson(response.data);
         var token = loginModel.token;
-        var name = loginModel.data?.name;
+        var name = loginModel.data!.name;
         var role = loginModel.data?.idRole;
 
         if (token == null || name == null) {
@@ -134,6 +135,8 @@ class LoginBloc extends Cubit<LoginState> {
         await secureStorage.write("role", role!.toString());
 
         // print("Role id : $role");
+        // print("Name : $name");
+
 
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {

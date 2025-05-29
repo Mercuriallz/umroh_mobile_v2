@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobile_umroh_v2/model/transaction/self_transaction_model.dart';
+import 'package:mobile_umroh_v2/model/transaction/self/self_transaction_model.dart';
 
 abstract class SelfTransactionState extends Equatable {
   @override

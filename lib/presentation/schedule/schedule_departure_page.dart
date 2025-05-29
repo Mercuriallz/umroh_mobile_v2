@@ -5,7 +5,7 @@ import 'package:mobile_umroh_v2/bloc/transaction/transaction/self_transaction_bl
 import 'package:mobile_umroh_v2/bloc/transaction/transaction/self_transaction_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
-import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction_detail_page.dart';
+import 'package:mobile_umroh_v2/presentation/schedule/payment/detail/transaction_detail_page.dart';
 
 class ScheduleDeparturePage extends StatefulWidget {
   final String? trx;
@@ -139,7 +139,7 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
                             child: ElevatedButton(
                               onPressed: () {
                                 Get.to(TransactionDetailPage(
-                                  trx: data.trx ?? "",
+                                  // trx: data.trx ?? "",
                                 ));
                               },
                               style: ElevatedButton.styleFrom(

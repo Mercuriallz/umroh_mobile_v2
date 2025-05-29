@@ -10,7 +10,7 @@ import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/shimmer.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
-import 'package:mobile_umroh_v2/services/web_socket.dart';
+// import 'package:mobile_umroh_v2/services/web_socket.dart';
 
 class DetailPage extends StatefulWidget {
   final String? id;

@@ -5,6 +5,7 @@ import 'package:get/get.dart' as getx;
 import 'package:mobile_umroh_v2/bloc/auth/login/login_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/login/login_state.dart';
 import 'package:mobile_umroh_v2/constant/loading.dart';
+import 'package:mobile_umroh_v2/model/auth/login/login_chief_request_model.dart';
 import 'package:mobile_umroh_v2/model/auth/login/login_request_model.dart';
 import 'package:mobile_umroh_v2/presentation/auth/register/register_page.dart';
 import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
@@ -40,8 +41,8 @@ class _LoginPageState extends State<LoginPage> {
         );
         context.read<LoginBloc>().login(formData: loginRequest);
       } else {
-        final loginRequest = LoginRequestModel(
-          email: emailController.text,
+        final loginRequest = LoginChiefRequestModel(
+          username: emailController.text,
           password: passwordController.text,
         );
         context.read<LoginBloc>().loginChief(formData: loginRequest);

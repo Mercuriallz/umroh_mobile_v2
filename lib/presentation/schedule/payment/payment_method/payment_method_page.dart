@@ -11,14 +11,15 @@ class PaymentMethodPage extends StatefulWidget {
 
 class _PaymentMethodPageState extends State<PaymentMethodPage> {
   String? selectedBank;
-
+  String? selectedBankName;
   String? selectedType;
 
-  void onBankTap(String bankCode, String type, bool available) {
+  void onBankTap(String bankCode, String type, String name, bool available) {
     if (!available) return;
     setState(() {
       selectedBank = bankCode;
       selectedType = type;
+      selectedBankName = name;
     });
   }
 
@@ -47,6 +48,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     required String asset,
     required String code,
     required String type,
+    required String name,
     required bool available,
   }) {
     return Padding(
@@ -54,7 +56,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
       child: BankOptionTile(
         logoAsset: asset,
         available: available,
-        onTap: () => onBankTap(code, type, available),
+        onTap: () => onBankTap(code, type, name, available),
         isSelected: selectedBank == code,
       ),
     );
@@ -85,18 +87,21 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         asset: 'assets/image/bca.png',
                         code: 'BNK_TF_BCA',
                         type: 'BNK_TF',
+                        name: 'Bank Central Asia',
                         available: true,
                       ),
                       buildBankTile(
                         asset: 'assets/image/bri.png',
                         code: 'BNK_TF_BRI',
                         type: 'BNK_TF',
+                        name: 'Bank Rakyat Indonesia',
                         available: true,
                       ),
                       buildBankTile(
                         asset: 'assets/image/bni.png',
                         code: 'BNK_TF_BNI',
                         type: 'BNK_TF',
+                        name: 'Bank Negara Indonesia',
                         available: false,
                       ),
 
@@ -105,12 +110,14 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         asset: 'assets/image/ovo.png',
                         code: 'VA_OVO',
                         type: 'VA',
+                        name: 'Virtual Account OVO',
                         available: true,
                       ),
                       buildBankTile(
                         asset: 'assets/image/dana.png',
                         code: 'VA_DANA',
                         type: 'VA',
+                        name: 'Virtual Account DANA',
                         available: true,
                       ),
 
@@ -178,6 +185,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                       : () => Navigator.pop(context, {
                             "type": selectedType ?? "",
                             "code": selectedBank ?? "",
+                            "name": selectedBankName ?? "",
                           }),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorConstant.primaryBlue,

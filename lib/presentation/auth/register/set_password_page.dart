@@ -9,7 +9,7 @@ import 'package:mobile_umroh_v2/bloc/auth/register/register_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/register/register_state.dart'; // Import state
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/loading.dart';
-import 'package:mobile_umroh_v2/model/auth/register_model.dart';
+import 'package:mobile_umroh_v2/model/auth/register/register_kepdes_model.dart';
 import 'package:mobile_umroh_v2/presentation/auth/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -31,6 +31,7 @@ class SetPasswordPage extends StatefulWidget {
   final String? address;
   final File? bpjsFile;
   final File? passPhotoFile;
+  final String? username;
 
   const SetPasswordPage(
       {super.key,
@@ -50,7 +51,8 @@ class SetPasswordPage extends StatefulWidget {
       this.selectedDate,
       this.address,
       this.bpjsFile,
-      this.passPhotoFile});
+      this.passPhotoFile,
+      this.username});
 
   @override
   State<SetPasswordPage> createState() => _SetPasswordPageState();
@@ -147,30 +149,33 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
 
       await removeCacheFoldersContainingImages();
 
-      final data = RegisterModel(
-          email: widget.email,
-          password: passwordController.text,
-          name: widget.name,
-          noTelp: widget.phoneNumber,
-          imgKtp: widget.ktpFile,
-          imgKk: widget.kkFile,
-          imgPassport: widget.pasporFile,
-          imgVaksin: widget.vaksinFile,
-          nik: widget.ktp,
-          address: widget.address,
-          imgBpjsKesehatan: widget.bpjsFile,
-          imgPasFoto: widget.passPhotoFile,
-          idKabupaten: widget.selectedKabupaten,
-          idKecamatan: widget.selectedKecamatan,
-          idProvinsi: widget.selectedProvinsi,
-          dob: widget.selectedDate);
+      final data = RegisterKepdesModel(
+        username: widget.username,
+        password: passwordController.text,
+        name: widget.name,
+        // noTelp: widget.phoneNumber,
+        // imgKtp: widget.ktpFile,
+        // imgKk: widget.kkFile,
+        // imgPassport: widget.pasporFile,
+        // imgVaksin: widget.vaksinFile,
+        // nik: widget.ktp,
+        // address: widget.address,
+        // imgBpjsKesehatan: widget.bpjsFile,
+        // imgPasFoto: widget.passPhotoFile,
+        idKabupaten: widget.selectedKabupaten,
+        idKecamatan: widget.selectedKecamatan,
+        idProvinsi: widget.selectedProvinsi,
+        idKelurahan: widget.selectedKelurahan,
+      );
 
-      registVM.register(data);
+      registVM.registerKepdes(data);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    
+    
     return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state is RegisterLoading) {
@@ -302,7 +307,8 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                                     : ElevatedButton(
                                         onPressed: _submitRegistration,
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: ColorConstant.primaryBlue,
+                                          backgroundColor:
+                                              ColorConstant.primaryBlue,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(25),

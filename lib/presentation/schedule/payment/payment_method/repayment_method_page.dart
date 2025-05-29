@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/payment_text_field.dart';
-import 'package:mobile_umroh_v2/presentation/schedule/payment/confirm_payment_page.dart';
-import 'package:mobile_umroh_v2/presentation/schedule/payment/payment_method_page.dart';
+import 'package:mobile_umroh_v2/constant/rupiah.dart';
+import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction/confirm_payment_page.dart';
+import 'package:mobile_umroh_v2/presentation/schedule/payment/payment_method/payment_method_page.dart';
 
 class RepaymentMethodPage extends StatefulWidget {
-  const RepaymentMethodPage({super.key});
+  final String? trx;
+  final String? amount;
+  final String? finalPrice;
+  const RepaymentMethodPage(
+      {super.key, this.trx, this.amount, this.finalPrice});
 
   @override
   State<RepaymentMethodPage> createState() => _RepaymentMethodPageState();
@@ -20,6 +24,7 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
 
   String? selectedMethodCode;
   String? selectedMethodType;
+  String? selectedBankName;
 
   bool isAmountValid() {
     if (amountController.text.isEmpty) return false;
@@ -41,20 +46,17 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp. ',
-      decimalDigits: 0,
-    );
-    final double target = 67800000;
-    final double collected = 2824000;
-    final double percentage = (collected / target * 100).floorToDouble();
+    // print(widget.trx);
+    // print(widget.finalPrice);
+    // print(widget.amount);
+    final rupiahConverter = RupiahConverter();
+    
+    final double percentage = (int.parse(widget.amount.toString()) / int.parse(widget.finalPrice.toString()) * 100).floorToDouble();
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            // Body Content
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
@@ -83,7 +85,8 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                         children: [
                           const Text('Target'),
                           Text(
-                            formatter.format(target),
+                           rupiahConverter.formatToRupiah(
+                                int.parse(widget.finalPrice.toString())),
                             style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -91,14 +94,15 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                           ),
                           const SizedBox(height: 8),
                           LinearProgressIndicator(
-                            value: collected / target,
+                            value: int.parse(widget.amount.toString()) / int.parse(widget.finalPrice.toString()),
                             minHeight: 6,
                             backgroundColor: const Color(0xFFE0ECFB),
                             valueColor: const AlwaysStoppedAnimation<Color>(
                                 Colors.blue),
                           ),
                           const SizedBox(height: 16),
-                          _infoRow('Terkumpul', formatter.format(collected)),
+                          _infoRow('Terkumpul', rupiahConverter.formatToRupiah(
+                              int.parse(widget.amount.toString()))),
                           _infoRow('Persentase Terkumpul',
                               '${percentage.toStringAsFixed(0)}%'),
                           _infoRow('Selesaikan Sebelum', '11 November 2025'),
@@ -174,6 +178,7 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                           setState(() {
                             selectedMethodCode = result['code'];
                             selectedMethodType = result['type'];
+                            selectedBankName = result['name'];
                           });
                           // print("Selected method: ${result['type']} - ${result['code']}");
                         }
@@ -247,12 +252,15 @@ class _RepaymentMethodPageState extends State<RepaymentMethodPage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => ConfirmPaymentPage(
+                            trx: widget.trx,
                             bankCode: selectedMethodCode!,
                             type: selectedMethodType!,
                             amount: amountController.text,
+                            bankName: selectedBankName ?? '',
                           ),
                         ),
                       );
+                      // print(amountController.text);
                     }
                   },
                   style: ElevatedButton.styleFrom(
