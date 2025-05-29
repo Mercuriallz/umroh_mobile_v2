@@ -136,36 +136,44 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                       ),
                                       const SizedBox(height: 12),
                                       if (history.isNotEmpty) ...[
-                                        ...history.map((tx) {
-                                          final amount = int.tryParse(
-                                                  tx.amount?.toString() ??
-                                                      '') ??
-                                              0;
-                                          final target = int.tryParse(tx
-                                                      .targetCompleted
-                                                      ?.toString() ??
-                                                  '') ??
-                                              0;
-                                          final progress = (target > 0)
-                                              ? (amount / target)
-                                                  .clamp(0.0, 1.0)
-                                              : 0.0;
-
-                                          return Column(
-                                            children: [
-                                              LinearProgressIndicator(
-                                                value: progress,
-                                                minHeight: 6,
-                                                backgroundColor:
-                                                    const Color(0xFFE0ECFB),
-                                                valueColor:
-                                                    const AlwaysStoppedAnimation<
-                                                        Color>(Colors.blue),
-                                              ),
-                                              const SizedBox(height: 12),
-                                            ],
-                                          );
-                                        }),
+                                        // Calculate totalAmount, totalTarget, and progress before the widget tree
+                                        Builder(
+                                          builder: (context) {
+                                            final totalAmount =
+                                                history.fold<int>(
+                                              0,
+                                              (sum, tx) =>
+                                                  sum +
+                                                  (int.tryParse(tx.amount
+                                                              ?.toString() ??
+                                                          '0') ??
+                                                      0),
+                                            );
+                                            final totalTarget = int.tryParse(
+                                                    transaction.priceFinal
+                                                            ?.toString() ??
+                                                        '0') ??
+                                                0;
+                                            final progress = (totalTarget > 0)
+                                                ? (totalAmount / totalTarget)
+                                                    .clamp(0.0, 1.0)
+                                                : 0.0;
+                                            return Column(
+                                              children: [
+                                                LinearProgressIndicator(
+                                                  value: progress,
+                                                  minHeight: 6,
+                                                  backgroundColor:
+                                                      const Color(0xFFE0ECFB),
+                                                  valueColor:
+                                                      const AlwaysStoppedAnimation<
+                                                          Color>(Colors.blue),
+                                                ),
+                                                const SizedBox(height: 12),
+                                              ],
+                                            );
+                                          },
+                                        ),
                                       ] else ...[
                                         const Text(
                                           'Belum ada progres transaksi',
@@ -290,18 +298,23 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                           onPressed: isFullyPaid
                                               ? null
                                               : () {
-                                                  final amount = history
-                                                          .isNotEmpty
-                                                      ? history
-                                                          .map((e) => e.amount)
-                                                          .join(', ')
-                                                      : '0';
+                                                  final totalAmount =
+                                                      transaction
+                                                          .transactionHistory!
+                                                          .map((e) =>
+                                                              int.tryParse(
+                                                                  e.amount ??
+                                                                      '0') ??
+                                                              0)
+                                                          .reduce(
+                                                              (a, b) => a + b);
                                                   Get.to(RepaymentMethodPage(
                                                     trx: transaction.trx ?? '',
                                                     finalPrice: transaction
                                                         .priceFinal
                                                         .toString(),
-                                                    amount: amount,
+                                                    amount:
+                                                        totalAmount.toString(),
                                                   ));
                                                 },
                                           child: Text(

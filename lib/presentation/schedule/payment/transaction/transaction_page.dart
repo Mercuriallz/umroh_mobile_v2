@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/model/transaction/payment/payment_transaction_model.dart';
+import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
 
 class TransactionPage extends StatefulWidget {
   final PaymentData paymentData;
@@ -157,6 +159,22 @@ class _TransactionPageState extends State<TransactionPage> {
                       // Implement check payment status
                     },
                     child: const Text('Cek Pembayaran'),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF72B7FB),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                    onPressed: () {
+                      Get.offAll(BottomMain());
+                    },
+                    child: const Text('Kembali ke home'),
                   ),
                 )
               ],

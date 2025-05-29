@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
@@ -47,14 +48,15 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
               backgroundColor: Colors.green,
             ),
           );
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => TransactionPage(
-                paymentData: state.paymentData,
-              ),
-            ),
-          );
+          Get.offAll(TransactionPage(paymentData: state.paymentData,));
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (_) => TransactionPage(
+          //       paymentData: state.paymentData,
+          //     ),
+          //   ),
+          // );
         } else if (state is PaymentTransactionFailed) {
           // Tampilkan error message
           ScaffoldMessenger.of(context).showSnackBar(
