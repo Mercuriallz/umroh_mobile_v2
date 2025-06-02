@@ -27,7 +27,7 @@ class SelfTransactionModel {
 
 class DataTransaction {
   TransactionList? transactionList;
-  List<TransactionHistory>? transactionHistory;
+  TransactionHistory? transactionHistory;
   UserChildrenLog? matchedChild;
 
   DataTransaction({this.transactionList, this.transactionHistory, this.matchedChild});
@@ -36,12 +36,9 @@ class DataTransaction {
     transactionList = json['transaction_list'] != null
         ? TransactionList.fromJson(json['transaction_list'])
         : null;
-    if (json['transaction_history'] != null) {
-      transactionHistory = <TransactionHistory>[];
-      json['transaction_history'].forEach((v) {
-        transactionHistory!.add(TransactionHistory.fromJson(v));
-      });
-    }
+    transactionHistory = json['transaction_history'] != null
+        ? TransactionHistory.fromJson(json['transaction_history'])
+        : null;
     matchedChild = json['matched_child'] != null
         ? UserChildrenLog.fromJson(json['matched_child'])
         : null;
@@ -53,8 +50,7 @@ class DataTransaction {
       data['transaction_list'] = transactionList!.toJson();
     }
     if (transactionHistory != null) {
-      data['transaction_history'] =
-          transactionHistory!.map((v) => v.toJson()).toList();
+      data['transaction_history'] = transactionHistory!.toJson();
     }
     if (matchedChild != null) {
       data['matched_child'] = matchedChild!.toJson();

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/model/transaction/payment/payment_transaction_model.dart';
-import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
+import 'package:mobile_umroh_v2/presentation/schedule/payment/upload/upload_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TransactionPage extends StatefulWidget {
   final PaymentData paymentData;
+  final String? id;
 
   const TransactionPage({
     super.key,
     required this.paymentData,
+    this.id,
   });
 
   @override
@@ -19,6 +21,22 @@ class TransactionPage extends StatefulWidget {
 }
 
 class _TransactionPageState extends State<TransactionPage> {
+
+  Future<void> _saveTransactionState() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('isTransactionOngoing', true);
+  await prefs.setString('trxId', widget.paymentData.trxId ?? '');
+  await prefs.setString('vaNumber', widget.paymentData.vaNumber ?? '');
+  await prefs.setString('amount', widget.paymentData.amount ?? '0');
+}
+
+
+  @override
+  void initState() {
+    super.initState();
+    _saveTransactionState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final currencyFormatter = RupiahConverter();
@@ -101,7 +119,7 @@ class _TransactionPageState extends State<TransactionPage> {
                       _buildPaymentRow(
                           'Jumlah Pembayaran',
                           currencyFormatter.formatToRupiah(
-                              int.parse(widget.paymentData.amount ?? '0') )),
+                              int.parse(widget.paymentData.amount ?? '0'))),
                       // _buildPaymentRow(
                       //     'Jasa Layanan',
                       //     currencyFormatter
@@ -120,7 +138,7 @@ class _TransactionPageState extends State<TransactionPage> {
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           Text(
                               currencyFormatter.formatToRupiah(
-                                  int.parse(widget.paymentData.amount ?? '0') ),
+                                  int.parse(widget.paymentData.amount ?? '0')),
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -156,27 +174,31 @@ class _TransactionPageState extends State<TransactionPage> {
                           borderRadius: BorderRadius.circular(30)),
                     ),
                     onPressed: () {
-                      // Implement check payment status
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => UploadPaymentProofPage(
+                                  id: widget.paymentData.trxId)));
                     },
-                    child: const Text('Cek Pembayaran'),
+                    child: const Text("Upload Bukti Pembayaran "),
                   ),
                 ),
                 const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF72B7FB),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                    ),
-                    onPressed: () {
-                      Get.offAll(BottomMain());
-                    },
-                    child: const Text('Kembali ke home'),
-                  ),
-                )
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: const Color(0xFF72B7FB),
+                //       padding: const EdgeInsets.symmetric(vertical: 14),
+                //       shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(30)),
+                //     ),
+                //     onPressed: () {
+                //       Get.offAll(BottomMain());
+                //     },
+                //     child: const Text(),
+                //   ),
+                // )
               ],
             ),
           ),

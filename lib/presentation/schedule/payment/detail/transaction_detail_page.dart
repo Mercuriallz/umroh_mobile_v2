@@ -306,7 +306,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                                                   e.amount ??
                                                                       '0') ??
                                                               0)
-                                                          .reduce(
+                                                          .fold(0,
                                                               (a, b) => a + b);
                                                   Get.to(RepaymentMethodPage(
                                                     trx: transaction.trx ?? '',

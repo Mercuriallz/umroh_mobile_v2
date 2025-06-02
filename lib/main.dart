@@ -17,9 +17,13 @@ import 'package:mobile_umroh_v2/bloc/transaction/payment/payment_transaction_blo
 import 'package:mobile_umroh_v2/bloc/transaction/transaction/detail/self_transaction_detail_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/transaction/transaction/self_transaction_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/transaction/transaction_detail/transaction_detail_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/transaction/upload/upload_bloc.dart';
 import 'package:mobile_umroh_v2/constant/on_boarding/on_boarding_main.dart';
-import 'package:mobile_umroh_v2/services/storage.dart';
-import 'package:mobile_umroh_v2/services/web_socket.dart';
+import 'package:mobile_umroh_v2/model/transaction/payment/payment_transaction_model.dart';
+import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction/transaction_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:mobile_umroh_v2/services/storage.dart';
+// import 'package:mobile_umroh_v2/services/web_socket.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,15 +34,22 @@ void main() async {
     await dotenv.load(fileName: ".env.development");
   }
 
-  final secureStorage = SecureStorageService();
-  final token = await secureStorage.read("token");
+  final prefs = await SharedPreferences.getInstance();
+  bool isOngoing = prefs.getBool('isTransactionOngoing') ?? false;
 
-  if (token != null) {
-    debugPrint("📦 Token ditemukan: $token");
-    SocketService().connect(token: token);
-  } else {
-    debugPrint("🔒 Token belum tersedia, user belum login");
-  }
+  String? trxId = prefs.getString('trxId');
+  String? vaNumber = prefs.getString('vaNumber');
+  String? amount = prefs.getString('amount');
+
+  // final secureStorage = SecureStorageService();
+  // final token = await secureStorage.read("token");
+
+  // if (token != null) {
+  //   debugPrint("📦 Token ditemukan: $token");
+  //   SocketService().connect(token: token);
+  // } else {
+  //   debugPrint("🔒 Token belum tersedia, user belum login");
+  // }
 
   runApp(MultiBlocProvider(
     providers: [
@@ -54,11 +65,20 @@ void main() async {
       BlocProvider(create: (_) => SelfTransactionBloc()),
       BlocProvider(create: (_) => PackageIdBloc()),
       BlocProvider(create: (_) => SelfTransactionDetailBloc()),
-      BlocProvider(create: (_) => PaymentTransactionBloc())
+      BlocProvider(create: (_) => PaymentTransactionBloc()),
+      BlocProvider(create: (_) => UploadBloc()),
     ],
     child: GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnBoardingMain(),
+      home: isOngoing && trxId != null
+          ? TransactionPage(
+              paymentData: PaymentData(
+                trxId: trxId,
+                vaNumber: vaNumber,
+                amount: amount,
+              ),
+            )
+          : OnBoardingMain(),
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
         useMaterial3: false,

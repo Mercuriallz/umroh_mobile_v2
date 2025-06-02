@@ -39,30 +39,29 @@ class LoginBloc extends Cubit<LoginState> {
         ),
       );
 
+
       if (response.statusCode == 200) {
         var loginModel = LoginModel.fromJson(response.data);
         var token = loginModel.token;
         var name = loginModel.data?.name;
         var role = loginModel.data?.roleId;
 
+
         if (token == null || name == null) {
           emit(LoginError("Data token atau nama tidak ditemukan"));
           return;
         }
+
         await secureStorage.write("token", token);
         await secureStorage.write("name", name);
         await secureStorage.write("role", role!.toString());
 
-        // print("Role id : $role");
-
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {
-        String errorMessage =
-            response.data?['message'] ?? "Email atau password salah.";
+        String errorMessage = response.data?['message'] ?? "Email atau password salah.";
         emit(LoginError(errorMessage));
       } else {
-        String errorMessage =
-            "Login gagal dengan status code: ${response.statusCode}";
+        String errorMessage = "Login gagal dengan status code: ${response.statusCode}";
         emit(LoginError(errorMessage));
       }
     } catch (e) {
@@ -74,8 +73,7 @@ class LoginBloc extends Cubit<LoginState> {
             final responseData = e.response!.data;
             if (responseData is Map && responseData.containsKey('message')) {
               errorMessage = responseData['message'];
-            } else if (responseData is Map &&
-                responseData.containsKey('error')) {
+            } else if (responseData is Map && responseData.containsKey('error')) {
               errorMessage = responseData['error'];
             }
           } catch (_) {
@@ -84,13 +82,11 @@ class LoginBloc extends Cubit<LoginState> {
         } else if (e.type == DioExceptionType.connectionTimeout) {
           errorMessage = "Koneksi timeout. Silakan coba lagi.";
         } else if (e.type == DioExceptionType.connectionError) {
-          errorMessage =
-              "Tidak dapat terhubung ke server. Periksa koneksi internet Anda.";
+          errorMessage = "Tidak dapat terhubung ke server. Periksa koneksi internet Anda.";
         }
       }
 
       emit(LoginError(errorMessage));
-      return;
     }
   }
 
@@ -120,36 +116,33 @@ class LoginBloc extends Cubit<LoginState> {
         ),
       );
 
+
       if (response.statusCode == 200) {
         var loginModel = LoginChiefModel.fromJson(response.data);
         var token = loginModel.token;
-        var name = loginModel.data!.name;
-        var role = loginModel.data?.idRole;
+        var name = loginModel.data?.name;
+        var role = loginModel.data?.idRole.toString();
+
 
         if (token == null || name == null) {
           emit(LoginError("Data token atau nama tidak ditemukan"));
           return;
         }
+
         await secureStorage.write("token", token);
         await secureStorage.write("name", name);
         await secureStorage.write("role", role!.toString());
 
-        // print("Role id : $role");
-        // print("Name : $name");
-
-
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {
-        String errorMessage =
-            response.data?['message'] ?? "Email atau password salah.";
+        String errorMessage = response.data?['message'] ?? "Email atau password salah.";
         emit(LoginError(errorMessage));
       } else {
-        String errorMessage =
-            "Login gagal dengan status code: ${response.statusCode}";
+        String errorMessage = "Login gagal dengan status code: ${response.statusCode}";
         emit(LoginError(errorMessage));
       }
     } catch (e) {
-      String errorMessage = "Terjadi kesalahan saat login";
+      String errorMessage = "Terjadi kesalahan saat loginChief";
 
       if (e is DioException) {
         if (e.response != null) {
@@ -157,8 +150,7 @@ class LoginBloc extends Cubit<LoginState> {
             final responseData = e.response!.data;
             if (responseData is Map && responseData.containsKey('message')) {
               errorMessage = responseData['message'];
-            } else if (responseData is Map &&
-                responseData.containsKey('error')) {
+            } else if (responseData is Map && responseData.containsKey('error')) {
               errorMessage = responseData['error'];
             }
           } catch (_) {
@@ -167,19 +159,18 @@ class LoginBloc extends Cubit<LoginState> {
         } else if (e.type == DioExceptionType.connectionTimeout) {
           errorMessage = "Koneksi timeout. Silakan coba lagi.";
         } else if (e.type == DioExceptionType.connectionError) {
-          errorMessage =
-              "Tidak dapat terhubung ke server. Periksa koneksi internet Anda.";
+          errorMessage = "Tidak dapat terhubung ke server. Periksa koneksi internet Anda.";
         }
       }
 
       emit(LoginError(errorMessage));
-      return;
     }
   }
 
   Future<String?> getToken() async {
     try {
-      return await secureStorage.read("token");
+      final token = await secureStorage.read("token");
+      return token;
     } catch (e) {
       return null;
     }
@@ -187,6 +178,7 @@ class LoginBloc extends Cubit<LoginState> {
 
   Future<bool> isLoggedIn() async {
     final token = await getToken();
-    return token != null && token.isNotEmpty;
+    final result = token != null && token.isNotEmpty;
+    return result;
   }
 }

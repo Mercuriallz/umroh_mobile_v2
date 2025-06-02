@@ -31,13 +31,15 @@ class PaymentData {
   String? finalPrice;
   String? invNumber;
   String? vaNumber;
+  String? trxId;
 
   PaymentData(
       {this.amount,
       this.typePayment,
       this.finalPrice,
       this.invNumber,
-      this.vaNumber});
+      this.vaNumber,
+      this.trxId});
 
   PaymentData.fromJson(Map<String, dynamic> json) {
     amount = json['amount'];
@@ -45,6 +47,7 @@ class PaymentData {
     finalPrice = json['final_price'];
     invNumber = json['inv_number'];
     vaNumber = json['va_number'];
+    trxId = json['trx_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +57,7 @@ class PaymentData {
     data['final_price'] = finalPrice;
     data['inv_number'] = invNumber;
     data['va_number'] = vaNumber;
+    data['trx_id'] = trxId;
     return data;
   }
 }

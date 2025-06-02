@@ -44,11 +44,11 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
         if (state is PaymentTransactionSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Pembayaran berhasil!'),
+              content: const Text('Transaksi Berhasil Dibuat!'),
               backgroundColor: Colors.green,
             ),
           );
-          Get.offAll(TransactionPage(paymentData: state.paymentData,));
+          Get.offAll(TransactionPage(paymentData: state.paymentData, id: widget.trx));
           // Navigator.pushReplacement(
           //   context,
           //   MaterialPageRoute(
@@ -114,7 +114,9 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                       border: Border.all(color: Colors.grey.shade100),
                     ),
                     child: Row(
+                      
                       children: [
+                        
                         const Expanded(
                           child: Text('Jumlah Pembayaran',
                               style: TextStyle(color: Colors.black54)),

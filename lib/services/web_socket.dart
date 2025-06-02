@@ -7,14 +7,17 @@ class SocketService {
   void connect({required String token}) {
     debugPrint("🔌 Mencoba menghubungkan ke WebSocket dengan token...");
     
+
     socket = io.io(
-      'https://umroh-be.floxy-it.cloud',
+      'https://api.umrahdesa.com',
       io.OptionBuilder()
-          .setTransports(['websocket']) // wajib websocket
+          .setTransports(['websocket'])
           .enableAutoConnect()
-          .setAuth({'auth': token}) // kirim token JWT
+          .setAuth({'auth': token})
           .build(),
+
     );
+
 
     socket.onConnect((_) {
       debugPrint('✅ Terhubung ke server WebSocket');
@@ -32,11 +35,26 @@ class SocketService {
       debugPrint('🔥 Error umum WebSocket: $err');
     });
 
+    socket.onReconnect((data) {
+      debugPrint('♻️ Mencoba menyambung ulang...');
+    });
+
+    socket.onReconnectAttempt((data) {
+      debugPrint('🔁 Mencoba reconnect...');
+    });
+
+    socket.onReconnectError((err) {
+      debugPrint('❗ Gagal reconnect: $err');
+    });
+
+    socket.onReconnectFailed((_) {
+      debugPrint('🛑 Gagal total reconnect ke WebSocket');
+    });
+
     socket.on('payment_success', (data) {
       debugPrint('📨 Notifikasi pembayaran diterima: $data');
     });
 
-    // Panggil connect manual agar koneksi benar-benar dimulai
     socket.connect();
   }
 

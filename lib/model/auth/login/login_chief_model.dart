@@ -48,13 +48,13 @@ class DataChief {
       this.idKelurahan});
 
   DataChief.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    idRole = json['id_role'];
+    id = int.tryParse(json['id']?.toString() ?? '');
+    idRole = int.tryParse(json['id_role']?.toString() ?? '');
     name = json['name'];
-    idProvinsi = json['id_provinsi'];
-    idKabupaten = json['id_kabupaten'];
-    idKecamatan = json['id_kecamatan'];
-    idKelurahan = json['id_kelurahan'];
+    idProvinsi = int.tryParse(json['id_provinsi']?.toString() ?? '');
+    idKabupaten = int.tryParse(json['id_kabupaten']?.toString() ?? '');
+    idKecamatan = int.tryParse(json['id_kecamatan']?.toString() ?? '');
+    idKelurahan = int.tryParse(json['id_kelurahan']?.toString() ?? '');
   }
 
   Map<String, dynamic> toJson() {

@@ -8,21 +8,23 @@ class SelfTransactionBloc extends Cubit<SelfTransactionState> {
 
   void getSelfTransaction() async {
     emit(SelfTransactionLoading());
+
     try {
       final response = await TransactionRepo().loadSelfTransaction();
 
-      if (response.statusCode == 200) {
-         final model = SelfTransactionModel.fromJson(response.data).data!.transactionList;
-        // final dataPay = SelfTransactionModel.fromJson(response.data).data!.transactionHistory!;
 
-        if (model != null) {
-          emit(SelfTransactionLoaded(model));
+      if (response.statusCode == 200) {
+        final transactionModel = SelfTransactionModel.fromJson(response.data);
+        final transactionList = transactionModel.data?.transactionList;
+
+
+        if (transactionList != null) {
+          emit(SelfTransactionLoaded(transactionList));
         } else {
           emit(SelfTransactionError("Data transaksi kosong"));
         }
       } else {
-        emit(SelfTransactionError(
-            "Gagal memuat data transaksi: ${response.statusCode}"));
+        emit(SelfTransactionError("Gagal memuat data transaksi: ${response.statusCode}"));
       }
     } catch (e) {
       emit(SelfTransactionError("Terjadi kesalahan: ${e.toString()}"));
