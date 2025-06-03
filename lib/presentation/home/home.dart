@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     loadUsername();
     refreshData();
+    loadRole();
   }
 
   @override
@@ -104,8 +105,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                           const SizedBox(height: 4),
-                          const Text("000123",
-                              style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          roles == "11"
+                              ? Text(
+                                  'User',
+                                  style: TextStyle(color: Colors.grey),
+                                )
+                              : roles == "2"
+                                  ? Text(
+                                      'Kepala Desa',
+                                      style: TextStyle(color: Colors.grey),
+                                    )
+                                  : Text(
+                                      'Super Admin',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
                         ],
                       ),
                     ),
@@ -195,7 +208,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is PackageLoaded) {
                       final packages = state.package;
-          
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -219,10 +232,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                           [];
                                       return Container(
                                         width: size.width * 0.75,
-                                        margin: const EdgeInsets.only(right: 16),
+                                        margin:
+                                            const EdgeInsets.only(right: 16),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                           boxShadow: [
                                             BoxShadow(
                                                 color: Colors.black12,
@@ -261,8 +276,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                         Axis.horizontal,
                                                     child: Row(
                                                       children: [
-                                                        if (features
-                                                            .contains("pesawat"))
+                                                        if (features.contains(
+                                                            "pesawat"))
                                                           _buildIconText(
                                                               Icons
                                                                   .flight_takeoff,
@@ -284,8 +299,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                               Icons
                                                                   .directions_bus,
                                                               "Bus"),
-                                                        if (features
-                                                            .contains("konsumsi"))
+                                                        if (features.contains(
+                                                            "konsumsi"))
                                                           _buildIconText(
                                                               Icons.food_bank,
                                                               "Konsumsi")
@@ -314,8 +329,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                     children: [
                                                       Text(
                                                         rupiahConverter
-                                                            .formatToRupiah(
-                                                                int.parse(package
+                                                            .formatToRupiah(int
+                                                                .parse(package
                                                                         .harga ??
                                                                     "0")),
                                                         style: const TextStyle(
@@ -331,7 +346,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                             .toString(),
                                                         style: TextStyle(
                                                             fontWeight:
-                                                                FontWeight.bold),
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ],
                                                   ),
@@ -344,7 +360,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                       IconButton(
                                                         onPressed: () {},
                                                         icon: const Icon(
-                                                            Icons.bookmark_border,
+                                                            Icons
+                                                                .bookmark_border,
                                                             color: Colors.grey),
                                                       ),
                                                       Expanded(

@@ -121,7 +121,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         available: true,
                       ),
 
-                         buildSectionTitle("QR"),
+                        //  buildSectionTitle("QR"),
 
                       // GestureDetector(
                       //   onTap: () async {
