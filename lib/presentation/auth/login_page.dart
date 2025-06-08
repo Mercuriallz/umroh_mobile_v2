@@ -4,6 +4,7 @@ import 'package:get/get.dart' as gets;
 import 'package:get/get.dart' as getx;
 import 'package:mobile_umroh_v2/bloc/auth/login/login_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/login/login_state.dart';
+import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/loading.dart';
 import 'package:mobile_umroh_v2/model/auth/login/login_chief_request_model.dart';
 import 'package:mobile_umroh_v2/model/auth/login/login_request_model.dart';
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   bool obscureText = true;
   bool showLoading = false;
 
-  final List<String> roles = ['User', 'Kepala Desa'];
+  final List<String> roles = ['User', 'Mitra Desa'];
   String? selectedRole = 'User';
 
   void _login() {
@@ -47,8 +48,6 @@ class _LoginPageState extends State<LoginPage> {
         );
         context.read<LoginBloc>().loginChief(formData: loginRequest);
       }
-
-          // print('Login sebagai: $selectedRole');
     }
   }
 
@@ -267,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                               _login();
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF70B8FF),
+                              backgroundColor: ColorConstant.primaryBlue,
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(32),
@@ -283,7 +282,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
             
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 25),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -295,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                               () => const RegisterPage(),
                               duration: const Duration(milliseconds: 500));
                         },
-                        child: const Text("Daftar"),
+                        child: const Text("Daftar Sebagai Mitra Desa"),
                       ),
                     ],
                   )

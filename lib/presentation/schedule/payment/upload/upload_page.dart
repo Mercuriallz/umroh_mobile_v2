@@ -63,7 +63,7 @@ class _UploadPaymentProofPageState extends State<UploadPaymentProofPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("ID Transaksi: ${widget.id}");
+    // print("ID Transaksi: ${widget.id}");
     return BlocListener<UploadBloc, UploadState>(
       listener: (context, state) {
         if (state is UploadSuccess) {

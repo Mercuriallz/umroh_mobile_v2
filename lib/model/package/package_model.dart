@@ -59,6 +59,8 @@ class DataPackage {
   int? typePaket;
   List<String>? arrFeature;
   String? imgThumbnail;
+  int? isShow;
+  int? isFull;
   bool? isVip;
   int? planeSeat;
   String? kodePaket;
@@ -78,6 +80,8 @@ class DataPackage {
       this.typePaket,
       this.arrFeature,
       this.imgThumbnail,
+      this.isShow,
+      this.isFull,
       this.isVip,
       this.planeSeat,
       this.kodePaket,
@@ -97,6 +101,8 @@ class DataPackage {
     typePaket = json['type_paket'];
     arrFeature = json['arr_feature'].cast<String>();
     imgThumbnail = json['img_thumbnail'];
+    isShow = json['is_show'];
+    isFull = json['is_full'];
     isVip = json['is_vip'];
     planeSeat = json['plane_seat'];
     kodePaket = json['kode_paket'];

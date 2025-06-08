@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/presentation/auth/login_page.dart';
 
-
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
 
@@ -14,35 +13,34 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnboardingSliderState extends State<OnBoardingScreen> {
   int _current = 0;
-final CarouselSliderController _controller = CarouselSliderController();
+  final CarouselSliderController _controller = CarouselSliderController();
 
   final List<Map<String, String>> onboardingData = [
     {
       "title": "Umrah Desa?",
       "description":
           "Program pemberangkatan umrah khusus bagi masyarakat desa dengan sistem tabungan atau cicilan ringan. Bertujuan untuk memperluas akses ibadah umrah ke seluruh lapisan masyarakat",
-      "image": "assets/umrah.png",
+      "image": "assets/image/slide-1.png",
     },
     {
       "title": "Kemudahan Pembayaran",
       "description":
-          "Lorem ipsum dolor sit amet consectetur. Tincidunt ut amet vitae nunc suspendisse tempor cras. Suscipit vitae diam id diam platea urna eu.",
-      "image": "assets/payment.png",
+          "Pembayaran yang fleksibel dan juga pilihan metode pembayaran beragam dan menyesuaikan dengan kebutuhan Anda.",
+      "image": "assets/image/Kartu-Pembayaran.png",
     },
     {
       "title": "Pendampingan Langsung",
       "description":
-          "Lorem ipsum dolor sit amet consectetur. Tincidunt ut amet vitae nunc suspendisse tempor cras. Suscipit vitae diam id diam platea urna eu.",
-      "image": "assets/pendampingan.png",
+          "Menyediakan pendampingan langsung kepada jema’ah umroh serta bimbingan online pada aplikasi Umroh Desa.",
+      "image": "assets/image/slide-3.png",
     },
     {
       "title": "Jadwal Flexibel",
       "description":
-          "Lorem ipsum dolor sit amet consectetur. Tincidunt ut amet vitae nunc suspendisse tempor cras. Suscipit vitae diam id diam platea urna eu.",
-      "image": "assets/schedule.png",
+          "Set Jadwal anda dengan mudah dan fleksibel sesuai dengan kebutuhan Anda.",
+      "image": "assets/image/slide-4.png",
     },
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +64,9 @@ final CarouselSliderController _controller = CarouselSliderController();
                         Container(
                           height: size.height * 0.3,
                           width: size.width * 0.7,
-                          color: Colors.grey[300], // Placeholder
-                          child: Center(
-                            child: Text(
-                              "Image",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                          // Uncomment this if you have image:
-                          // child: Image.asset(data['image']!, fit: BoxFit.contain),
+                          color: Colors.transparent,
+                          child:
+                              Image.asset(data['image']!, fit: BoxFit.contain),
                         ),
                         const SizedBox(height: 24),
                         Text(

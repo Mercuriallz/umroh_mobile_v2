@@ -13,7 +13,7 @@ class UploadBloc extends Cubit<UploadState> {
 
  void uploadImage({required String id, required UploadModel formData}) async {
   emit(UploadLoading());
-  print("🔄 Mulai upload gambar untuk transaksi ID: $id");
+  // print("🔄 Mulai upload gambar untuk transaksi ID: $id");
 
   final data = FormData.fromMap({
     "img_trx": await MultipartFile.fromFile(formData.imgTrx!.path),
@@ -21,7 +21,7 @@ class UploadBloc extends Cubit<UploadState> {
 
   try {
     final token = await secureStorage.read("token");
-    print("🔐 Token ditemukan: ${token != null}");
+    // print("🔐 Token ditemukan: ${token != null}");
 
     final response = await dio.post(
       "$baseUrl/bukti-tf/$id",
@@ -38,26 +38,26 @@ class UploadBloc extends Cubit<UploadState> {
       ),
     );
 
-    print("📡 Status Code: ${response.statusCode}");
-    print("📄 Response Type: ${response.data.runtimeType}");
-    print("📄 Raw Response: ${response.data}");
+    // print("📡 Status Code: ${response.statusCode}");
+    // print("📄 Response Type: ${response.data.runtimeType}");
+    // print("📄 Raw Response: ${response.data}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       emit(UploadSuccess());
-      print("✅ Upload berhasil.");
+      // print("✅ Upload berhasil.");
     } else {
       if (response.data is Map) {
         final errorMsg = response.data['message'] ?? 'Unknown error';
-        print("⚠️ Error message dari server: $errorMsg");
+        // print("⚠️ Error message dari server: $errorMsg");
         emit(UploadError("Gagal mengunggah gambar: $errorMsg"));
       } else {
-        print("⚠️ Response bukan JSON, kemungkinan error HTML: ${response.data}");
+        // print("⚠️ Response bukan JSON, kemungkinan error HTML: ${response.data}");
         emit(UploadError("Gagal mengunggah gambar: Server mengembalikan respons tidak valid."));
       }
     }
-  } catch (e, stacktrace) {
-    print("❗ Exception saat upload: $e");
-    print("📌 Stacktrace: $stacktrace");
+  } catch (e) {
+    // print("❗ Exception saat upload: $e");
+    // print("📌 Stacktrace: $stacktrace");
     emit(UploadError("Gagal mengunggah gambar: ${e.toString()}"));
   }
 }

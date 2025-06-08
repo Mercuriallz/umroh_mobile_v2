@@ -57,6 +57,8 @@ dependencies:
   socket_io_client: ^3.1.2
   pull_to_refresh_flutter3: ^2.0.2
   shared_preferences: ^2.5.3
+  dropdown_button2: ^2.3.9
+  flutter_html: ^3.0.0
 
 dev_dependencies:
   flutter_test:

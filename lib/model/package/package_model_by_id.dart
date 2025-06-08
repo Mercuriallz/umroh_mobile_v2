@@ -41,8 +41,14 @@ class DataPackageById {
   bool? isVip;
   int? planeSeat;
   String? kodePaket;
+  int? airplaneTypeId;
+  int? airportId;
+  String? notes;
   List<TPaketFasilitas>? tPaketFasilitas;
   List<THotel>? tHotel;
+
+  AirplaneType? airplaneType;
+  Airport? airport;
 
   DataPackageById(
       {this.paketId,
@@ -60,8 +66,13 @@ class DataPackageById {
       this.isVip,
       this.planeSeat,
       this.kodePaket,
+      this.airplaneTypeId,
+      this.airportId,
+      this.notes,
       this.tPaketFasilitas,
-      this.tHotel});
+      this.tHotel,
+      this.airplaneType,
+      this.airport});
 
   DataPackageById.fromJson(Map<String, dynamic> json) {
     paketId = json['paket_id'];
@@ -79,6 +90,9 @@ class DataPackageById {
     isVip = json['is_vip'];
     planeSeat = json['plane_seat'];
     kodePaket = json['kode_paket'];
+    airplaneTypeId = json['airplane_type_id'];
+    airportId = json['airport_id'];
+    notes = json['notes'];
     if (json['t_paket_fasilitas'] != null) {
       tPaketFasilitas = <TPaketFasilitas>[];
       json['t_paket_fasilitas'].forEach((v) {
@@ -91,6 +105,12 @@ class DataPackageById {
         tHotel!.add(THotel.fromJson(v));
       });
     }
+
+    airplaneType = json['airplane_type'] != null
+        ? AirplaneType.fromJson(json['airplane_type'])
+        : null;
+    airport =
+        json['airport'] != null ? Airport.fromJson(json['airport']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -110,12 +130,22 @@ class DataPackageById {
     data['is_vip'] = isVip;
     data['plane_seat'] = planeSeat;
     data['kode_paket'] = kodePaket;
+    data['airplane_type_id'] = airplaneTypeId;
+    data['airport_id'] = airportId;
+    data['notes'] = notes;
     if (tPaketFasilitas != null) {
       data['t_paket_fasilitas'] =
           tPaketFasilitas!.map((v) => v.toJson()).toList();
     }
     if (tHotel != null) {
       data['t_hotel'] = tHotel!.map((v) => v.toJson()).toList();
+    }
+
+    if (airplaneType != null) {
+      data['airplane_type'] = airplaneType!.toJson();
+    }
+    if (airport != null) {
+      data['airport'] = airport!.toJson();
     }
     return data;
   }
@@ -195,6 +225,56 @@ class THotel {
     data['img_thumbnail'] = imgThumbnail;
     data['created_at'] = createdAt;
     data['paket_id'] = paketId;
+    return data;
+  }
+}
+
+class AirplaneType {
+  int? id;
+  String? airplaneCode;
+  String? airplaneName;
+  String? createdAt;
+
+  AirplaneType({this.id, this.airplaneCode, this.airplaneName, this.createdAt});
+
+  AirplaneType.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    airplaneCode = json['airplane_code'];
+    airplaneName = json['airplane_name'];
+    createdAt = json['created_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['airplane_code'] = airplaneCode;
+    data['airplane_name'] = airplaneName;
+    data['created_at'] = createdAt;
+    return data;
+  }
+}
+
+class Airport {
+  int? id;
+  String? airportCode;
+  String? airportName;
+  String? createdAt;
+
+  Airport({this.id, this.airportCode, this.airportName, this.createdAt});
+
+  Airport.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    airportCode = json['airport_code'];
+    airportName = json['airport_name'];
+    createdAt = json['created_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['airport_code'] = airportCode;
+    data['airport_name'] = airportName;
+    data['created_at'] = createdAt;
     return data;
   }
 }

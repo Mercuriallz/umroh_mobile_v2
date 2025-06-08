@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -41,8 +42,14 @@ class _OrderPageState extends State<OrderPage> {
 
   List<String> typePaymentUser = [
     "Dana Talangan",
+    "Mandiri",
+  ];
+
+  List<String> typeJenisPembayaran = [
+    "Pembayaran Cicilan",
     "Bayar Lunas",
   ];
+
 
   Map<String, String> typePaymentValues = {
     "BANK TRANSFER": "BANK_TRANSFER",
@@ -51,19 +58,21 @@ class _OrderPageState extends State<OrderPage> {
 
   Map<String, int> typePaymentUserValues = {
     "Dana Talangan": 1,
-    "Bayar Lunas": 0,
+    "Mandiri": 0,
   };
 
   String? selectedGender;
   String? selectedTypePayment;
   String? selectedTypePaymentValue;
   String? selectedTypePaymentUser;
+  String? selectedJenisPembayaran;
   int? selectedTypePaymentUserValue;
 
   int counter = 1;
   final secureStorage = SecureStorageService();
 
   String? roleId;
+  final int dpAmount = 5000000;
 
   void loadRoleId() async {
     final role = await secureStorage.read("role");
@@ -171,10 +180,12 @@ class _OrderPageState extends State<OrderPage> {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is PackageLoadedById) {
                 final package = state.packageId;
-                 final features = package.arrFeature
-                                            ?.map((e) => e.toLowerCase())
-                                            .toList() ??
-                                        [];
+                final features =
+                    package.arrFeature?.map((e) => e.toLowerCase()).toList() ??
+                        [];
+
+                final airplaneName = package.airplaneType!.airplaneName;
+                final airportName = package.airport!.airportName;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -233,42 +244,27 @@ class _OrderPageState extends State<OrderPage> {
                                       )
                                     : Text("Reguler"),
                                 const SizedBox(height: 12),
-                               SingleChildScrollView(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  child: Row(
-                                                    children: [
-                                                      if (features
-                                                          .contains("pesawat"))
-                                                        _buildIconText(
-                                                            Icons
-                                                                .flight_takeoff,
-                                                            "Pesawat"),
-                                                      if (features
-                                                          .contains("antar"))
-                                                        _buildIconText(
-                                                            Icons
-                                                                .directions_car,
-                                                            "Antar"),
-                                                      if (features
-                                                          .contains("hotel"))
-                                                        _buildIconText(
-                                                            Icons.hotel,
-                                                            "Hotel"),
-                                                      if (features
-                                                          .contains("bis"))
-                                                        _buildIconText(
-                                                            Icons
-                                                                .directions_bus,
-                                                            "Bus"),
-                                                      if (features
-                                                          .contains("konsumsi"))
-                                                        _buildIconText(
-                                                            Icons.food_bank,
-                                                            "Konsumsi")
-                                                    ],
-                                                  ),
-                                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      if (features.contains("pesawat"))
+                                        _buildIconText(
+                                            Icons.flight_takeoff, "Pesawat"),
+                                      if (features.contains("antar"))
+                                        _buildIconText(
+                                            Icons.directions_car, "Antar"),
+                                      if (features.contains("hotel"))
+                                        _buildIconText(Icons.hotel, "Hotel"),
+                                      if (features.contains("bis"))
+                                        _buildIconText(
+                                            Icons.directions_bus, "Bus"),
+                                      if (features.contains("konsumsi"))
+                                        _buildIconText(
+                                            Icons.food_bank, "Konsumsi")
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           )
@@ -368,7 +364,7 @@ class _OrderPageState extends State<OrderPage> {
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
+                                  children:  [
                                     Text(
                                       "Penerbangan",
                                       style: TextStyle(
@@ -376,7 +372,7 @@ class _OrderPageState extends State<OrderPage> {
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      "Saudi Airlines - Bandara Soekarno Hatta (CGK)",
+                                      "$airplaneName - $airportName",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),
@@ -549,6 +545,42 @@ class _OrderPageState extends State<OrderPage> {
                         ],
                       ),
                     ),
+
+                    if (selectedJenisPembayaran == "Pembayaran Cicilan")
+                      Column(
+                        children: [
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "DP",
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  rupiahConverter.formatToRupiah(dpAmount),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
                     const SizedBox(
                       height: 16,
                     ),
@@ -558,95 +590,386 @@ class _OrderPageState extends State<OrderPage> {
 
                     const SizedBox(height: 16),
 
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        hintText: "Pilih Tipe Pembayaran",
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(color: Colors.grey),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(color: Colors.grey),
-                        ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                       
                       ),
-                      value: selectedTypePaymentUser,
-                      items: typePaymentUser
-                          .map((String displayText) => DropdownMenuItem<String>(
-                                value: displayText,
-                                child: Text(displayText),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedTypePaymentUser = value;
-                          if (value != null) {
-                            selectedTypePaymentUserValue =
-                                typePaymentUserValues[value];
-                          }
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        hintText: "Pilih Jenis Pembayaran",
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(color: Colors.grey),
+                      child: DropdownButtonFormField2<String>(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.zero,
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: Colors.grey[300]!,
+                              width: 1.5,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: Colors.blue[600]!,
+                              width: 2,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                              width: 1.5,
+                            ),
+                          ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(color: Colors.grey),
+                        isExpanded: true,
+                        hint: Row(
+                          children: [
+                            Icon(
+                              Icons.payment,
+                              color: Colors.blue[600],
+                              size: 20,
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Pilih Metode Pembayaran',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
+                        value: selectedTypePaymentUser,
+                        items: typePaymentUser
+                            .map((String item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.payment,
+                                        color: Colors.blue[600],
+                                        size: 18,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedTypePaymentUser = value;
+                            if (value != null) {
+                              selectedTypePaymentUserValue =
+                                  typePaymentUserValues[value];
+                            }
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 56,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        iconStyleData: IconStyleData(
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Colors.grey[600],
+                          ),
+                          iconSize: 24,
+                          iconEnabledColor: Colors.grey[600],
+                          iconDisabledColor: Colors.grey[400],
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: Colors.white,
+                            
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thickness: WidgetStateProperty.all<double>(6),
+                            thumbVisibility:
+                                WidgetStateProperty.all<bool>(true),
+                            thumbColor: WidgetStateProperty.all<Color>(
+                                Colors.grey[400]!),
+                          ),
+                        ),
+                     
                       ),
-                      value: selectedTypePayment,
-                      items: typePayment
-                          .map((String displayText) => DropdownMenuItem<String>(
-                                value: displayText,
-                                child: Text(displayText),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedTypePayment = value;
-                          if (value != null) {
-                            selectedTypePaymentValue = typePaymentValues[value];
-                          }
-                        });
-                      },
                     ),
+                    const SizedBox(height: 24,),
+                    
 
-                    const SizedBox(height: 16),
-
-                    // TextFormField(
-                    //   inputFormatters: [RupiahInputFormatter()],
-                    //   keyboardType: TextInputType.number,
-                    //   controller: amountController,
-                    //   decoration: InputDecoration(
-                    //     hintText: "Jumlah Pembayaran",
-                    //     contentPadding: const EdgeInsets.symmetric(
-                    //         horizontal: 20, vertical: 16),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(30),
-                    //       borderSide: const BorderSide(color: Colors.grey),
-                    //     ),
-                    //     enabledBorder: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(30),
-                    //       borderSide: const BorderSide(color: Colors.grey),
-                    //     ),
-                    //     // Adding a prefix icon for better UX
-                    //     prefixIcon: const Icon(Icons.payments_outlined),
-                    //     // Adding a suffix text for clarity
-                    //     suffixText: "IDR",
-                    //   ),
-                    // ),
-
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                       
+                      ),
+                      child: DropdownButtonFormField2<String>(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.zero,
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: Colors.grey[300]!,
+                              width: 1.5,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: Colors.blue[600]!,
+                              width: 2,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        isExpanded: true,
+                        hint: Row(
+                          children: [
+                            Icon(
+                              Icons.payment,
+                              color: Colors.blue[600],
+                              size: 20,
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Pilih Tipe Pembayaran',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                        value: selectedJenisPembayaran,
+                        items: typeJenisPembayaran
+                            .map((String item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.payment,
+                                        color: Colors.blue[600],
+                                        size: 18,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedJenisPembayaran = value;
+                            
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 56,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        iconStyleData: IconStyleData(
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Colors.grey[600],
+                          ),
+                          iconSize: 24,
+                          iconEnabledColor: Colors.grey[600],
+                          iconDisabledColor: Colors.grey[400],
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: Colors.white,
+                            
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thickness: WidgetStateProperty.all<double>(6),
+                            thumbVisibility:
+                                WidgetStateProperty.all<bool>(true),
+                            thumbColor: WidgetStateProperty.all<Color>(
+                                Colors.grey[400]!),
+                          ),
+                        ),
+                     
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+// Dropdown kedua - Jenis Pembayaran
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                       
+                      ),
+                      child: DropdownButtonFormField2<String>(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.zero,
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: Colors.grey[300]!,
+                              width: 1.5,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: Colors.green[600]!,
+                              width: 2,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        isExpanded: true,
+                        hint: Row(
+                          children: [
+                            Icon(
+                              Icons.account_balance_wallet,
+                              color: Colors.green[600],
+                              size: 20,
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Pilih Jenis Pembayaran',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                        value: selectedTypePayment,
+                        items: typePayment
+                            .map((String item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.account_balance_wallet,
+                                        color: Colors.green[600],
+                                        size: 18,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedTypePayment = value;
+                            if (value != null) {
+                              selectedTypePaymentValue =
+                                  typePaymentValues[value];
+                            }
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 56,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        iconStyleData: IconStyleData(
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Colors.grey[600],
+                          ),
+                          iconSize: 24,
+                          iconEnabledColor: Colors.grey[600],
+                          iconDisabledColor: Colors.grey[400],
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: Colors.white,
+                            
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thickness: WidgetStateProperty.all<double>(6),
+                            thumbVisibility:
+                                WidgetStateProperty.all<bool>(true),
+                            thumbColor: WidgetStateProperty.all<Color>(
+                                Colors.grey[400]!),
+                          ),
+                        ),
+                      
+                      ),
+                    ),
                     const SizedBox(height: 16),
 
                     TextFormField(
@@ -769,6 +1092,7 @@ class _OrderPageState extends State<OrderPage> {
                   const Icon(Icons.chat_bubble_outline),
                   ElevatedButton(
                     onPressed: () {
+                     
                       if (validateAmount()) {
                         Get.to(
                             () => DataOrderPage(
@@ -779,7 +1103,7 @@ class _OrderPageState extends State<OrderPage> {
                                           counter,
                                   totalOrang: counter,
                                   id: package.paketId,
-                                  amount: "2000000",
+                                  amount: selectedTypePaymentUser == "Mandiri" ? dpAmount.toString() : 0.toString(),
                                   note: noteController.text,
                                 ),
                             transition: gets.Transition.rightToLeft);

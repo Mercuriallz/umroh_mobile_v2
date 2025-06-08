@@ -10,22 +10,17 @@ class RupiahInputFormatter extends TextInputFormatter {
       return newValue.copyWith(text: '');
     }
 
-    // Remove all non-digit characters
     String newText = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
     
-    // If it's just a deletion or no actual change, don't format
     if (newText.isEmpty || newValue.text.length < oldValue.text.length) {
       return newValue;
     }
 
-    // Convert to integer
     int value = int.parse(newText);
     
-    // Format with thousand separators
     final formatter = NumberFormat("#,###", "id_ID");
     String formattedText = formatter.format(value);
     
-    // Add "Rp" prefix
     formattedText = "Rp. $formattedText";
 
     return TextEditingValue(
@@ -35,7 +30,6 @@ class RupiahInputFormatter extends TextInputFormatter {
   }
 }
 
-// Example implementation in a widget:
 class PaymentTextField extends StatelessWidget {
   final TextEditingController controller;
   

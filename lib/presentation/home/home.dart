@@ -230,12 +230,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                               ?.map((e) => e.toLowerCase())
                                               .toList() ??
                                           [];
+                                      final isDisabled = package.isShow == 1;
+
                                       return Container(
                                         width: size.width * 0.75,
                                         margin:
                                             const EdgeInsets.only(right: 16),
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: isDisabled
+                                              ? Colors.grey[400]
+                                              : Colors.white,
                                           borderRadius:
                                               BorderRadius.circular(20),
                                           boxShadow: [
@@ -250,14 +254,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                               borderRadius:
                                                   const BorderRadius.vertical(
                                                       top: Radius.circular(20)),
-                                              child: Image.network(
-                                                package.imgThumbnail ?? "",
-                                                width: double.infinity,
-                                                height: size.height * 0.2,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                        stackTrace) =>
-                                                    const Icon(Icons.image),
+                                              child: ColorFiltered(
+                                                colorFilter: isDisabled
+                                                    ? ColorFilter.mode(
+                                                        Colors.grey,
+                                                        BlendMode.saturation)
+                                                    : ColorFilter.mode(
+                                                        Colors.transparent,
+                                                        BlendMode.multiply),
+                                                child: Image.network(
+                                                  package.imgThumbnail ?? "",
+                                                  width: double.infinity,
+                                                  height: size.height * 0.2,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      const Icon(Icons.image),
+                                                ),
                                               ),
                                             ),
                                             Padding(
@@ -267,9 +280,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(package.namaPaket ?? "-",
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                           fontWeight:
-                                                              FontWeight.bold)),
+                                                              FontWeight.bold,
+                                                          color: isDisabled
+                                                              ? Colors.grey[600]
+                                                              : Colors.black)),
                                                   const SizedBox(height: 6),
                                                   SingleChildScrollView(
                                                     scrollDirection:
@@ -281,44 +297,59 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                           _buildIconText(
                                                               Icons
                                                                   .flight_takeoff,
-                                                              "Pesawat"),
+                                                              "Pesawat",
+                                                              isDisabled),
                                                         if (features
                                                             .contains("antar"))
                                                           _buildIconText(
                                                               Icons
                                                                   .directions_car,
-                                                              "Antar"),
+                                                              "Antar",
+                                                              isDisabled),
                                                         if (features
                                                             .contains("hotel"))
                                                           _buildIconText(
                                                               Icons.hotel,
-                                                              "Hotel"),
+                                                              "Hotel",
+                                                              isDisabled),
                                                         if (features
                                                             .contains("bis"))
                                                           _buildIconText(
                                                               Icons
                                                                   .directions_bus,
-                                                              "Bus"),
+                                                              "Bus",
+                                                              isDisabled),
                                                         if (features.contains(
                                                             "konsumsi"))
                                                           _buildIconText(
                                                               Icons.food_bank,
-                                                              "Konsumsi")
+                                                              "Konsumsi",
+                                                              isDisabled)
                                                       ],
                                                     ),
                                                   ),
                                                   const SizedBox(height: 12),
-                                                  const Row(
+                                                  Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: [
                                                       Text("Mulai dari",
                                                           style: TextStyle(
-                                                              fontSize: 12)),
+                                                              fontSize: 12,
+                                                              color: isDisabled
+                                                                  ? Colors
+                                                                      .grey[600]
+                                                                  : Colors
+                                                                      .black)),
                                                       Text("Seat / Bangku :",
                                                           style: TextStyle(
-                                                              fontSize: 12)),
+                                                              fontSize: 12,
+                                                              color: isDisabled
+                                                                  ? Colors
+                                                                      .grey[600]
+                                                                  : Colors
+                                                                      .black)),
                                                     ],
                                                   ),
                                                   const SizedBox(height: 4),
@@ -333,12 +364,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                                 .parse(package
                                                                         .harga ??
                                                                     "0")),
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          color:
-                                                              Color(0xFF3A7AFB),
+                                                          color: isDisabled
+                                                              ? Colors.grey[600]
+                                                              : const Color(
+                                                                  0xFF3A7AFB),
                                                         ),
                                                       ),
                                                       Text(
@@ -346,8 +379,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                             .toString(),
                                                         style: TextStyle(
                                                             fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                                FontWeight.bold,
+                                                            color: isDisabled
+                                                                ? Colors
+                                                                    .grey[600]
+                                                                : Colors.black),
                                                       ),
                                                     ],
                                                   ),
@@ -358,31 +394,40 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                             .spaceBetween,
                                                     children: [
                                                       IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
+                                                        onPressed: isDisabled
+                                                            ? null
+                                                            : () {},
+                                                        icon: Icon(
                                                             Icons
                                                                 .bookmark_border,
-                                                            color: Colors.grey),
+                                                            color: isDisabled
+                                                                ? Colors
+                                                                    .grey[600]
+                                                                : Colors.grey),
                                                       ),
                                                       Expanded(
                                                         child: ElevatedButton(
-                                                          onPressed: () {
-                                                            Get.to(
-                                                                transition: getx
-                                                                    .Transition
-                                                                    .rightToLeft,
-                                                                () => DetailPage(
-                                                                    id: package
-                                                                        .paketId
-                                                                        .toString()))?.then(
-                                                                (_) {
-                                                              refreshData();
-                                                            });
-                                                          },
+                                                          onPressed: isDisabled
+                                                              ? null
+                                                              : () {
+                                                                  Get.to(
+                                                                      transition: getx
+                                                                          .Transition
+                                                                          .rightToLeft,
+                                                                      () => DetailPage(
+                                                                          id: package
+                                                                              .paketId
+                                                                              .toString()))?.then(
+                                                                      (_) {
+                                                                    refreshData();
+                                                                  });
+                                                                },
                                                           style: ElevatedButton
                                                               .styleFrom(
-                                                            backgroundColor:
-                                                                const Color(
+                                                            backgroundColor: isDisabled
+                                                                ? Colors
+                                                                    .grey[300]
+                                                                : const Color(
                                                                     0xFF70B8FF),
                                                             minimumSize:
                                                                 const Size
@@ -396,11 +441,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                                           32),
                                                             ),
                                                           ),
-                                                          child: const Text(
+                                                          child: Text(
                                                               "Detail Paket",
                                                               style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
+                                                                  color: isDisabled
+                                                                      ? Colors.grey[
+                                                                          600]
+                                                                      : Colors
+                                                                          .white,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold)),
@@ -428,33 +476,37 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     }
                   },
                 ),
-                const SizedBox(height: 20),
                 // Container(
                 //   padding: const EdgeInsets.all(16),
                 //   decoration: BoxDecoration(
                 //     color: Colors.white,
                 //     borderRadius: BorderRadius.circular(16),
-                //     boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+                //     boxShadow: [
+                //       BoxShadow(color: Colors.black12, blurRadius: 6)
+                //     ],
                 //   ),
                 //   child: const Row(
                 //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 //     children: [
                 //       Row(
                 //         children: [
-                //           Icon(Icons.location_pin, size: 16, color: Colors.grey),
+                //           Icon(Icons.location_pin,
+                //               size: 16, color: Colors.grey),
                 //           SizedBox(width: 4),
                 //           Text("Bojong", style: TextStyle(fontSize: 12)),
                 //         ],
                 //       ),
-                //       Text("Isya", style: TextStyle(fontWeight: FontWeight.bold)),
+                //       Text("Isya",
+                //           style: TextStyle(fontWeight: FontWeight.bold)),
                 //       Text("19:19 Malam",
                 //           style: TextStyle(color: Colors.black54)),
                 //     ],
                 //   ),
                 // ),
                 // const SizedBox(height: 20),
-                // const Text("Panduan Umrah",
-                //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                // // const Text("Panduan Umrah",
+                //     style:
+                //         TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                 // const SizedBox(height: 12),
                 // Column(
                 //   children: List.generate(3, (index) {
@@ -506,14 +558,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 }
 
-Widget _buildIconText(IconData icon, String text) {
+Widget _buildIconText(IconData icon, String text, bool isDisabled) {
   return Padding(
     padding: const EdgeInsets.only(right: 12),
     child: Row(
       children: [
-        Icon(icon, size: 16),
+        Icon(icon,
+            size: 16, color: isDisabled ? Colors.grey[600] : Colors.black),
         const SizedBox(width: 4),
-        Text(text, style: const TextStyle(fontSize: 12)),
+        Text(text,
+            style: TextStyle(
+                fontSize: 12,
+                color: isDisabled ? Colors.grey[600] : Colors.black)),
       ],
     ),
   );

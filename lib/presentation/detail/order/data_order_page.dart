@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -38,7 +39,8 @@ class DataOrderPage extends StatefulWidget {
 }
 
 class _DataOrderPageState extends State<DataOrderPage> {
-  List<Map<String, String>> jemaahList = [];
+  // Ubah tipe data untuk mendukung File
+  List<Map<String, dynamic>> jemaahList = [];
   List<bool> expandedList = [];
   bool isLoading = false;
   bool isAddingJemaah = false;
@@ -58,7 +60,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
       hasInitialized = true;
     });
 
-    // Use a shorter delay for better UX
     Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) {
         context.read<PackageIdBloc>().getPackageById(widget.id.toString());
@@ -66,8 +67,18 @@ class _DataOrderPageState extends State<DataOrderPage> {
     });
   }
 
+  File? _convertToFile(dynamic imageData) {
+    if (imageData == null) return null;
+    if (imageData is File) return imageData;
+    // Jika imageData adalah path string, convert ke File
+    if (imageData is String && imageData.isNotEmpty) {
+      return File(imageData);
+    }
+    return null;
+  }
+
   void navigateToTambahJemaah() async {
-    if (isAddingJemaah) return; // Prevent multiple navigation attempts
+    if (isAddingJemaah) return;
 
     if (jemaahList.length >= (widget.totalOrang ?? 0)) {
       Get.snackbar(
@@ -90,7 +101,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
         MaterialPageRoute(builder: (_) => const AddJemaahPage()),
       );
 
-      if (result != null && result is Map<String, String>) {
+      // Ubah pengecekan tipe data
+      if (result != null && result is Map<String, dynamic>) {
         setState(() {
           jemaahList.add(result);
           expandedList.add(false);
@@ -98,9 +110,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
       }
     } catch (e) {
       // Handle navigation errors
-      // print("Error navigating to AddJemaahPage: $e");
     } finally {
-      // Ensure flag is reset even if an error occurs
       if (mounted) {
         setState(() {
           isAddingJemaah = false;
@@ -117,7 +127,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
     }
   }
 
-  // Method to dismiss any active dialogs
   void _dismissDialogs() {
     if (Navigator.canPop(context)) {
       Navigator.pop(context);
@@ -133,7 +142,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
       });
 
       final paymentVM = context.read<PaymentBloc>();
-
       paymentVM.sendPayment(paymentData);
     } catch (e) {
       _dismissDialogs();
@@ -153,7 +161,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
     }
   }
 
-  // Helper to show loading dialog
   void _showLoadingDialog() {
     showDialog(
       context: context,
@@ -165,6 +172,24 @@ class _DataOrderPageState extends State<DataOrderPage> {
         );
       },
     );
+  }
+
+  // Helper function untuk mendapatkan nama file dari File object
+  String _getFileDisplayName(dynamic file) {
+    if (file == null) return "-";
+    if (file is File) {
+      return file.path.split('/').last;
+    }
+    return file.toString();
+  }
+
+  bool _hasDocuments(Map<String, dynamic> jemaah) {
+    return jemaah['img_ktp'] != null ||
+        jemaah['img_passport'] != null ||
+        jemaah['img_kk'] != null ||
+        jemaah['img_vaksin'] != null ||
+        jemaah['img_pas_foto'] != null ||
+        jemaah['img_bpjs_kesehatan'] != null;
   }
 
   @override
@@ -195,9 +220,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         });
                       } else if (state is PaymentSuccess) {
                         _dismissDialogs();
-
                         Get.offAll(BottomMain());
-
                         Future.delayed(const Duration(milliseconds: 300), () {
                           Get.snackbar(
                             "Pesanan Berhasil Dibuat",
@@ -212,9 +235,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         setState(() {
                           isLoading = false;
                         });
-
                         _dismissDialogs();
-
                         Future.delayed(const Duration(milliseconds: 300), () {
                           Get.snackbar(
                             "Gagal Membuat Pesanan",
@@ -391,7 +412,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                               ...jemaahList.asMap().entries.map((entry) {
                                 final index = entry.key;
                                 final jemaah = entry.value;
-                                // Make sure expandedList has enough elements
                                 if (expandedList.length <= index) {
                                   expandedList.add(false);
                                 }
@@ -484,14 +504,46 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                       ),
                                                     ),
                                                     const SizedBox(width: 12),
-                                                    Text(
-                                                      jemaah['nama'] ??
-                                                          "Nama Jamaah",
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 16,
-                                                      ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          jemaah['nama'] ??
+                                                              "Nama Jamaah",
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                        // Tampilkan indikator dokumen
+                                                        if (_hasDocuments(
+                                                            jemaah))
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.folder,
+                                                                size: 12,
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                              const SizedBox(
+                                                                  width: 4),
+                                                              Text(
+                                                                "Dokumen tersedia",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
@@ -553,7 +605,9 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                     _buildInfoRow(
                                                       Icons.badge_outlined,
                                                       "NIK",
-                                                      jemaah['nik'] ?? "-",
+                                                      jemaah['nik']
+                                                              ?.toString() ??
+                                                          "-",
                                                     ),
                                                     _buildInfoRow(
                                                       jemaah['jenis_kelamin'] ==
@@ -561,7 +615,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                           ? Icons.male
                                                           : Icons.female,
                                                       "Jenis Kelamin",
-                                                      jemaah['jenis_kelamin'] ??
+                                                      jemaah['jenis_kelamin']
+                                                              ?.toString() ??
                                                           "-",
                                                     ),
 
@@ -571,27 +626,84 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                     _buildInfoRow(
                                                       Icons.phone_outlined,
                                                       "Telepon",
-                                                      jemaah['phone'] ?? "-",
+                                                      jemaah['phone']
+                                                              ?.toString() ??
+                                                          "-",
                                                     ),
                                                     _buildInfoRow(
                                                       Icons.email_outlined,
                                                       "Email",
-                                                      jemaah['email'] ?? "-",
+                                                      jemaah['email']
+                                                              ?.toString() ??
+                                                          "-",
                                                     ),
 
                                                     _buildInfoRow(
                                                       Icons.person,
                                                       "Hubungan",
-                                                      jemaah['hubungan_kerabat'] ??
+                                                      jemaah['hubungan_kerabat']
+                                                              ?.toString() ??
                                                           "-",
                                                     ),
+
+                                                    const Divider(height: 24),
+
+                                                    // Documents section - Tampilkan file yang sudah diupload
+                                                    const Text(
+                                                      "Dokumen",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 8),
+
+                                                    _buildInfoRow(
+                                                        Icons.file_copy,
+                                                        "File KTP",
+                                                        _getFileDisplayName(
+                                                            jemaah['img_ktp'])),
+
+                                                    _buildInfoRow(
+                                                        Icons.file_copy,
+                                                        "File KK",
+                                                        _getFileDisplayName(
+                                                            jemaah['img_kk'])),
+
+                                                    _buildInfoRow(
+                                                        Icons.file_copy,
+                                                        "File Paspor",
+                                                        _getFileDisplayName(
+                                                            jemaah[
+                                                                'img_passport'])),
+
+                                                    _buildInfoRow(
+                                                      Icons.file_copy,
+                                                      "File Foto",
+                                                      _getFileDisplayName(
+                                                          jemaah[
+                                                              'img_pas_foto']),
+                                                    ),
+
+                                                    _buildInfoRow(
+                                                        Icons.file_copy,
+                                                        "File Sertifikat Vaksin",
+                                                        _getFileDisplayName(
+                                                            jemaah[
+                                                                'img_vaksin'])),
+
+                                                    _buildInfoRow(
+                                                        Icons.file_copy,
+                                                        "File BPJS",
+                                                        _getFileDisplayName(jemaah[
+                                                            'img_bpjs_kesehatan'])),
                                                   ],
                                                 ),
                                               ),
 
                                               // Footer with edit action
-                                              if (index != 0 &&
-                                                  !isLoading) // Only show this for non-lead jamaah and not while loading
+                                              if (index != 0 && !isLoading)
                                                 Container(
                                                   decoration:
                                                       const BoxDecoration(
@@ -606,9 +718,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                         MainAxisAlignment.end,
                                                     children: [
                                                       TextButton.icon(
-                                                        onPressed: () {
-                                                          // Edit functionality would go here
-                                                        },
+                                                        onPressed: () {},
                                                         icon: const Icon(
                                                             Icons.edit_outlined,
                                                             size: 16),
@@ -692,12 +802,12 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                           }
 
                                           try {
-                                            String cleanedAmount = widget.amount
-                                                .toString()
-                                                .replaceAll(
-                                                    RegExp(r'[^\d]'), '');
-                                            int parsedAmount =
-                                                int.parse(cleanedAmount);
+                                            // String cleanedAmount = widget.amount
+                                            //     .toString()
+                                            //     .replaceAll(
+                                            //         RegExp(r'[^\d]'), '');
+                                            // int parsedAmount =
+                                            //     int.parse(cleanedAmount);
 
                                             final secureStorage =
                                                 SecureStorageService();
@@ -719,34 +829,53 @@ class _DataOrderPageState extends State<DataOrderPage> {
 
                                             final anggotaList = jemaahList
                                                 .map((jemaah) => UserReg(
-                                                      name: jemaah['nama'],
-                                                      email: jemaah['email'],
+                                                      name: jemaah['nama']
+                                                          ?.toString(),
+                                                      email: jemaah['email']
+                                                          ?.toString(),
                                                       phoneNumber:
-                                                          jemaah['phone'],
-                                                      nik: jemaah['nik'],
+                                                          jemaah['phone']
+                                                              ?.toString(),
+                                                      nik: jemaah['nik']
+                                                          ?.toString(),
                                                       password:
-                                                          jemaah['password'],
+                                                          jemaah['password']
+                                                              ?.toString(),
                                                       hubunganKerabat: jemaah[
-                                                          'hubungan_kerabat'],
+                                                              'hubungan_kerabat']
+                                                          ?.toString(),
+                                                      imgKtp: _convertToFile(
+                                                          jemaah['img_ktp']),
+                                                      imgPassport:
+                                                          _convertToFile(jemaah[
+                                                              'img_passport']),
+                                                      imgKk: _convertToFile(
+                                                          jemaah['img_kk']),
+                                                      imgVaksin: _convertToFile(
+                                                          jemaah['img_vaksin']),
+                                                      imgPasFoto:
+                                                          _convertToFile(jemaah[
+                                                              'img_pas_foto']),
+                                                      imgBpjsKesehatan:
+                                                          _convertToFile(jemaah[
+                                                              'img_bpjs_kesehatan']),
                                                     ))
                                                 .toList();
 
                                             var data = PaymentModel(
                                                 purchaseTitle:
                                                     package.namaPaket,
-                                                paketId: package.paketId,
-                                                priceFinal: widget.priceFinal,
-                                                amount: parsedAmount,
+                                                paketId: int.parse(package.paketId.toString()),
+                                                priceFinal: int.parse(
+                                                    widget.priceFinal.toString()),
+                                                amount: int.parse("0".toString()),
                                                 typePayment: widget.typePayment,
                                                 typePaymentUser:
-                                                    widget.typePaymentUser,
-                                                notes: widget.note,
+                                                   int.parse( widget.typePaymentUser.toString()),
                                                 userReg: anggotaList);
 
-                                            // Use improved payment sending method
                                             _sendPayment(data);
                                           } catch (e) {
-                                            // Handle parsing errors
                                             Get.snackbar(
                                               "Error",
                                               "Terjadi kesalahan saat memproses data: $e",
@@ -823,24 +952,30 @@ Widget _buildInfoRow(IconData icon, String label, String value) {
           color: Colors.grey.shade600,
         ),
         const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600,
+        Expanded(
+          // Menyediakan ruang fleksibel untuk teks panjang
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
               ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              value,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                softWrap: false,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     ),

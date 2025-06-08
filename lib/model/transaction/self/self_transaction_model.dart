@@ -66,14 +66,14 @@ class TransactionList {
   String? proofPaymentImage;
   int? statusPayPaket;
   int? createdBy;
-  String? approvedBy;
+  int? approvedBy;
   String? createdAt;
   int? userId;
   int? paketId;
   String? priceFinal;
   List<UserChildrenLog>? userChildrenLog;
   int? typePaymentUser;
-  String? statusCreditPayment;
+  int? statusCreditPayment;
   int? idProvinsi;
   int? createdByRole;
   String? createFrom;
@@ -201,8 +201,8 @@ class TPaket {
   bool? isVip;
   int? planeSeat;
   String? kodePaket;
-  String? airplaneTypeId;
-  String? airportId;
+  int? airplaneTypeId;
+  int? airportId;
 
   TPaket(
       {this.paketId,

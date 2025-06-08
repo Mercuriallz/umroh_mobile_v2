@@ -27,7 +27,9 @@ class SelfTransactionBloc extends Cubit<SelfTransactionState> {
         emit(SelfTransactionError("Gagal memuat data transaksi: ${response.statusCode}"));
       }
     } catch (e) {
+      print(e);
       emit(SelfTransactionError("Terjadi kesalahan: ${e.toString()}"));
+      
     }
   }
 }
