@@ -434,11 +434,12 @@ class _RegistUmrahPageState extends State<RegistUmrahPage> {
                       color: ColorConstant.primaryBlue, size: 20),
                 ),
                 const SizedBox(width: 12),
-                const Text(
+                 Text(
                   "Paket Terpilih",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    color: Colors.white
                   ),
                 ),
               ],
