@@ -30,14 +30,14 @@ class _LoginPageState extends State<LoginPage> {
   bool obscureText = true;
   bool showLoading = false;
 
-  final List<String> roles = ['User', 'Mitra Desa'];
-  String? selectedRole = 'User';
+  final List<String> roles = ['Jemaah', 'Mitra Desa'];
+  String? selectedRole = 'Jemaah';
 
   void _login() {
     if (formKey.currentState!.validate()) {
-      if (selectedRole == 'User') {
+      if (selectedRole == 'Jemaah') {
         final loginRequest = LoginRequestModel(
-          email: emailController.text,
+          nik: emailController.text,
           password: passwordController.text,
         );
         context.read<LoginBloc>().login(formData: loginRequest);
@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           controller: emailController,
                           decoration: InputDecoration(
-                            hintText: "Username/E-mail/NIK",
+                            hintText: selectedRole == "Mitra Desa" ? "Username" : "NIK",
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 16),
                             border: OutlineInputBorder(

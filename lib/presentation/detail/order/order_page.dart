@@ -46,7 +46,7 @@ class _OrderPageState extends State<OrderPage> {
   ];
 
   List<String> typeJenisPembayaran = [
-    "Pembayaran Cicilan",
+    "Pembayaran Bertahap",
     "Bayar Lunas",
   ];
 
@@ -184,8 +184,8 @@ class _OrderPageState extends State<OrderPage> {
                     package.arrFeature?.map((e) => e.toLowerCase()).toList() ??
                         [];
 
-                final airplaneName = package.airplaneType!.airplaneName;
-                final airportName = package.airport!.airportName;
+                final airplaneName = package.airplaneType?.airplaneName ?? "Belum Tersedia";
+                final airportName = package.airport?.airportName ?? "Belum Tersedia";
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -546,7 +546,7 @@ class _OrderPageState extends State<OrderPage> {
                       ),
                     ),
 
-                    if (selectedJenisPembayaran == "Pembayaran Cicilan")
+                    if (selectedJenisPembayaran == "Pembayaran Bertahap")
                       Column(
                         children: [
                           const SizedBox(height: 16),
@@ -992,84 +992,84 @@ class _OrderPageState extends State<OrderPage> {
                     ),
 
                     // Expandable Tile List
-                    Column(
-                      children: [
-                        ExpansionTile(
-                          shape: Border.all(color: Colors.transparent),
-                          title: Text("Itinerary",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w500)),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8.0),
-                              child: Text(
-                                  "Detail itinerary akan ditampilkan di sini."),
-                            ),
-                          ],
-                        ),
-                        ExpansionTile(
-                          shape: Border.all(color: Colors.transparent),
-                          title: Text("Fasilitas",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w500)),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children:
-                                    package.tPaketFasilitas?.map((fasilitas) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Row(
-                                              children: [
-                                                const Icon(Icons.check_circle,
-                                                    color: Colors.green,
-                                                    size: 16),
-                                                const SizedBox(width: 8),
-                                                Text(fasilitas.desc ?? ""),
-                                              ],
-                                            ),
-                                          );
-                                        }).toList() ??
-                                        [Text("Tidak ada data fasilitas")],
-                              ),
-                            ),
-                          ],
-                        ),
-                        ExpansionTile(
-                          shape: Border.all(color: Colors.transparent),
-                          title: Text("Persyaratan Peserta",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w500)),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8.0),
-                              child: Text(
-                                  "Syarat peserta akan dijelaskan di sini."),
-                            ),
-                          ],
-                        ),
-                        ExpansionTile(
-                          shape: Border.all(color: Colors.transparent),
-                          title: Text("Syarat dan Ketentuan",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w500)),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8.0),
-                              child: Text(
-                                  "Ketentuan umum pemesanan ditampilkan di sini."),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                    // Column(
+                    //   children: [
+                    //     ExpansionTile(
+                    //       shape: Border.all(color: Colors.transparent),
+                    //       title: Text("Itinerary",
+                    //           style:
+                    //               const TextStyle(fontWeight: FontWeight.w500)),
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.symmetric(
+                    //               horizontal: 16.0, vertical: 8.0),
+                    //           child: Text(
+                    //               "Detail itinerary akan ditampilkan di sini."),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     ExpansionTile(
+                    //       shape: Border.all(color: Colors.transparent),
+                    //       title: Text("Fasilitas",
+                    //           style:
+                    //               const TextStyle(fontWeight: FontWeight.w500)),
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.symmetric(
+                    //               horizontal: 16.0, vertical: 8.0),
+                    //           child: Column(
+                    //             crossAxisAlignment: CrossAxisAlignment.start,
+                    //             children:
+                    //                 package.tPaketFasilitas?.map((fasilitas) {
+                    //                       return Padding(
+                    //                         padding: const EdgeInsets.symmetric(
+                    //                             vertical: 4.0),
+                    //                         child: Row(
+                    //                           children: [
+                    //                             const Icon(Icons.check_circle,
+                    //                                 color: Colors.green,
+                    //                                 size: 16),
+                    //                             const SizedBox(width: 8),
+                    //                             Text(fasilitas.desc ?? ""),
+                    //                           ],
+                    //                         ),
+                    //                       );
+                    //                     }).toList() ??
+                    //                     [Text("Tidak ada data fasilitas")],
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     ExpansionTile(
+                    //       shape: Border.all(color: Colors.transparent),
+                    //       title: Text("Persyaratan Peserta",
+                    //           style:
+                    //               const TextStyle(fontWeight: FontWeight.w500)),
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.symmetric(
+                    //               horizontal: 16.0, vertical: 8.0),
+                    //           child: Text(
+                    //               "Syarat peserta akan dijelaskan di sini."),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     ExpansionTile(
+                    //       shape: Border.all(color: Colors.transparent),
+                    //       title: Text("Syarat dan Ketentuan",
+                    //           style:
+                    //               const TextStyle(fontWeight: FontWeight.w500)),
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.symmetric(
+                    //               horizontal: 16.0, vertical: 8.0),
+                    //           child: Text(
+                    //               "Ketentuan umum pemesanan ditampilkan di sini."),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ],
+                    // ),
                     const SizedBox(height: 100), // Space for bottom bar
                   ],
                 );

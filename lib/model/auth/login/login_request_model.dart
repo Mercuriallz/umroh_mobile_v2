@@ -1,17 +1,17 @@
 class LoginRequestModel {
-  String? email;
+  String? nik;
   String? password;
 
-  LoginRequestModel({this.email, this.password});
+  LoginRequestModel({this.nik, this.password});
 
   LoginRequestModel.fromJson(Map<String, dynamic> json) {
-    email = json['email'];
+    nik = json['nik'];
     password = json['password'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['email'] = email;
+    data['nik'] = nik;
     data['password'] = password;
     return data;
   }

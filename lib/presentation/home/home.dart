@@ -7,6 +7,7 @@ import 'package:mobile_umroh_v2/bloc/package/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package/package_state.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/presentation/detail/detail_page.dart';
+import 'package:mobile_umroh_v2/presentation/home/regist-umrah/regist_umrah_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -88,7 +89,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Center(
+                Center(
+                  child: Text(
+                    'السلام عليكم ورحمة الله وبركاته',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                Center(
                   child: Text(
                     'Selamat Datang',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
@@ -101,7 +108,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(username ?? "-",
+                          Text(username?.toUpperCase() ?? "Loading...",
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                           const SizedBox(height: 4),
@@ -112,7 +119,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                 )
                               : roles == "2"
                                   ? Text(
-                                      'Kepala Desa',
+                                      'Mitra Desa',
                                       style: TextStyle(color: Colors.grey),
                                     )
                                   : Text(
@@ -124,8 +131,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(50),
-                      child: Image.network(
-                        'https://i.pravatar.cc/100',
+                      child: Image.asset(
+                        'assets/image/test-foto.jpg',
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,
@@ -135,7 +142,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 ),
                 const SizedBox(height: 20),
                 GridView.builder(
-                  itemCount: 8,
+                  itemCount: 7,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -145,47 +152,68 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     mainAxisSpacing: 12,
                   ),
                   itemBuilder: (context, i) {
-                    final menu = [
-                      {"title": "Umrah", "icon": "assets/image/Ka'bah.png"},
+                    final List<Map<String, dynamic>> menu = [
                       {
-                        "title": "Bimbingan",
-                        "icon": "assets/image/Bimbingan.png"
+                        "title": "Daftar Umrah",
+                        "icon": "assets/image/Ka'bah.png",
+                        "route": RegistUmrahPage()
                       },
                       {
-                        "title": "Fitur Haji",
-                        "icon": "assets/image/Fitur Haji.png"
+                        "title": "Jadwal Umroh",
+                        "icon": "assets/image/Bimbingan.png",
+                        "route": RegistUmrahPage()
                       },
                       {
-                        "title": "Kurs & Mata Uang",
-                        "icon": "assets/image/Mata Uang.png"
+                        "title": "Bimbingan Manasik",
+                        "icon": "assets/image/Fitur Haji.png",
+                        "route": RegistUmrahPage()
                       },
                       {
-                        "title": "Paket Data",
-                        "icon": "assets/image/Paket Data.png"
+                        "title": "Doa Umrah & haji",
+                        "icon": "assets/image/Mata Uang.png",
+                        "route": RegistUmrahPage()
+                      },
+                      {
+                        "title": "Al-Qur'an",
+                        "icon": "assets/image/Paket Data.png",
+                        "route": RegistUmrahPage()
                       },
                       {
                         "title": "Jadwal Sholat",
-                        "icon": "assets/image/Jadwal Sholat.png"
+                        "icon": "assets/image/Jadwal Sholat.png",
+                        "route": RegistUmrahPage()
                       },
                       {
-                        "title": "Al-qur'an",
-                        "icon": "assets/image/Al-Qur'an.png"
+                        "title": "Paket data",
+                        "icon": "assets/image/Al-Qur'an.png",
+                        "route": RegistUmrahPage()
                       },
-                      {"title": "Lainnya", "icon": "assets/icons/blocks 1.png"},
                     ];
                     return Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            shape: BoxShape.circle,
-                            // boxShadow: [
-                            //   BoxShadow(color: Colors.black12, blurRadius: 6),
-                            // ],
+                        GestureDetector(
+                          onTap: () {
+                            if (menu[i]['route'] != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => menu[i]['route']!,
+                                ),
+                              );
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              shape: BoxShape.circle,
+                              // boxShadow: [
+                              //   BoxShadow(color: Colors.black12, blurRadius: 6),
+                              // ],
+                            ),
+                            child: Image.asset(menu[i]['icon']!,
+                                width: 28, height: 28),
                           ),
-                          child: Image.asset(menu[i]['icon']!,
-                              width: 28, height: 28),
                         ),
                         const SizedBox(height: 6),
                         Align(
@@ -342,7 +370,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                                       .grey[600]
                                                                   : Colors
                                                                       .black)),
-                                                      Text("Seat / Bangku :",
+                                                      Text("Sisa Kuota",
                                                           style: TextStyle(
                                                               fontSize: 12,
                                                               color: isDisabled

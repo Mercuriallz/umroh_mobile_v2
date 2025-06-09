@@ -7,7 +7,7 @@ class PaymentSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEFFAF1),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -16,14 +16,14 @@ class PaymentSuccessPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.check_circle_outline,
-                    size: 80, color: Colors.green),
+                    size: 80, color: Color(0xFF5687BF)),
                 const SizedBox(height: 20),
                 const Text(
                   "Pembayaran Berhasil!",
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green),
+                      color: Color(0xFF5687BF)),
                 ),
                 const SizedBox(height: 12),
                 const Text(
@@ -39,7 +39,7 @@ class PaymentSuccessPage extends StatelessWidget {
                      Navigator.push(context, MaterialPageRoute(builder: (_) => const BottomMain()));
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: Color(0xFF5687BF),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30)),

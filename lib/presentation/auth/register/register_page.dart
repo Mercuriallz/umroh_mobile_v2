@@ -343,14 +343,41 @@ class _RegisterPageState extends State<RegisterPage> {
                 //     return null;
                 //   },
                 // ),
+                // _buildTextField(
+                //   name: 'username',
+                //   label: 'Username',
+                 
+                //   controller: usernameController,
+                 
+                // ),
+
                 _buildTextField(
-                  name: 'username',
-                  label: 'Username',
+                  name: 'No. Telephone',
+                  label: 'No. Telephone',
                  
                   controller: usernameController,
                  
                 ),
-                const SizedBox(height: 12),
+
+
+                _buildTextField(
+                  name: 'NIK',
+                  label: 'NIK',
+                 
+                  controller: usernameController,
+                 
+                ),
+
+                _buildTextField(
+                  name: 'Jabatan',
+                  label: 'Jabatan',
+                 
+                  controller: usernameController,
+                 
+                ),
+
+                const SizedBox(height: 12,),
+
 
                 flutter_bloc.BlocBuilder<ProvinsiBloc, ProvinsiState>(
                   builder: (context, state) {
@@ -406,7 +433,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return FormBuilderDropdown(
                         name: 'kabupatenDropdown',
                         decoration: _dropdownDecoration(),
-                        hint: const Text('Pilih Kabupaten'),
+                        hint: const Text('Pilih Kabupaten / Kota'),
                         validator: (value) {
                           if (value == null) {
                             return 'Kabupaten wajib dipilih';
@@ -437,7 +464,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         name: 'KabupatenDropdown',
                         items: [],
                         decoration: _dropdownDecoration(),
-                        hint: const Text("Pilih Kabupaten"),
+                        hint: const Text("Pilih Kabupaten / Kota"),
                       );
                     }
                   },
@@ -497,7 +524,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return FormBuilderDropdown(
                         name: 'kelurahanDropdown',
                         decoration: _dropdownDecoration(),
-                        hint: const Text('Pilih Kelurahan'),
+                        hint: const Text('Pilih Kelurahan / Desa'),
                         validator: (value) {
                           if (value == null) {
                             return 'Kelurahan wajib dipilih';
@@ -523,7 +550,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         name: 'KelurahanDropdown',
                         items: [],
                         decoration: _dropdownDecoration(),
-                        hint: const Text("Pilih Kelurahan"),
+                        hint: const Text("Pilih Desa "),
                       );
                     }
                   },

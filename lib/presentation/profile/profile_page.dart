@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     )
                   : roles == "2"
                       ? Text(
-                          'Kepala Desa',
+                          'Mitra Desa',
                           style: TextStyle(color: Colors.grey),
                         )
                       : Text(

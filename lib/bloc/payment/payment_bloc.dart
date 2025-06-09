@@ -20,8 +20,8 @@ class PaymentBloc extends Cubit<PaymentState> {
     ));
 
     final token = await secureStorage.read("token");
-    print("User Reg --> ${formData.userReg}");
-          print("[PaymentBloc] Sending payment data: $formData");
+    // print("User Reg --> ${formData.userReg}");
+    //       print("[PaymentBloc] Sending payment data: $formData");
 
     final paymentData = FormData.fromMap({
       "purchase_title": formData.purchaseTitle,
@@ -61,7 +61,7 @@ class PaymentBloc extends Cubit<PaymentState> {
     });
 
     try {
-      print("[PaymentBloc] Sending payment data: $paymentData");
+      // print("[PaymentBloc] Sending payment data: $paymentData");
 
       final response = await dio.post(
         "$baseUrl/reg-schedule-pay-kepdes",
@@ -77,8 +77,8 @@ class PaymentBloc extends Cubit<PaymentState> {
         ),
       );
 
-      print("[PaymentBloc] Response status: ${response.statusCode}");
-      print("[PaymentBloc] Response data: ${response.data}");
+      // print("[PaymentBloc] Response status: ${response.statusCode}");
+      // print("[PaymentBloc] Response data: ${response.data}");
       
 
       if (response.statusCode == 200 || response.statusCode == 201) {

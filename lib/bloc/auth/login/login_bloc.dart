@@ -23,7 +23,7 @@ class LoginBloc extends Cubit<LoginState> {
 
     final dio = Dio();
     Map<String, dynamic> dataLogin = {
-      'email': formData.email,
+      'nik': formData.nik,
       'password': formData.password,
     };
 

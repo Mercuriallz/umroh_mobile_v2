@@ -2,20 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+// import 'package:get/get.dart';
 
 import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
+// import 'package:mobile_umroh_v2/constant/color_constant.dart';
+import 'package:mobile_umroh_v2/constant/full_image_preview.dart';
 import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/shimmer.dart';
 import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
+// import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 
 class DetailPage extends StatefulWidget {
   final String? id;
+  final bool? isOrder;
 
-  const DetailPage({super.key, this.id});
+  const DetailPage({super.key, required this.id, this.isOrder = false});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -51,6 +56,8 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    // print("widget idd --> ${widget.id}");
+
     return Scaffold(
       backgroundColor: const Color(0xFFFDFDFD),
       body: SafeArea(
@@ -65,8 +72,10 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                 final features =
                     package.arrFeature?.map((e) => e.toLowerCase()).toList() ??
                         [];
-                final airplaneName = package.airplaneType!.airplaneName;
-                final airportName = package.airport!.airportName;
+                final airplaneName =
+                    package.airplaneType?.airplaneName ?? "Belum Tersedia";
+                final airportName =
+                    package.airport?.airportName ?? "Belum Tersedia";
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -77,10 +86,21 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                         onBack: () => Navigator.pop(context),
                       ),
                     ),
-                    ShimmerImage(
-                      imageUrl: package.imgThumbnail ?? "",
-                      height: 180,
-                      borderRadius: BorderRadius.circular(12),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => FullImagePage(
+                                imageUrl: package.imgThumbnail ?? ""),
+                          ),
+                        );
+                      },
+                      child: ShimmerImage(
+                        imageUrl: package.imgThumbnail ?? "",
+                        height: 180,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Text(package.namaPaket ?? "-",
@@ -122,8 +142,12 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
                     Html(data: package.notes),
+                    // const Text("Perlengkapan",
+                    //     style: TextStyle(fontWeight: FontWeight.bold)),
+                    // const SizedBox(height: 6),
+                    // Html(data: package.notes),
                     const SizedBox(height: 12),
-                    _buildFlightSection(airplaneName!, airportName!),
+                    _buildFlightSection(airplaneName, airportName),
                     const SizedBox(height: 16),
                     const Text("Estimasi Keberangkatan",
                         style: TextStyle(fontWeight: FontWeight.bold)),
@@ -207,29 +231,37 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
         children: [
           const Icon(Icons.flight_takeoff, color: Colors.black, size: 24),
           const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Penerbangan",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-              const SizedBox(height: 4),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: airplaneName,
-                      style: const TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600),
-                    ),
-                    TextSpan(
-                      text: " - $airportName",
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
-                style: const TextStyle(fontSize: 14),
-              ),
-            ],
+          Expanded(
+            // <-- Ganti Column langsung dibungkus Expanded
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Penerbangan",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                const SizedBox(height: 4),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: airplaneName,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextSpan(
+                        text: " - $airportName",
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  style: const TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -298,7 +330,6 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        
       ),
       child: SafeArea(
         child: Padding(
@@ -345,28 +376,30 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                 ),
               ),
               const SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Get.to(() => OrderPage(id: package.paketId.toString()));
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorConstant.primaryBlue,
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  elevation: 2,
-                ),
-                child: const Text(
-                  'Pesan Sekarang',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+              widget.isOrder == true
+                  ? ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => OrderPage(id: package.paketId.toString()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorConstant.primaryBlue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: const Text(
+                        'Pesan Sekarang',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  : const SizedBox()
             ],
           ),
         ),

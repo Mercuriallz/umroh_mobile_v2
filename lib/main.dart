@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_umroh_v2/bloc/auth/login/login_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/auth/register/register_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package/package_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/package/package_active/package_active_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/payment/payment_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kabupaten/kabupaten_bloc.dart';
@@ -22,8 +23,6 @@ import 'package:mobile_umroh_v2/constant/on_boarding/on_boarding_main.dart';
 import 'package:mobile_umroh_v2/model/transaction/payment/payment_transaction_model.dart';
 import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction/transaction_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:mobile_umroh_v2/services/storage.dart';
-// import 'package:mobile_umroh_v2/services/web_socket.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,6 +66,7 @@ void main() async {
       BlocProvider(create: (_) => SelfTransactionDetailBloc()),
       BlocProvider(create: (_) => PaymentTransactionBloc()),
       BlocProvider(create: (_) => UploadBloc()),
+      BlocProvider(create: (_) => PackageActiveBloc()),
     ],
     child: GetMaterialApp(
       debugShowCheckedModeBanner: false,
