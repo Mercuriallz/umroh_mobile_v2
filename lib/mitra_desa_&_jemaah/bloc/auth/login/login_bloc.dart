@@ -207,6 +207,8 @@ class LoginBloc extends Cubit<LoginState> {
         var token = loginModel.token;
         var name = loginModel.data?.name;
         var role = loginModel.data?.idRole.toString();
+        var idProvinsi = loginModel.data?.idProvinsi.toString();
+        var idKabupaten = loginModel.data?.idKabupaten.toString();
 
         if (token == null || name == null) {
           emit(LoginError("Data token atau nama tidak ditemukan"));
@@ -216,6 +218,8 @@ class LoginBloc extends Cubit<LoginState> {
         await secureStorage.write("token", token);
         await secureStorage.write("name", name);
         await secureStorage.write("role", role!.toString());
+        await secureStorage.write("idProvinsi", idProvinsi!.toString());
+        await secureStorage.write("idKabupaten", idKabupaten!.toString());
 
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {
@@ -286,6 +290,7 @@ class LoginBloc extends Cubit<LoginState> {
         var token = loginModel.token;
         var name = loginModel.data?.name;
         var role = loginModel.data?.idRole.toString();
+        var idProvinsiRegional = loginModel.data?.idProvinsi.toString();
 
         if (token == null || name == null) {
           emit(LoginError("Data token atau nama tidak ditemukan"));
@@ -295,6 +300,7 @@ class LoginBloc extends Cubit<LoginState> {
         await secureStorage.write("token", token);
         await secureStorage.write("name", name);
         await secureStorage.write("role", role!.toString());
+        await secureStorage.write("idProvinsiRegional", idProvinsiRegional!.toString());
 
         emit(LoginSuccess());
       } else if (response.statusCode == 400) {

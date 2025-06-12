@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/auth/login_page.dart';
-import 'package:mobile_umroh_v2/regional-manager/bloc/list_regional_manager_bloc.dart';
-import 'package:mobile_umroh_v2/regional-manager/bloc/list_regional_manager_state.dart';
+import 'package:mobile_umroh_v2/regional-manager/bloc/list-regional-manager/list_regional_manager_bloc.dart';
+import 'package:mobile_umroh_v2/regional-manager/bloc/list-regional-manager/list_regional_manager_state.dart';
 import 'package:mobile_umroh_v2/regional-manager/model/list_regional_manager_model.dart';
+import 'package:mobile_umroh_v2/regional-manager/presentation/list_jemaah_kepdes_provinsi_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 
 class RegionalManagerHomePage extends StatefulWidget {
@@ -137,7 +138,7 @@ class _RegionalManagerDropdownPageState extends State<RegionalManagerHomePage> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 16),
                                         child: Text(
-                                          regionalManager.nama ??
+                                          regionalManager.wProvinsi?.name ??
                                               'Nama tidak tersedia',
                                           style: const TextStyle(fontSize: 14),
                                         ),
@@ -152,7 +153,6 @@ class _RegionalManagerDropdownPageState extends State<RegionalManagerHomePage> {
                         return const SizedBox.shrink();
                       },
                     ),
-                   
                   ],
                 ),
               ),
@@ -259,6 +259,32 @@ class _RegionalManagerDropdownPageState extends State<RegionalManagerHomePage> {
                                       ],
                                     ),
                                   ),
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                ListJemaahKepdesProvinsiPage(
+                                                    provinsiId:
+                                                        selectedRegionalManager!
+                                                            .idProvinsi
+                                                            .toString())));
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: ColorConstant.primaryBlue,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25)),
+                                    minimumSize:
+                                        const Size(double.infinity, 48),
+                                  ),
+                                  child: const Text('Detail',
+                                      style: TextStyle(color: Colors.white)),
+                                )
                               ],
                             ),
                           ),
@@ -300,23 +326,23 @@ class _RegionalManagerDropdownPageState extends State<RegionalManagerHomePage> {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+              const SizedBox(height: 24),
 
-                 ElevatedButton(
-                      onPressed: () {
-                        final secureStorage = SecureStorageService();
-                        secureStorage.deleteAll();
-                        Get.offAll(const LoginPage());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade100,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25)),
-                        minimumSize: const Size(double.infinity, 48),
-                      ),
-                      child: const Text('Log Out',
-                          style: TextStyle(color: Colors.red)),
-                    )
+              ElevatedButton(
+                onPressed: () {
+                  final secureStorage = SecureStorageService();
+                  secureStorage.deleteAll();
+                  Get.offAll(const LoginPage());
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red.shade100,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25)),
+                  minimumSize: const Size(double.infinity, 48),
+                ),
+                child:
+                    const Text('Log Out', style: TextStyle(color: Colors.red)),
+              )
             ],
           ),
         ),

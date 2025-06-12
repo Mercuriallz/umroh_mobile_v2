@@ -34,14 +34,16 @@ class DataAreaManager {
   String? name;
   int? idRole;
   int? idProvinsi;
+  int? idKabupaten;
 
-  DataAreaManager({this.userId, this.name, this.idRole, this.idProvinsi});
+  DataAreaManager({this.userId, this.name, this.idRole, this.idProvinsi, this.idKabupaten});
 
   DataAreaManager.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
     name = json['name'];
     idRole = json['id_role'];
     idProvinsi = json['id_provinsi'];
+    idKabupaten = json['id_kabupaten'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +52,7 @@ class DataAreaManager {
     data['name'] = name;
     data['id_role'] = idRole;
     data['id_provinsi'] = idProvinsi;
+    data['id_kabupaten'] = idKabupaten;
     return data;
   }
 }

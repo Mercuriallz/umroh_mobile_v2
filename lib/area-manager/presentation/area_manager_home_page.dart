@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/area-manager/bloc/list_area_manager_bloc.dart';
 import 'package:mobile_umroh_v2/area-manager/bloc/list_area_manager_state.dart';
 import 'package:mobile_umroh_v2/area-manager/model/list_area_manager_model.dart';
+import 'package:mobile_umroh_v2/area-manager/presentation/list_jemaah_kepdes_kabupaten_page.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/auth/login_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
@@ -141,7 +142,7 @@ class _AreaManagerHomePageState extends State<AreaManagerHomePage> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              areaManager.nama ??
+                                              areaManager.wKabupaten?.name ??
                                                   'Nama tidak tersedia',
                                               style: const TextStyle(
                                                   fontSize: 14,
@@ -249,7 +250,7 @@ class _AreaManagerHomePageState extends State<AreaManagerHomePage> {
                                     margin: const EdgeInsets.only(top: 16),
                                     padding: const EdgeInsets.all(16),
                                     decoration: BoxDecoration(
-                                      color:  ColorConstant.primaryBlue,
+                                      color: ColorConstant.primaryBlue,
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
                                           color: ColorConstant.primaryBlue),
@@ -287,7 +288,7 @@ class _AreaManagerHomePageState extends State<AreaManagerHomePage> {
                                             'Area Manager untuk wilayah ${selectedAreaManager!.wKabupaten!.name}, ${selectedAreaManager!.wProvinsi!.name}',
                                             style: TextStyle(
                                               fontSize: 13,
-                                               color: Colors.white,
+                                              color: Colors.white,
                                             ),
                                           )
                                         else if (selectedAreaManager!
@@ -297,7 +298,7 @@ class _AreaManagerHomePageState extends State<AreaManagerHomePage> {
                                             'Area Manager untuk wilayah ${selectedAreaManager!.wProvinsi!.name}',
                                             style: TextStyle(
                                               fontSize: 13,
-                                               color: Colors.white,
+                                              color: Colors.white,
                                             ),
                                           ),
 
@@ -316,7 +317,7 @@ class _AreaManagerHomePageState extends State<AreaManagerHomePage> {
                                             children: [
                                               Icon(
                                                 Icons.location_on,
-                                                 color: Colors.white,
+                                                color: Colors.white,
                                                 size: 14,
                                               ),
                                               const SizedBox(width: 4),
@@ -324,7 +325,7 @@ class _AreaManagerHomePageState extends State<AreaManagerHomePage> {
                                                 'Cakupan Area: ${selectedAreaManager!.wKabupaten?.name ?? selectedAreaManager!.wProvinsi?.name ?? 'Tidak diketahui'}',
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                   color: Colors.white,
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
@@ -334,6 +335,33 @@ class _AreaManagerHomePageState extends State<AreaManagerHomePage> {
                                       ],
                                     ),
                                   ),
+                                const SizedBox(
+                                  height: 24,
+                                ),
+
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                ListJemaahKepdesKabupatenPage(
+                                                    kabupatenId:
+                                                        selectedAreaManager!
+                                                            .idKabupaten
+                                                            .toString())));
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: ColorConstant.primaryBlue,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25)),
+                                    minimumSize:
+                                        const Size(double.infinity, 48),
+                                  ),
+                                  child: const Text('Detail',
+                                      style: TextStyle(color: Colors.white)),
+                                )
                               ],
                             ),
                           ),

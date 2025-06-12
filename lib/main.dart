@@ -25,7 +25,7 @@ import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/transaction/upload/uplo
 import 'package:mobile_umroh_v2/constant/on_boarding/on_boarding_main.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/model/transaction/payment/payment_transaction_model.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/schedule/payment/transaction/transaction_page.dart';
-import 'package:mobile_umroh_v2/regional-manager/bloc/list_regional_manager_bloc.dart';
+import 'package:mobile_umroh_v2/regional-manager/bloc/list-regional-manager/list_regional_manager_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -75,6 +75,7 @@ void main() async {
       BlocProvider(create: (_) => ProfileBloc()),
       BlocProvider(create: (_) => ListRegionalManagerBloc()),
       BlocProvider(create: (_) => ListAreaManagerBloc()),
+      
 
       // BlocProvider(create: (_) => LoginAreaManagerBloc()),
       // BlocProvider(create: (_) => LoginRegionalManagerBloc()),

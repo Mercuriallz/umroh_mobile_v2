@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_umroh_v2/regional-manager/bloc/list_regional_manager_state.dart';
+import 'package:mobile_umroh_v2/regional-manager/bloc/list-regional-manager/list_regional_manager_state.dart';
 import 'package:mobile_umroh_v2/regional-manager/model/list_regional_manager_model.dart';
 import 'package:mobile_umroh_v2/regional-manager/regional-manager-repo/list_regional_manager_repo.dart';
 
