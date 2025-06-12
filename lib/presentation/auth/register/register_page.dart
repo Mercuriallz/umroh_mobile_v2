@@ -48,6 +48,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final ktpController = TextEditingController();
   final birthdayController = TextEditingController();
   final usernameController = TextEditingController();
+  final nikController = TextEditingController();
+  final jabatanController = TextEditingController();
 
   String? selectedGender;
 
@@ -229,8 +231,6 @@ class _RegisterPageState extends State<RegisterPage> {
   //   );
   // }
 
-
-
   // void _handlePickedFile(File file, String label) {
   //   setState(() {
   //     switch (label) {
@@ -279,7 +279,7 @@ class _RegisterPageState extends State<RegisterPage> {
     phoneNumberController.dispose();
     emailController.dispose();
     usernameController.dispose();
-    
+
     addressController.dispose();
     ktpController.dispose();
     birthdayController.dispose();
@@ -291,7 +291,6 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-           
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: FormBuilder(
             key: _formKey,
@@ -343,41 +342,37 @@ class _RegisterPageState extends State<RegisterPage> {
                 //     return null;
                 //   },
                 // ),
-                // _buildTextField(
-                //   name: 'username',
-                //   label: 'Username',
-                 
-                //   controller: usernameController,
-                 
-                // ),
-
                 _buildTextField(
-                  name: 'No. Telephone',
-                  label: 'No. Telephone',
-                 
+                  name: 'username',
+                  label: 'Username',
+
                   controller: usernameController,
-                 
+
                 ),
 
+                _buildTextField(
+                  keyboardType: TextInputType.number,
+                  name: 'No. Telephone',
+                  label: 'No. Telephone',
+                  controller: phoneNumberController,
+                ),
 
                 _buildTextField(
+                  keyboardType: TextInputType.number,
                   name: 'NIK',
                   label: 'NIK',
-                 
-                  controller: usernameController,
-                 
+                  controller: nikController,
                 ),
 
                 _buildTextField(
                   name: 'Jabatan',
                   label: 'Jabatan',
-                 
-                  controller: usernameController,
-                 
+                  controller: jabatanController,
                 ),
 
-                const SizedBox(height: 12,),
-
+                const SizedBox(
+                  height: 12,
+                ),
 
                 flutter_bloc.BlocBuilder<ProvinsiBloc, ProvinsiState>(
                   builder: (context, state) {
@@ -843,11 +838,11 @@ class _RegisterPageState extends State<RegisterPage> {
 //   }
 // }
 
-InputDecoration _dropdownDecoration({String? errorText}) {
-  return InputDecoration(
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-    errorText: errorText,
-  );
-}
+  InputDecoration _dropdownDecoration({String? errorText}) {
+    return InputDecoration(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      errorText: errorText,
+    );
+  }
 }

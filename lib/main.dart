@@ -10,6 +10,8 @@ import 'package:mobile_umroh_v2/bloc/package/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_active/package_active_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package_id/package_id_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/payment/payment_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/profile/get_profile/profile_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/profile/upload/upload_profile_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kabupaten/kabupaten_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kecamatan/kecamatan_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/region/kelurahan/kelurahan_bloc.dart';
@@ -67,6 +69,8 @@ void main() async {
       BlocProvider(create: (_) => PaymentTransactionBloc()),
       BlocProvider(create: (_) => UploadBloc()),
       BlocProvider(create: (_) => PackageActiveBloc()),
+      BlocProvider(create: (_) => UploadProfileBloc()),
+      BlocProvider(create: (_) => ProfileBloc())
     ],
     child: GetMaterialApp(
       debugShowCheckedModeBanner: false,

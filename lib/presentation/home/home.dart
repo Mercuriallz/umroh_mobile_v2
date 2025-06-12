@@ -5,6 +5,10 @@ import 'package:get/get.dart' as getx;
 
 import 'package:mobile_umroh_v2/bloc/package/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/bloc/package/package/package_state.dart';
+import 'package:mobile_umroh_v2/bloc/profile/get_profile/profile_bloc.dart';
+import 'package:mobile_umroh_v2/bloc/profile/get_profile/profile_state.dart';
+import 'package:mobile_umroh_v2/constant/full_image_preview.dart';
+import 'package:mobile_umroh_v2/constant/on_progress.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/presentation/detail/detail_page.dart';
 import 'package:mobile_umroh_v2/presentation/home/regist-umrah/regist_umrah_page.dart';
@@ -54,6 +58,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     loadUsername();
     refreshData();
     loadRole();
+    context.read<ProfileBloc>().getProfile();
   }
 
   @override
@@ -131,11 +136,39 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(50),
-                      child: Image.asset(
-                        'assets/image/test-foto.jpg',
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
+                      child: BlocBuilder<ProfileBloc, ProfileState>(
+                        builder: (context, state) {
+                          if (state is ProfileLoading) {
+                            return const CircularProgressIndicator();
+                          } else if (state is ProfileLoaded) {
+                            final images = state.dataProfile;
+
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (_) => FullImagePage(imageUrl: images.profilePicture!)));
+                              },
+                              child: Image.network(
+                                "${images.profilePicture}",
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          } else {
+                            return Image.asset(
+                            'assets/image/test-foto.jpg',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          );
+                          }
+                          // return Image.asset(
+                          //   'assets/image/test-foto.jpg',
+                          //   width: 50,
+                          //   height: 50,
+                          //   fit: BoxFit.cover,
+                          // );
+                        },
                       ),
                     )
                   ],
@@ -161,32 +194,32 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       {
                         "title": "Jadwal Umroh",
                         "icon": "assets/image/Bimbingan.png",
-                        "route": RegistUmrahPage()
+                        "route": OnProgressPage()
                       },
                       {
                         "title": "Bimbingan Manasik",
                         "icon": "assets/image/Fitur Haji.png",
-                        "route": RegistUmrahPage()
+                        "route": OnProgressPage()
                       },
                       {
                         "title": "Doa Umrah & haji",
                         "icon": "assets/image/Mata Uang.png",
-                        "route": RegistUmrahPage()
+                        "route": OnProgressPage()
                       },
                       {
                         "title": "Al-Qur'an",
                         "icon": "assets/image/Paket Data.png",
-                        "route": RegistUmrahPage()
+                        "route": OnProgressPage()
                       },
                       {
                         "title": "Jadwal Sholat",
                         "icon": "assets/image/Jadwal Sholat.png",
-                        "route": RegistUmrahPage()
+                        "route": OnProgressPage()
                       },
                       {
                         "title": "Paket data",
                         "icon": "assets/image/Al-Qur'an.png",
-                        "route": RegistUmrahPage()
+                        "route": OnProgressPage()
                       },
                     ];
                     return Column(

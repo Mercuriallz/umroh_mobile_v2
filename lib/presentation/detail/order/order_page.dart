@@ -41,7 +41,7 @@ class _OrderPageState extends State<OrderPage> {
   ];
 
   List<String> typePaymentUser = [
-    "Dana Talangan",
+    "Pembiayaan",
     "Mandiri",
   ];
 
@@ -50,14 +50,13 @@ class _OrderPageState extends State<OrderPage> {
     "Bayar Lunas",
   ];
 
-
   Map<String, String> typePaymentValues = {
     "BANK TRANSFER": "BANK_TRANSFER",
     "VIRTUAL ACCOUNT": "VIRTUAL_ACCOUNT",
   };
 
   Map<String, int> typePaymentUserValues = {
-    "Dana Talangan": 1,
+    "Pembiayaan": 1,
     "Mandiri": 0,
   };
 
@@ -73,6 +72,7 @@ class _OrderPageState extends State<OrderPage> {
 
   String? roleId;
   final int dpAmount = 5000000;
+  final int administration = 100000;
 
   void loadRoleId() async {
     final role = await secureStorage.read("role");
@@ -184,8 +184,10 @@ class _OrderPageState extends State<OrderPage> {
                     package.arrFeature?.map((e) => e.toLowerCase()).toList() ??
                         [];
 
-                final airplaneName = package.airplaneType?.airplaneName ?? "Belum Tersedia";
-                final airportName = package.airport?.airportName ?? "Belum Tersedia";
+                final airplaneName =
+                    package.airplaneType?.airplaneName ?? "Belum Tersedia";
+                final airportName =
+                    package.airport?.airportName ?? "Belum Tersedia";
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -364,7 +366,7 @@ class _OrderPageState extends State<OrderPage> {
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children:  [
+                                  children: [
                                     Text(
                                       "Penerbangan",
                                       style: TextStyle(
@@ -581,9 +583,47 @@ class _OrderPageState extends State<OrderPage> {
                         ],
                       ),
 
+                    
+
                     const SizedBox(
                       height: 16,
                     ),
+
+                    if (selectedTypePaymentUser == "Pembiayaan")
+                      Column(
+                        children: [
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Administrasi",
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  rupiahConverter.formatToRupiah(administration),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
 
                     const Text("Note : Satu kamar terdiri dari 4 orang",
                         style: TextStyle(fontSize: 12)),
@@ -593,7 +633,6 @@ class _OrderPageState extends State<OrderPage> {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                       
                       ),
                       child: DropdownButtonFormField2<String>(
                         decoration: InputDecoration(
@@ -678,6 +717,11 @@ class _OrderPageState extends State<OrderPage> {
                               selectedTypePaymentUserValue =
                                   typePaymentUserValues[value];
                             }
+
+                            // Reset dropdown kedua saat memilih Pembiayaan
+                            if (value == "Pembiayaan") {
+                              selectedJenisPembayaran = null;
+                            }
                           });
                         },
                         buttonStyleData: ButtonStyleData(
@@ -701,7 +745,6 @@ class _OrderPageState extends State<OrderPage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             color: Colors.white,
-                            
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           scrollbarTheme: ScrollbarThemeData(
@@ -713,141 +756,138 @@ class _OrderPageState extends State<OrderPage> {
                                 Colors.grey[400]!),
                           ),
                         ),
-                     
                       ),
                     ),
-                    const SizedBox(height: 24,),
-                    
 
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                       
-                      ),
-                      child: DropdownButtonFormField2<String>(
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.zero,
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.grey[300]!,
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.blue[600]!,
-                              width: 2,
-                            ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
-                              width: 1.5,
-                            ),
-                          ),
+                    // Dropdown kedua - Tipe Pembayaran (hanya muncul jika Mandiri)
+                    if (selectedTypePaymentUser == "Mandiri") ...[
+                      const SizedBox(height: 24),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        isExpanded: true,
-                        hint: Row(
-                          children: [
-                            Icon(
-                              Icons.payment,
-                              color: Colors.blue[600],
-                              size: 20,
+                        child: DropdownButtonFormField2<String>(
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide.none,
                             ),
-                            const SizedBox(width: 12),
-                            Text(
-                              'Pilih Tipe Pembayaran',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[600],
-                                fontWeight: FontWeight.w400,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: Colors.grey[300]!,
+                                width: 1.5,
                               ),
                             ),
-                          ],
-                        ),
-                        value: selectedJenisPembayaran,
-                        items: typeJenisPembayaran
-                            .map((String item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.payment,
-                                        color: Colors.blue[600],
-                                        size: 18,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black87,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: Colors.blue[600]!,
+                                width: 2,
+                              ),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                                width: 1.5,
+                              ),
+                            ),
+                          ),
+                          isExpanded: true,
+                          hint: Row(
+                            children: [
+                              Icon(
+                                Icons.payment,
+                                color: Colors.blue[600],
+                                size: 20,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'Pilih Tipe Pembayaran',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                          value: selectedJenisPembayaran,
+                          items: typeJenisPembayaran
+                              .map((String item) => DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.payment,
+                                          color: Colors.blue[600],
+                                          size: 18,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black87,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedJenisPembayaran = value;
-                            
-                          });
-                        },
-                        buttonStyleData: ButtonStyleData(
-                          height: 56,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                                      ],
+                                    ),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedJenisPembayaran = value;
+                            });
+                          },
+                          buttonStyleData: ButtonStyleData(
+                            height: 56,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          iconStyleData: IconStyleData(
+                            icon: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: Colors.grey[600],
+                            ),
+                            iconSize: 24,
+                            iconEnabledColor: Colors.grey[600],
+                            iconDisabledColor: Colors.grey[400],
+                          ),
+                          dropdownStyleData: DropdownStyleData(
+                            maxHeight: 300,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white,
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            scrollbarTheme: ScrollbarThemeData(
+                              radius: const Radius.circular(40),
+                              thickness: WidgetStateProperty.all<double>(6),
+                              thumbVisibility:
+                                  WidgetStateProperty.all<bool>(true),
+                              thumbColor: WidgetStateProperty.all<Color>(
+                                  Colors.grey[400]!),
+                            ),
                           ),
                         ),
-                        iconStyleData: IconStyleData(
-                          icon: Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: Colors.grey[600],
-                          ),
-                          iconSize: 24,
-                          iconEnabledColor: Colors.grey[600],
-                          iconDisabledColor: Colors.grey[400],
-                        ),
-                        dropdownStyleData: DropdownStyleData(
-                          maxHeight: 300,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.white,
-                            
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          scrollbarTheme: ScrollbarThemeData(
-                            radius: const Radius.circular(40),
-                            thickness: WidgetStateProperty.all<double>(6),
-                            thumbVisibility:
-                                WidgetStateProperty.all<bool>(true),
-                            thumbColor: WidgetStateProperty.all<Color>(
-                                Colors.grey[400]!),
-                          ),
-                        ),
-                     
                       ),
-                    ),
-                    const SizedBox(height: 24),
+                    ],
+
+                    const SizedBox(height: 24), 
 // Dropdown kedua - Jenis Pembayaran
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                       
                       ),
                       child: DropdownButtonFormField2<String>(
                         decoration: InputDecoration(
@@ -955,7 +995,6 @@ class _OrderPageState extends State<OrderPage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             color: Colors.white,
-                            
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           scrollbarTheme: ScrollbarThemeData(
@@ -967,7 +1006,6 @@ class _OrderPageState extends State<OrderPage> {
                                 Colors.grey[400]!),
                           ),
                         ),
-                      
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -1092,7 +1130,6 @@ class _OrderPageState extends State<OrderPage> {
                   const Icon(Icons.chat_bubble_outline),
                   ElevatedButton(
                     onPressed: () {
-                     
                       if (validateAmount()) {
                         Get.to(
                             () => DataOrderPage(
@@ -1103,7 +1140,9 @@ class _OrderPageState extends State<OrderPage> {
                                           counter,
                                   totalOrang: counter,
                                   id: package.paketId,
-                                  amount: selectedTypePaymentUser == "Mandiri" ? dpAmount.toString() : 0.toString(),
+                                  amount: selectedTypePaymentUser == "Mandiri"
+                                      ? dpAmount.toString()
+                                      : 0.toString(),
                                   note: noteController.text,
                                 ),
                             transition: gets.Transition.rightToLeft);

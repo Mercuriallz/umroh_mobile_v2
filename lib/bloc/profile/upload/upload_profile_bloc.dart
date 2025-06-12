@@ -9,32 +9,54 @@ class UploadProfileBloc extends Cubit<UploadProfileState> {
   UploadProfileBloc() : super(UploadProfileInitial());
 
   void uploadProfile(ProfileUpdateRequestModel formData) async {
+    // print('[UploadProfileBloc] Mulai upload foto profil...');
     emit(UploadProfileLoading());
+    // print('[UploadProfileBloc] State: UploadProfileLoading');
 
-    var dio = Dio();
+    final dio = Dio();
     final secureStorage = SecureStorageService();
-    final token = secureStorage.read("token");
+    final token = await secureStorage.read("token");
 
-    final data = FormData.fromMap({
-      "img": await MultipartFile.fromFile(formData.img!.path)
-    });
+    // print('[UploadProfileBloc] Token: $token');
+    // print('[UploadProfileBloc] File path: ${formData.img?.path}');
+
+    if (formData.img == null) {
+      // print('[UploadProfileBloc] Error: Gambar tidak ditemukan');
+      emit(UploadProfileError("Gambar tidak ditemukan"));
+      return;
+    }
 
     try {
-      final response = await dio.post("$baseUrl/profile-update-pic",
-      data: data,
-      options: Options(
-        headers: {
-          "Content-type": "multipart/form-data",
-          "Authorization": "Bearer $token"
-        }
-      )
+      final data = FormData.fromMap({
+        "img": await MultipartFile.fromFile(formData.img!.path),
+      });
+
+      // print('[UploadProfileBloc] FormData siap dikirim');
+
+      final response = await dio.post(
+        "$baseUrl/profile-update-pic",
+        data: data,
+        options: Options(
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": "Bearer $token",
+          },
+        ),
       );
 
-      if(response.statusCode == 200 || response.statusCode == 201) {
+      // print('[UploadProfileBloc] Response status: ${response.statusCode}');
+      // print('[UploadProfileBloc] Response data: ${response.data}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
         emit(UploadProfileSuccess());
+        // print('[UploadProfileBloc] State: UploadProfileSuccess');
+      } else {
+        emit(UploadProfileError("Upload gagal: ${response.statusCode}"));
+        // print('[UploadProfileBloc] State: UploadProfileError');
       }
     } catch (e) {
-      emit(UploadProfileError(e.toString()));
+      emit(UploadProfileError("Terjadi kesalahan: ${e.toString()}"));
+      // print('[UploadProfileBloc] Exception: ${e.toString()}');
     }
   }
 }

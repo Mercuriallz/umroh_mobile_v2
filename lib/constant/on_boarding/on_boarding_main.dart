@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_umroh_v2/constant/on_boarding/on_boarding_screen.dart';
 import 'package:mobile_umroh_v2/presentation/bottombar/bottom_bar.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
+import 'package:mobile_umroh_v2/supervisor/supervisor_page.dart';
 
 class OnBoardingMain extends StatefulWidget {
   const OnBoardingMain({super.key});
@@ -15,6 +16,7 @@ class _OnBoardingMainState extends State<OnBoardingMain> {
   bool _isLoading = true;
   bool _isLoggedIn = false;
   String? _token;
+  String? _role;
 
   @override
   void initState() {
@@ -25,10 +27,12 @@ class _OnBoardingMainState extends State<OnBoardingMain> {
   Future<void> _checkAuthStatus() async {
     final token = await secureStorage.read("token");
     final isLoggedIn = await secureStorage.readBool("login") ?? false;
+    final role = await secureStorage.read("role");
 
     setState(() {
       _token = token;
       _isLoggedIn = isLoggedIn;
+      _role = role;
       _isLoading = false;
     });
   }
@@ -42,9 +46,13 @@ class _OnBoardingMainState extends State<OnBoardingMain> {
     }
 
     if (_token != null && _isLoggedIn) {
-      return const BottomMain();
-    } else {
-      return const OnBoardingScreen();
+      if (_role == '4') {
+        return const SupervisorPage();
+      } else if (_role == '2' || _role == '11') {
+        return const BottomMain();
+      }
     }
+
+    return const OnBoardingScreen();
   }
 }
