@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
-import 'package:mobile_umroh_v2/presentation/auth/login_page.dart';
+import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/auth/login_page.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});

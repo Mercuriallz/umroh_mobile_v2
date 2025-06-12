@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:mobile_umroh_v2/model/transaction/payment/payment_transaction_model.dart';
-import 'package:mobile_umroh_v2/presentation/schedule/payment/transaction/transaction_page.dart';
+import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/model/transaction/payment/payment_transaction_model.dart';
+import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/schedule/payment/transaction/transaction_page.dart';
 
 class TransactionHelper {
   static const _transactionKey = 'pending_transaction';
