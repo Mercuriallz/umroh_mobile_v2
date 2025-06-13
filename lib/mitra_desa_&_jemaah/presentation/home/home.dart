@@ -145,7 +145,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                             return GestureDetector(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (_) => FullImagePage(imageUrl: images.profilePicture!)));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => FullImagePage(
+                                            imageUrl: images.profilePicture!)));
                               },
                               child: Image.network(
                                 "${images.profilePicture}",
@@ -156,11 +160,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             );
                           } else {
                             return Image.asset(
-                            'assets/image/test-foto.jpg',
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                          );
+                              'assets/image/test-foto.jpg',
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            );
                           }
                           // return Image.asset(
                           //   'assets/image/test-foto.jpg',
@@ -180,7 +184,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
-                    childAspectRatio: 1,
+                    childAspectRatio:
+                        0.85,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
@@ -189,7 +194,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       {
                         "title": "Daftar Umrah",
                         "icon": "assets/image/Ka'bah.png",
-                        "route": RegistUmrahPage()
+                        "route": roles == "11" ? OnProgressPage() : RegistUmrahPage()
                       },
                       {
                         "title": "Jadwal Umroh",
@@ -223,39 +228,47 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       },
                     ];
                     return Column(
+                      mainAxisSize:
+                          MainAxisSize.min, 
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (menu[i]['route'] != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => menu[i]['route']!,
-                                ),
-                              );
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              shape: BoxShape.circle,
-                              // boxShadow: [
-                              //   BoxShadow(color: Colors.black12, blurRadius: 6),
-                              // ],
+                        Expanded(
+                          flex: 3, 
+                          child: GestureDetector(
+                            onTap: () {
+                              if (menu[i]['route'] != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => menu[i]['route']!,
+                                  ),
+                                );
+                              }
+                            },
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.all(8), 
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image.asset(menu[i]['icon']!,
+                                  width: 50,
+                                  height: 50), 
                             ),
-                            child: Image.asset(menu[i]['icon']!,
-                                width: 28, height: 28),
                           ),
                         ),
-                        const SizedBox(height: 6),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            menu[i]['title']!,
-                            style: const TextStyle(fontSize: 12),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                        Expanded(
+                          flex: 1, 
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              menu[i]['title']!,
+                              style: const TextStyle(
+                                  fontSize: 11), 
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2, 
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ],
@@ -330,7 +343,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                   fit: BoxFit.cover,
                                                   errorBuilder: (context, error,
                                                           stackTrace) =>
-                                                      const Icon(Icons.image),
+                                                      const Icon(Icons.image,
+                                                          size:
+                                                              48), // Icon error diperbesar
                                                 ),
                                               ),
                                             ),
@@ -461,6 +476,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                         icon: Icon(
                                                             Icons
                                                                 .bookmark_border,
+                                                            size:
+                                                                28, 
                                                             color: isDisabled
                                                                 ? Colors
                                                                     .grey[600]
@@ -537,79 +554,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     }
                   },
                 ),
-                // Container(
-                //   padding: const EdgeInsets.all(16),
-                //   decoration: BoxDecoration(
-                //     color: Colors.white,
-                //     borderRadius: BorderRadius.circular(16),
-                //     boxShadow: [
-                //       BoxShadow(color: Colors.black12, blurRadius: 6)
-                //     ],
-                //   ),
-                //   child: const Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       Row(
-                //         children: [
-                //           Icon(Icons.location_pin,
-                //               size: 16, color: Colors.grey),
-                //           SizedBox(width: 4),
-                //           Text("Bojong", style: TextStyle(fontSize: 12)),
-                //         ],
-                //       ),
-                //       Text("Isya",
-                //           style: TextStyle(fontWeight: FontWeight.bold)),
-                //       Text("19:19 Malam",
-                //           style: TextStyle(color: Colors.black54)),
-                //     ],
-                //   ),
-                // ),
-                // const SizedBox(height: 20),
-                // // const Text("Panduan Umrah",
-                //     style:
-                //         TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                // const SizedBox(height: 12),
-                // Column(
-                //   children: List.generate(3, (index) {
-                //     return Container(
-                //       margin: const EdgeInsets.only(bottom: 10),
-                //       padding: const EdgeInsets.all(12),
-                //       decoration: BoxDecoration(
-                //         color: Colors.white,
-                //         borderRadius: BorderRadius.circular(16),
-                //         boxShadow: [
-                //           BoxShadow(color: Colors.black12, blurRadius: 6)
-                //         ],
-                //       ),
-                //       child: Row(
-                //         children: [
-                //           Container(
-                //             width: 60,
-                //             height: 60,
-                //             color: Colors.grey[300],
-                //           ),
-                //           const SizedBox(width: 12),
-                //           const Expanded(
-                //             child: Column(
-                //               crossAxisAlignment: CrossAxisAlignment.start,
-                //               children: [
-                //                 Text(
-                //                     "Tata Cara Menjalankan Umrah yang baik dan benar",
-                //                     style:
-                //                         TextStyle(fontWeight: FontWeight.w500)),
-                //                 SizedBox(height: 6),
-                //                 Text("Durasi 10 jam",
-                //                     style: TextStyle(
-                //                         fontSize: 12, color: Colors.grey)),
-                //               ],
-                //             ),
-                //           )
-                //         ],
-                //       ),
-                //     );
-                //   }),
-                // ),
-                // const SizedBox(height: 80),
               ],
             ),
           ),
@@ -625,7 +569,7 @@ Widget _buildIconText(IconData icon, String text, bool isDisabled) {
     child: Row(
       children: [
         Icon(icon,
-            size: 16, color: isDisabled ? Colors.grey[600] : Colors.black),
+            size: 20, color: isDisabled ? Colors.grey[600] : Colors.black),
         const SizedBox(width: 4),
         Text(text,
             style: TextStyle(
