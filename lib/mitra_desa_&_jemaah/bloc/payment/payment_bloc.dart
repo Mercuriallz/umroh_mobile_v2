@@ -29,6 +29,7 @@ class PaymentBloc extends Cubit<PaymentState> {
       "price_final": formData.priceFinal,
       "amount": formData.amount,
       "type_payment": formData.typePayment,
+      "type_va_choice": formData.typeVaChoice,
       "type_payment_user": formData.typePaymentUser,
       "user_reg": formData.userReg != null
           ? await Future.wait(formData.userReg!.map((v) async => {

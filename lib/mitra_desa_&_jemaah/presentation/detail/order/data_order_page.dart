@@ -18,6 +18,7 @@ class DataOrderPage extends StatefulWidget {
   final String? amount;
   final String? note;
   final String? typePayment;
+  final String? selectedJenisPembayaran;
   final int? typePaymentUser;
   final int? priceFinal;
   final int? totalOrang;
@@ -30,6 +31,7 @@ class DataOrderPage extends StatefulWidget {
     this.typePayment,
     this.typePaymentUser,
     this.priceFinal,
+    this.selectedJenisPembayaran,
     required this.totalOrang,
     required this.id,
   });
@@ -870,6 +872,7 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                     widget.priceFinal.toString()),
                                                 amount: int.parse("0".toString()),
                                                 typePayment: widget.typePayment,
+                                                typeVaChoice: widget.selectedJenisPembayaran,
                                                 typePaymentUser:
                                                    int.parse( widget.typePaymentUser.toString()),
                                                 userReg: anggotaList);

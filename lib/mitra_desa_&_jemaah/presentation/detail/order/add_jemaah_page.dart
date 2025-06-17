@@ -167,30 +167,126 @@ class _AddJemaahPageState extends State<AddJemaahPage>
   }
 
   void _submit() {
-    if (nameController.text.isNotEmpty && selectedGender != null) {
-      Navigator.pop(context, {
-        "nama": nameController.text,
-        "jenis_kelamin": selectedGender!,
-        "email": emailController.text,
-        "phone": phoneController.text,
-        "nik": nikController.text,
-        "password": passwordController.text,
-        "hubungan_kerabat": selectedRelation!,
-        "img_ktp": ktpFile,
-        "img_passport": pasporFile,
-        "img_kk": kkFile,
-        "img_vaksin": vaksinFile,
-        "img_pas_foto": passPhotoFile,
-        "img_bpjs_kesehatan": bpjsFile
-      });
-    } else {
+    // Reset semua error terlebih dahulu
+    setState(() {
+      ktpFileError = null;
+      kkFileError = null;
+      pasporFileError = null;
+      vaksinFileError = null;
+    });
+
+    bool hasError = false;
+
+    // Validasi Nama
+    if (nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Nama, '),
+          content: Text('Nama harus diisi'),
           backgroundColor: Colors.red,
         ),
       );
+      return;
     }
+
+    // Validasi Jenis Kelamin
+    if (selectedGender == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Jenis kelamin harus dipilih'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Validasi Hubungan Kerabat
+    if (selectedRelation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Hubungan kerabat harus dipilih'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Validasi NIK (harus 16 digit)
+    if (nikController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('NIK harus diisi'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (nikController.text.length != 16) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('NIK harus 16 digit'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Validasi File Wajib (KTP, KK, Paspor, Vaksin)
+    if (ktpFile == null) {
+      setState(() {
+        ktpFileError = 'Foto KTP wajib diupload';
+        hasError = true;
+      });
+    }
+
+    if (kkFile == null) {
+      setState(() {
+        kkFileError = 'Kartu Keluarga wajib diupload';
+        hasError = true;
+      });
+    }
+
+    if (pasporFile == null) {
+      setState(() {
+        pasporFileError = 'Paspor wajib diupload';
+        hasError = true;
+      });
+    }
+
+    if (vaksinFile == null) {
+      setState(() {
+        vaksinFileError = 'Sertifikat Vaksin wajib diupload';
+        hasError = true;
+      });
+    }
+
+    // Jika ada error file, tampilkan pesan dan return
+    if (hasError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Mohon lengkapi semua dokumen yang wajib diisi'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Jika semua validasi berhasil
+    Navigator.pop(context, {
+      "nama": nameController.text,
+      "jenis_kelamin": selectedGender!,
+      "email": emailController.text,
+      "phone": phoneController.text,
+      "nik": nikController.text,
+      "password": passwordController.text,
+      "hubungan_kerabat": selectedRelation!,
+      "img_ktp": ktpFile,
+      "img_passport": pasporFile,
+      "img_kk": kkFile,
+      "img_vaksin": vaksinFile,
+      "img_pas_foto": passPhotoFile,
+      "img_bpjs_kesehatan": bpjsFile
+    });
   }
 
   Widget _buildUploadButton(
@@ -262,195 +358,184 @@ class _AddJemaahPageState extends State<AddJemaahPage>
   }
 
   Widget _buildFormTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextFormField(
-              controller: nameController,
-              decoration: _inputDecoration("Nama Lengkap"),
-            ),
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextFormField(
+            controller: nameController,
+            decoration: _inputDecoration("Nama Lengkap *"),
           ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextFormField(
-              controller: emailController,
-              decoration: _inputDecoration("Email"),
-            ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextFormField(
+            controller: emailController,
+            decoration: _inputDecoration("Email"),
           ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextFormField(
-              controller: phoneController,
-              keyboardType: TextInputType.phone,
-              decoration: _inputDecoration("Nomor Telepon"),
-            ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextFormField(
+            controller: phoneController,
+            keyboardType: TextInputType.phone,
+            decoration: _inputDecoration("Nomor Telepon"),
           ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextFormField(
-              controller: nikController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(16),
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              onChanged: (_) => setState(() {}),
-              decoration: _inputDecoration("NIK").copyWith(
-                counterText: "${nikController.text.length}/16",
-                counterStyle: TextStyle(
-                  fontSize: 12,
-                  color: nikController.text.length < 16
-                      ? Colors.red
-                      : Colors.green,
-                ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextFormField(
+            controller: nikController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(16),
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            onChanged: (_) => setState(() {}),
+            decoration: _inputDecoration("NIK *").copyWith(
+              counterText: "${nikController.text.length}/16",
+              counterStyle: TextStyle(
+                fontSize: 12,
+                color:
+                    nikController.text.length < 16 ? Colors.red : Colors.green,
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextFormField(
-              controller: passwordController,
-              decoration: _inputDecoration("Password"),
-            ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextFormField(
+            controller: passwordController,
+            decoration: _inputDecoration("Password"),
           ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: DropdownButtonFormField2<String>(
-              decoration: _dropdownDecoration(),
-              isExpanded: true,
-              hint: _dropdownHint("Pilih Jenis Kelamin", Icons.person_outline),
-              value: selectedGender,
-              items: genderItems
-                  .map((item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Row(
-                          children: [
-                            Icon(
-                              item == "Laki-laki" ? Icons.male : Icons.female,
-                              color: item == "Laki-laki"
-                                  ? Colors.blue
-                                  : Colors.pink,
-                              size: 18,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              item,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                      ))
-                  .toList(),
-              onChanged: (value) => setState(() {
-                selectedGender = value;
-              }),
-              buttonStyleData: const ButtonStyleData(height: 56),
-              dropdownStyleData: DropdownStyleData(
-                maxHeight: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
-                ),
-              ),
-              iconStyleData: IconStyleData(
-                icon: Icon(Icons.keyboard_arrow_down_rounded,
-                    color: Colors.grey[600]),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: DropdownButtonFormField2<String>(
+            decoration: _dropdownDecoration(),
+            isExpanded: true,
+            hint: _dropdownHint("Pilih Jenis Kelamin", Icons.person_outline),
+            value: selectedGender,
+            items: genderItems
+                .map((item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Row(
+                        children: [
+                          Icon(
+                            item == "Laki-laki" ? Icons.male : Icons.female,
+                            color:
+                                item == "Laki-laki" ? Colors.blue : Colors.pink,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            item,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ))
+                .toList(),
+            onChanged: (value) => setState(() {
+              selectedGender = value;
+            }),
+            buttonStyleData: const ButtonStyleData(height: 56),
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: DropdownButtonFormField<String>(
-              decoration: _inputDecoration("Pilih Hubungan"),
-              value: selectedRelation,
-              items: relation
-                  .map((item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item, style: const TextStyle(fontSize: 14)),
-                      ))
-                  .toList(),
-              onChanged: (value) => setState(() {
-                selectedRelation = value;
-              }),
+            iconStyleData: IconStyleData(
+              icon: Icon(Icons.keyboard_arrow_down_rounded,
+                  color: Colors.grey[600]),
             ),
           ),
-          const SizedBox(height: 30),
-          SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ElevatedButton(
-                onPressed: _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorConstant.primaryBlue,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                ),
-                child:
-                    const Text("Tambah", style: TextStyle(color: Colors.white)),
-              ),
-            ),
-          )
-        ],
-      ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: DropdownButtonFormField<String>(
+            decoration: _inputDecoration("Pilih Hubungan"),
+            value: selectedRelation,
+            items: relation
+                .map((item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item, style: const TextStyle(fontSize: 14)),
+                    ))
+                .toList(),
+            onChanged: (value) => setState(() {
+              selectedRelation = value;
+            }),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildDocumentTab() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          _buildUploadButton(
-            'Upload Foto KTP',
-            ktpFile,
-            () => _showImageSourceDialog('Upload Foto KTP'),
-            ktpFileError,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        // File Wajib
+        _buildUploadButton(
+          'Upload Foto KTP *',
+          ktpFile,
+          () => _showImageSourceDialog('Upload Foto KTP'),
+          ktpFileError,
+        ),
+        _buildUploadButton(
+          'Kartu Keluarga *',
+          kkFile,
+          () => _showImageSourceDialog('Kartu Keluarga'),
+          kkFileError,
+        ),
+        _buildUploadButton(
+          'Paspor *',
+          pasporFile,
+          () => _showImageSourceDialog('Paspor'),
+          pasporFileError,
+        ),
+        _buildUploadButton(
+          'Sertifikat Vaksin *',
+          vaksinFile,
+          () => _showImageSourceDialog('Sertifikat Vaksin'),
+          vaksinFileError,
+        ),
+        // File Opsional
+        _buildUploadButton(
+          'BPJS Kesehatan (Opsional)',
+          bpjsFile,
+          () => _showImageSourceDialog('Bpjs'),
+          bpjsFileError,
+        ),
+        _buildUploadButton(
+          'Pass Foto (Opsional)',
+          passPhotoFile,
+          () => _showImageSourceDialog('Pass Foto'),
+          passPhotoError,
+        ),
+        // Keterangan
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(
+            '* Dokumen wajib diisi',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.red,
+              fontStyle: FontStyle.italic,
+            ),
           ),
-          _buildUploadButton(
-            'Kartu Keluarga',
-            kkFile,
-            () => _showImageSourceDialog('Kartu Keluarga'),
-            kkFileError,
-          ),
-          _buildUploadButton(
-            'Paspor',
-            pasporFile,
-            () => _showImageSourceDialog('Paspor'),
-            pasporFileError,
-          ),
-          _buildUploadButton(
-            'Sertifikat Vaksin',
-            vaksinFile,
-            () => _showImageSourceDialog('Sertifikat Vaksin'),
-            vaksinFileError,
-          ),
-          _buildUploadButton(
-            'Bpjs',
-            bpjsFile,
-            () => _showImageSourceDialog('Bpjs'),
-            bpjsFileError,
-          ),
-          _buildUploadButton(
-            'Pass Foto',
-            passPhotoFile,
-            () => _showImageSourceDialog('Pass Foto'),
-            passPhotoError,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -502,58 +587,54 @@ class _AddJemaahPageState extends State<AddJemaahPage>
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: Row(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Row(
+                children: [
+                  CustomBackHeader(
+                    title: "Tambah Jamaah",
+                    onBack: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            // Expanded widget untuk mengisi sisa ruang
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Column(
                   children: [
-                    CustomBackHeader(
-                      title: "Tambah Jamaah",
-                      onBack: () => Navigator.pop(context),
+                    _buildFormTab(),
+                    _buildDocumentTab(),
+                    // Tombol submit dipindahkan ke sini
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ElevatedButton(
+                          onPressed: _submit,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorConstant.primaryBlue,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                          ),
+                          child: const Text("Tambah",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: TabBar(
-                  dividerColor: Colors.transparent,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: ColorConstant.primaryBlue,
-                  ),
-                  indicatorColor: Colors.transparent,
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.black,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  tabs: const [
-                    Tab(text: "Detail Paket"),
-                    Tab(text: "Tambah Dokumen"),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    _buildFormTab(),
-                    _buildDocumentTab(),
-                  ],
-                ),
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

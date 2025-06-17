@@ -12,6 +12,7 @@ import 'package:mobile_umroh_v2/constant/on_progress.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/detail/detail_page.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/home/regist-umrah/regist_umrah_page.dart';
+import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/schedule/schedule_departure_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -184,17 +185,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
-                    childAspectRatio:
-                        0.85,
+                    childAspectRatio: 0.85,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
                   itemBuilder: (context, i) {
                     final List<Map<String, dynamic>> menu = [
                       {
-                        "title": "Daftar Umrah",
-                        "icon": "assets/image/Ka'bah.png",
-                        "route": roles == "11" ? OnProgressPage() : RegistUmrahPage()
+                        "title": roles == "11" ? "Jadwal Haji" : "Jadwal Umrah",
+                        "icon": roles == "11"
+                            ? "assets/icons/jadwal_2.png"
+                            : "assets/image/Ka'bah.png",
+                        "route": roles == "11"
+                            ? ScheduleDeparturePage()
+                            : RegistUmrahPage()
                       },
                       {
                         "title": "Jadwal Umroh",
@@ -228,11 +232,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       },
                     ];
                     return Column(
-                      mainAxisSize:
-                          MainAxisSize.min, 
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Expanded(
-                          flex: 3, 
+                          flex: 3,
                           child: GestureDetector(
                             onTap: () {
                               if (menu[i]['route'] != null) {
@@ -245,28 +248,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               }
                             },
                             child: Container(
-                              padding:
-                                  const EdgeInsets.all(8), 
+                              padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: Colors.transparent,
                                 shape: BoxShape.circle,
                               ),
                               child: Image.asset(menu[i]['icon']!,
-                                  width: 50,
-                                  height: 50), 
+                                  width: 50, height: 50),
                             ),
                           ),
                         ),
                         Expanded(
-                          flex: 1, 
+                          flex: 1,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 4),
                             child: Text(
                               menu[i]['title']!,
-                              style: const TextStyle(
-                                  fontSize: 11), 
+                              style: const TextStyle(fontSize: 11),
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 2, 
+                              maxLines: 2,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -476,8 +476,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                         icon: Icon(
                                                             Icons
                                                                 .bookmark_border,
-                                                            size:
-                                                                28, 
+                                                            size: 28,
                                                             color: isDisabled
                                                                 ? Colors
                                                                     .grey[600]

@@ -298,8 +298,11 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                           onPressed: isFullyPaid
                                               ? null
                                               : () {
-                                                  final totalAmount =
-                                                      transaction
+                                                  final totalAmount = transaction
+                                                              .transactionHistory
+                                                              ?.isNotEmpty ==
+                                                          true
+                                                      ? transaction
                                                           .transactionHistory!
                                                           .map((e) =>
                                                               int.tryParse(
@@ -307,14 +310,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                                                       '0') ??
                                                               0)
                                                           .fold(0,
-                                                              (a, b) => a + b);
+                                                              (a, b) => a + b)
+                                                      : 0;
                                                   Get.to(RepaymentMethodPage(
                                                     trx: transaction.trx ?? '',
                                                     finalPrice: transaction
                                                         .priceFinal
                                                         .toString(),
                                                     amount:
-                                                        totalAmount.toString(),
+                                                        totalAmount.toString().isNotEmpty ? totalAmount.toString() : '0',
                                                   ));
                                                 },
                                           child: Text(

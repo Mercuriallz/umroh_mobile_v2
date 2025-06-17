@@ -25,6 +25,7 @@ import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/transaction/upload/uplo
 import 'package:mobile_umroh_v2/constant/on_boarding/on_boarding_main.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/model/transaction/payment/payment_transaction_model.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/schedule/payment/transaction/transaction_page.dart';
+import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/repository/package/package_repo.dart';
 import 'package:mobile_umroh_v2/regional-manager/bloc/list-regional-manager/list_regional_manager_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,10 +55,12 @@ void main() async {
   //   debugPrint("🔒 Token belum tersedia, user belum login");
   // }
 
+  final packageRepo = PackageRepository();
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(create: (_) => LoginBloc()),
-      BlocProvider(create: (_) => PackageBloc()),
+      BlocProvider(create: (_) => PackageBloc(packageRepo)),
       BlocProvider(create: (_) => ProvinsiBloc()),
       BlocProvider(create: (_) => KabupatenBloc()),
       BlocProvider(create: (_) => KecamatanBloc()),

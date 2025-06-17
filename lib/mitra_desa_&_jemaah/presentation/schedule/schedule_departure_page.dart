@@ -95,7 +95,6 @@ class _ScheduleDeparturePageState extends State<ScheduleDeparturePage> {
 
                     const SizedBox(height: 24),
 
-                    /// --- CARD PEMBAYARAN ---
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(

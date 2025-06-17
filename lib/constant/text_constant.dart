@@ -38,7 +38,7 @@ class TextConfig {
     fontWeight: FontWeight.w600,
   );
   static const TextStyle alertMedium = TextStyle(
-    fontSize: 12,
+    fontSize: 12,   
     color: ColorConstant.outline,
     fontWeight: FontWeight.w600,
   );

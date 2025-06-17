@@ -6,6 +6,7 @@ class PaymentModel {
   int? priceFinal;
   int? amount;
   String? typePayment;
+  String? typeVaChoice;
   int? typePaymentUser;
   List<UserReg>? userReg;
 
@@ -15,6 +16,7 @@ class PaymentModel {
       this.priceFinal,
       this.amount,
       this.typePayment,
+      this.typeVaChoice,
       this.typePaymentUser,
       this.userReg});
 
@@ -24,6 +26,7 @@ class PaymentModel {
     priceFinal = json['price_final'];
     amount = json['amount'];
     typePayment = json['type_payment'];
+    typeVaChoice = json['type_va_choice'];
     typePaymentUser = json['type_payment_user'];
     if (json['user_reg'] != null) {
       userReg = <UserReg>[];
@@ -40,6 +43,7 @@ class PaymentModel {
     data['price_final'] = priceFinal;
     data['amount'] = amount;
     data['type_payment'] = typePayment;
+    data['type_va_choice'] = typeVaChoice;
     data['type_payment_user'] = typePaymentUser;
     if (userReg != null) {
       data['user_reg'] = userReg!.map((v) => v.toJson()).toList();

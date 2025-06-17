@@ -1133,6 +1133,7 @@ class _OrderPageState extends State<OrderPage> {
                       if (validateAmount()) {
                         Get.to(
                             () => DataOrderPage(
+                              selectedJenisPembayaran: selectedJenisPembayaran,
                                   typePayment: selectedTypePaymentValue,
                                   typePaymentUser: selectedTypePaymentUserValue,
                                   priceFinal:
