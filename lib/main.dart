@@ -5,6 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_umroh_v2/area-manager/bloc/list_area_manager_bloc.dart';
+import 'package:mobile_umroh_v2/home_feature/bloc/alquran/alquran_bloc.dart';
+import 'package:mobile_umroh_v2/home_feature/bloc/surah/surah_bloc.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/auth/login/login_bloc.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/auth/register/register_bloc.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/package/package/package_bloc.dart';
@@ -78,6 +80,8 @@ void main() async {
       BlocProvider(create: (_) => ProfileBloc()),
       BlocProvider(create: (_) => ListRegionalManagerBloc()),
       BlocProvider(create: (_) => ListAreaManagerBloc()),
+      BlocProvider(create: (_) => AlquranBloc()),
+      BlocProvider(create: (_) => SurahBloc())
       
 
       // BlocProvider(create: (_) => LoginAreaManagerBloc()),

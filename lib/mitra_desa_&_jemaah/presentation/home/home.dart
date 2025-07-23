@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart' as getx;
+import 'package:mobile_umroh_v2/home_feature/presentation/alquran_page.dart';
 
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/package/package/package_bloc.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/package/package/package_state.dart';
@@ -192,18 +193,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   itemBuilder: (context, i) {
                     final List<Map<String, dynamic>> menu = [
                       {
-                        "title": roles == "11" ? "Jadwal Haji" : "Jadwal Umrah",
-                        "icon": roles == "11"
-                            ? "assets/icons/jadwal_2.png"
-                            : "assets/image/Ka'bah.png",
-                        "route": roles == "11"
-                            ? ScheduleDeparturePage()
-                            : RegistUmrahPage()
+                        // "title": roles == "11" ? "Jadwal Haji" : "Jadwal Umrah",
+                        // "icon": roles == "11"
+                        //     ? "assets/icons/jadwal_2.png"
+                        //     : "assets/image/Ka'bah.png",
+                        // "route": roles == "11"
+                        //     ? ScheduleDeparturePage()
+                        //     : RegistUmrahPage()
+                        "title": "Jadwal Umroh",
+                        "icon": "assets/image/Ka'bah.png",
+                        "route": RegistUmrahPage()
                       },
                       {
-                        "title": "Jadwal Umroh",
-                        "icon": "assets/image/Bimbingan.png",
-                        "route": OnProgressPage()
+                        "title": "Jadwal Haji",
+                        "icon": "assets/icons/jadwal_2.png",
+                        "route": ScheduleDeparturePage()
                       },
                       {
                         "title": "Bimbingan Manasik",
@@ -218,7 +222,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       {
                         "title": "Al-Qur'an",
                         "icon": "assets/image/Paket Data.png",
-                        "route": OnProgressPage()
+                        "route": AlquranView()
                       },
                       {
                         "title": "Jadwal Sholat",

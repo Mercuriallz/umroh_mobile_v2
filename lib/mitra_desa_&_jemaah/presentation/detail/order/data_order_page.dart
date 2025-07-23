@@ -459,7 +459,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                     ),
                                     child: Column(
                                       children: [
-                                        // Header with status badge (always visible)
                                         InkWell(
                                           onTap: () => toggleExpansion(index),
                                           child: Container(

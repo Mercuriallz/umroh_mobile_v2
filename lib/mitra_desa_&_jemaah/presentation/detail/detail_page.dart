@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-// import 'package:get/get.dart';
 
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/package/package_id/package_id_bloc.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/package/package_id/package_id_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
-// import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/full_image_preview.dart';
 import 'package:mobile_umroh_v2/constant/header_page.dart';
 import 'package:mobile_umroh_v2/constant/rupiah.dart';
 import 'package:mobile_umroh_v2/constant/shimmer.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/detail/order/order_page.dart';
-// import 'package:mobile_umroh_v2/presentation/detail/order/order_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
 
 class DetailPage extends StatefulWidget {
@@ -232,7 +229,6 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
           const Icon(Icons.flight_takeoff, color: Colors.black, size: 24),
           const SizedBox(width: 12),
           Expanded(
-            // <-- Ganti Column langsung dibungkus Expanded
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

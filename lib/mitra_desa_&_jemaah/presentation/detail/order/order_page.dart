@@ -632,7 +632,7 @@ class _OrderPageState extends State<OrderPage> {
 
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: DropdownButtonFormField2<String>(
                         decoration: InputDecoration(
@@ -640,25 +640,25 @@ class _OrderPageState extends State<OrderPage> {
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(
                               color: Colors.grey[300]!,
                               width: 1.5,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(
                               color: Colors.blue[600]!,
                               width: 2,
                             ),
                           ),
                           errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: const BorderSide(
                               color: Colors.red,
                               width: 1.5,
@@ -728,7 +728,7 @@ class _OrderPageState extends State<OrderPage> {
                           height: 56,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         iconStyleData: IconStyleData(
@@ -743,7 +743,7 @@ class _OrderPageState extends State<OrderPage> {
                         dropdownStyleData: DropdownStyleData(
                           maxHeight: 300,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             color: Colors.white,
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -759,12 +759,11 @@ class _OrderPageState extends State<OrderPage> {
                       ),
                     ),
 
-                    // Dropdown kedua - Tipe Pembayaran (hanya muncul jika Mandiri)
                     if (selectedTypePaymentUser == "Mandiri") ...[
                       const SizedBox(height: 24),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: DropdownButtonFormField2<String>(
                           decoration: InputDecoration(
@@ -772,25 +771,25 @@ class _OrderPageState extends State<OrderPage> {
                             filled: true,
                             fillColor: Colors.white,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
                                 color: Colors.grey[300]!,
                                 width: 1.5,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
                                 color: Colors.blue[600]!,
                                 width: 2,
                               ),
                             ),
                             errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                               borderSide: const BorderSide(
                                 color: Colors.red,
                                 width: 1.5,
@@ -851,7 +850,7 @@ class _OrderPageState extends State<OrderPage> {
                             height: 56,
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           iconStyleData: IconStyleData(
@@ -866,7 +865,7 @@ class _OrderPageState extends State<OrderPage> {
                           dropdownStyleData: DropdownStyleData(
                             maxHeight: 300,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                               color: Colors.white,
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -884,10 +883,9 @@ class _OrderPageState extends State<OrderPage> {
                     ],
 
                     const SizedBox(height: 24), 
-// Dropdown kedua - Jenis Pembayaran
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: DropdownButtonFormField2<String>(
                         decoration: InputDecoration(
@@ -895,25 +893,25 @@ class _OrderPageState extends State<OrderPage> {
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(
                               color: Colors.grey[300]!,
                               width: 1.5,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(
                               color: Colors.green[600]!,
                               width: 2,
                             ),
                           ),
                           errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: const BorderSide(
                               color: Colors.red,
                               width: 1.5,
@@ -978,7 +976,7 @@ class _OrderPageState extends State<OrderPage> {
                           height: 56,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         iconStyleData: IconStyleData(
@@ -993,7 +991,7 @@ class _OrderPageState extends State<OrderPage> {
                         dropdownStyleData: DropdownStyleData(
                           maxHeight: 300,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             color: Colors.white,
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -1011,19 +1009,33 @@ class _OrderPageState extends State<OrderPage> {
                     const SizedBox(height: 16),
 
                     TextFormField(
+                      
+                      controller: referralController,
+                      decoration: InputDecoration(
+                        hintText: "Referal (Opsional)",
+                        suffixIcon: Icon(Icons.person),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)
+                        )
+                      )
+                    ),
+
+                    const SizedBox(height: 16,),
+
+                    TextFormField(
                       keyboardType: TextInputType.multiline,
                       maxLines: 5,
                       controller: noteController,
                       decoration: InputDecoration(
-                        hintText: "Note",
+                        hintText: "Catatan",
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 16),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: Colors.grey),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: Colors.grey),
                         ),
                       ),
