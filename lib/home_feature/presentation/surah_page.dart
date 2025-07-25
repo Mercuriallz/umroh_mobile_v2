@@ -441,7 +441,6 @@ class _SurahReaderPageState extends State<SurahReaderPage> {
                 const Spacer(),
                 IconButton(
                   onPressed: () {
-                    // TODO: Implement audio playback
                   },
                   icon: const Icon(
                     Icons.play_circle_outline,

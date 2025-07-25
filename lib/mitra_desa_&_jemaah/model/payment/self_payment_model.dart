@@ -1,63 +1,68 @@
 import 'dart:io';
 
-class PaymentModel {
+class SelfPaymentModel {
+  String? amount;
+  String? priceFinal;
   String? purchaseTitle;
   int? paketId;
-  int? priceFinal;
-  int? amount;
   String? typePayment;
+  List<UserRegs>? userReg;
+  String? typePaymentUser;
   String? typeVaChoice;
-  int? typePaymentUser;
-  List<UserReg>? userReg;
   String? kodeConnect;
+  String? statusPay;
 
-  PaymentModel(
-      {this.purchaseTitle,
-      this.paketId,
+  SelfPaymentModel(
+      {this.amount,
       this.priceFinal,
-      this.amount,
+      this.purchaseTitle,
+      this.paketId,
       this.typePayment,
-      this.typeVaChoice,
-      this.typePaymentUser,
       this.userReg,
-      this.kodeConnect
+      this.typePaymentUser,
+      this.typeVaChoice,
+      this.kodeConnect,
+      this.statusPay
       });
 
-  PaymentModel.fromJson(Map<String, dynamic> json) {
+  SelfPaymentModel.fromJson(Map<String, dynamic> json) {
+    amount = json['amount'];
+    priceFinal = json['price_final'];
     purchaseTitle = json['purchase_title'];
     paketId = json['paket_id'];
-    priceFinal = json['price_final'];
-    amount = json['amount'];
     typePayment = json['type_payment'];
-    typeVaChoice = json['type_va_choice'];
-    typePaymentUser = json['type_payment_user'];
     if (json['user_reg'] != null) {
-      userReg = <UserReg>[];
+      userReg = <UserRegs>[];
       json['user_reg'].forEach((v) {
-        userReg!.add(UserReg.fromJson(v));
+        userReg!.add(UserRegs.fromJson(v));
       });
     }
+    typePaymentUser = json['type_payment_user'];
+    typeVaChoice = json['type_va_choice'];
     kodeConnect = json['kode_connect'];
+    statusPay = json['status_pay'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['amount'] = amount;
+    data['price_final'] = priceFinal;
     data['purchase_title'] = purchaseTitle;
     data['paket_id'] = paketId;
-    data['price_final'] = priceFinal;
-    data['amount'] = amount;
     data['type_payment'] = typePayment;
-    data['type_va_choice'] = typeVaChoice;
-    data['type_payment_user'] = typePaymentUser;
     if (userReg != null) {
       data['user_reg'] = userReg!.map((v) => v.toJson()).toList();
     }
+    data['type_payment_user'] = typePaymentUser;
+    data['type_va_choice'] = typeVaChoice;
     data['kode_connect'] = kodeConnect;
+    data['status_pay'] = statusPay;
     return data;
   }
 }
 
-class UserReg {
+
+  class UserRegs {
   String? name;
   String? email;
   String? phoneNumber;
@@ -71,7 +76,7 @@ class UserReg {
   File? imgPasFoto;
   File? imgBpjsKesehatan;
 
-  UserReg(
+  UserRegs(
       {this.name,
       this.email,
       this.phoneNumber,
@@ -85,7 +90,7 @@ class UserReg {
       this.imgPasFoto,
       this.imgBpjsKesehatan});
 
-  UserReg.fromJson(Map<String, dynamic> json) {
+  UserRegs.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     email = json['email'];
     phoneNumber = json['phone_number'];

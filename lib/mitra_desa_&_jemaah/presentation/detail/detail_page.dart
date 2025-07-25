@@ -138,7 +138,7 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                     const Text("Catatan",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
-                    Html(data: package.notes),
+                    Html(data: package.notes ?? "-"),
                     // const Text("Perlengkapan",
                     //     style: TextStyle(fontWeight: FontWeight.bold)),
                     // const SizedBox(height: 6),
@@ -156,7 +156,6 @@ class _DetailPageState extends State<DetailPage> with WidgetsBindingObserver {
                             fontSize: 16, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 12),
                     _buildHotelSection(package),
-                    // Tambahkan padding bottom untuk space dengan bottom nav
                     const SizedBox(height: 100),
                   ],
                 );

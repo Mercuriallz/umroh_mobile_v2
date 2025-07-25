@@ -479,8 +479,8 @@ class _OrderPageState extends State<OrderPage> {
 
                     const SizedBox(height: 16),
 
-                    roleId == "2"
-                        ? Column(
+                    // roleId == "2"
+                        Column(
                             children: [
                               Container(
                                 padding: EdgeInsets.symmetric(
@@ -512,8 +512,8 @@ class _OrderPageState extends State<OrderPage> {
                                 ),
                               ),
                             ],
-                          )
-                        : SizedBox(),
+                          ),
+                    
 
                     const SizedBox(
                       height: 16,
@@ -1145,6 +1145,7 @@ class _OrderPageState extends State<OrderPage> {
                       if (validateAmount()) {
                         Get.to(
                             () => DataOrderPage(
+                              kodeConnect: referralController.text,
                               selectedJenisPembayaran: selectedJenisPembayaran,
                                   typePayment: selectedTypePaymentValue,
                                   typePaymentUser: selectedTypePaymentUserValue,

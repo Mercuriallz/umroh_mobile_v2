@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/package/package_id/package_id_bloc.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/package/package_id/package_id_state.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/payment/payment_bloc.dart';
+import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/payment/payment_self/payment_self_state.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/bloc/payment/payment_state.dart';
 import 'package:mobile_umroh_v2/constant/color_constant.dart';
 import 'package:mobile_umroh_v2/constant/header_page.dart';
-import 'package:mobile_umroh_v2/constant/loading.dart';
+// import 'package:mobile_umroh_v2/constant/loading.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/model/payment/payment_model.dart';
+import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/model/payment/self_payment_model.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/bottombar/bottom_bar.dart';
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/detail/order/add_jemaah_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
@@ -23,6 +25,7 @@ class DataOrderPage extends StatefulWidget {
   final int? priceFinal;
   final int? totalOrang;
   final int? id;
+  final String? kodeConnect;
 
   const DataOrderPage({
     super.key,
@@ -34,6 +37,7 @@ class DataOrderPage extends StatefulWidget {
     this.selectedJenisPembayaran,
     required this.totalOrang,
     required this.id,
+    this.kodeConnect,
   });
 
   @override
@@ -41,18 +45,26 @@ class DataOrderPage extends StatefulWidget {
 }
 
 class _DataOrderPageState extends State<DataOrderPage> {
-  // Ubah tipe data untuk mendukung File
   List<Map<String, dynamic>> jemaahList = [];
   List<bool> expandedList = [];
   bool isLoading = false;
   bool isAddingJemaah = false;
   bool hasInitialized = false;
+  final secureStorage = SecureStorageService();
+  String? roleId;
+  void loadRoleId() async {
+    final role = await secureStorage.read("role");
+    setState(() {
+      roleId = role;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _initializeData();
     expandedList = List.generate(jemaahList.length, (_) => false);
+    loadRoleId();
   }
 
   void _initializeData() {
@@ -72,7 +84,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
   File? _convertToFile(dynamic imageData) {
     if (imageData == null) return null;
     if (imageData is File) return imageData;
-    // Jika imageData adalah path string, convert ke File
     if (imageData is String && imageData.isNotEmpty) {
       return File(imageData);
     }
@@ -103,7 +114,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
         MaterialPageRoute(builder: (_) => const AddJemaahPage()),
       );
 
-      // Ubah pengecekan tipe data
       if (result != null && result is Map<String, dynamic>) {
         setState(() {
           jemaahList.add(result);
@@ -135,48 +145,47 @@ class _DataOrderPageState extends State<DataOrderPage> {
     }
   }
 
-  Future<void> _sendPayment(PaymentModel paymentData) async {
-    try {
-      _showLoadingDialog();
+  // Future<void> _sendPayment(PaymentModel paymentData) async {
+  //   try {
+  //     _showLoadingDialog();
 
-      setState(() {
-        isLoading = true;
-      });
+  //     setState(() {
+  //       isLoading = true;
+  //     });
 
-      final paymentVM = context.read<PaymentBloc>();
-      paymentVM.sendPayment(paymentData);
-    } catch (e) {
-      _dismissDialogs();
+  //     final paymentVM = context.read<PaymentBloc>();
+  //     paymentVM.sendPayment(paymentData);
+  //   } catch (e) {
+  //     _dismissDialogs();
 
-      setState(() {
-        isLoading = false;
-      });
+  //     setState(() {
+  //       isLoading = false;
+  //     });
 
-      Get.snackbar(
-        "Error",
-        "Terjadi kesalahan tidak terduga: $e",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 3),
-      );
-    }
-  }
+  //     Get.snackbar(
+  //       "Error",
+  //       "Terjadi kesalahan tidak terduga: $e",
+  //       snackPosition: SnackPosition.BOTTOM,
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //       duration: const Duration(seconds: 3),
+  //     );
+  //   }
+  // }
 
-  void _showLoadingDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return LoadingOverlay(
-          lottiePath: 'assets/lottie/loading_animation.json',
-          message: 'Pesananmu sedang diproses',
-        );
-      },
-    );
-  }
+  // void _showLoadingDialog() {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return LoadingOverlay(
+  //         lottiePath: 'assets/lottie/loading_animation.json',
+  //         message: 'Pesananmu sedang diproses',
+  //       );
+  //     },
+  //   );
+  // }
 
-  // Helper function untuk mendapatkan nama file dari File object
   String _getFileDisplayName(dynamic file) {
     if (file == null) return "-";
     if (file is File) {
@@ -196,7 +205,14 @@ class _DataOrderPageState extends State<DataOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    // print("selectedJenisPembayaran: ${widget.selectedJenisPembayaran}");
+    // print("Type Payment User: ${widget.typePayment}");
+    // print("typePaymentUser: ${widget.typePaymentUser}");
+    // print("roleId: $roleId");
+    // print("paketId: ${widget.id}");
+    // print("amount: ${widget.amount}");
     final totalJemaah = jemaahList.length;
+    final paymentVM = context.read<PaymentBloc>();
 
     return PopScope(
       canPop: !isLoading,
@@ -220,7 +236,8 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         setState(() {
                           isLoading = true;
                         });
-                      } else if (state is PaymentSuccess) {
+                      } else if (state is PaymentSuccess ||
+                          state is PaymentSelfSuccess) {
                         _dismissDialogs();
                         Get.offAll(BottomMain());
                         Future.delayed(const Duration(milliseconds: 300), () {
@@ -237,7 +254,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                         setState(() {
                           isLoading = false;
                         });
-                        _dismissDialogs();
                         Future.delayed(const Duration(milliseconds: 300), () {
                           Get.snackbar(
                             "Gagal Membuat Pesanan",
@@ -592,7 +608,6 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                             ),
                                           ),
                                         ),
-
                                         if (isExpanded)
                                           Column(
                                             children: [
@@ -863,20 +878,108 @@ class _DataOrderPageState extends State<DataOrderPage> {
                                                     ))
                                                 .toList();
 
+                                            final anggotaList2 = jemaahList
+                                                .map((jemaah) => UserRegs(
+                                                      name: jemaah['nama']
+                                                          ?.toString(),
+                                                      email: jemaah['email']
+                                                          ?.toString(),
+                                                      phoneNumber:
+                                                          jemaah['phone']
+                                                              ?.toString(),
+                                                      nik: jemaah['nik']
+                                                          ?.toString(),
+                                                      password:
+                                                          jemaah['password']
+                                                              ?.toString(),
+                                                      hubunganKerabat: jemaah[
+                                                              'hubungan_kerabat']
+                                                          ?.toString(),
+                                                      imgKtp: _convertToFile(
+                                                          jemaah['img_ktp']),
+                                                      imgPassport:
+                                                          _convertToFile(jemaah[
+                                                              'img_passport']),
+                                                      imgKk: _convertToFile(
+                                                          jemaah['img_kk']),
+                                                      imgVaksin: _convertToFile(
+                                                          jemaah['img_vaksin']),
+                                                      imgPasFoto:
+                                                          _convertToFile(jemaah[
+                                                              'img_pas_foto']),
+                                                      imgBpjsKesehatan:
+                                                          _convertToFile(jemaah[
+                                                              'img_bpjs_kesehatan']),
+                                                    ))
+                                                .toList();
+
                                             var data = PaymentModel(
                                                 purchaseTitle:
                                                     package.namaPaket,
-                                                paketId: int.parse(package.paketId.toString()),
-                                                priceFinal: int.parse(
-                                                    widget.priceFinal.toString()),
-                                                amount: int.parse("0".toString()),
+                                                paketId: int.parse(
+                                                    package.paketId.toString()),
+                                                priceFinal: int.parse(widget
+                                                    .priceFinal
+                                                    .toString()),
+                                                amount: 0,
                                                 typePayment: widget.typePayment,
-                                                typeVaChoice: widget.selectedJenisPembayaran,
-                                                typePaymentUser:
-                                                   int.parse( widget.typePaymentUser.toString()),
+                                                typeVaChoice: widget
+                                                    .selectedJenisPembayaran,
+                                                typePaymentUser: int.parse(
+                                                    widget.typePaymentUser
+                                                        .toString()),
                                                 userReg: anggotaList);
 
-                                            _sendPayment(data);
+                                            var dataSelf = SelfPaymentModel(
+                                              kodeConnect: widget.kodeConnect,
+                                              amount: 0.toString(),
+                                              priceFinal: widget.priceFinal.toString(),
+                                              purchaseTitle: package.namaPaket,
+                                              paketId: package.paketId,
+                                              typePayment: widget.typePayment,
+                                              userReg: anggotaList2,
+                                              typePaymentUser: int.parse(widget
+                                                          .typePaymentUser
+                                                          .toString()) ==
+                                                      1
+                                                  ? "Mandiri"
+                                                  : "Pembiayaan",
+                                              // typePaymentUser: "Pembiayaan",
+                                              typeVaChoice: widget
+                                                  .selectedJenisPembayaran,
+                                            );
+
+                                            if (roleId == "2") {
+                                              // Mitra Desa
+                                              // context
+                                              //     .read<PaymentBloc>()
+                                              //     .sendPayment(data);
+                                              paymentVM.sendPayment(data);
+                                            } else if (roleId == "11") {
+                                              // print(
+                                              //     "[selfPayment] Mengirim dataSelf:");
+                                              // print(
+                                              //     "kodeConnect: ${dataSelf.kodeConnect}");
+                                              // print(
+                                              //     "amount: ${dataSelf.amount}");
+                                              // print(
+                                              //     "priceFinal: ${dataSelf.priceFinal}");
+                                              // print(
+                                              //     "purchaseTitle: ${dataSelf.purchaseTitle}");
+                                              // print(
+                                              //     "paketId: ${dataSelf.paketId}");
+                                              // print(
+                                              //     "typePayment: ${dataSelf.typePayment}");
+                                              // print(
+                                              //     "typePaymentUser: ${dataSelf.typePaymentUser}");
+                                              // print(
+                                              //     "typeVaChoice: ${dataSelf.typeVaChoice}");
+                                              // Jemaah
+                                              // context
+                                              //     .read<PaymentBloc>()
+                                              //     .selfPayment(dataSelf);
+                                              paymentVM.selfPayment(dataSelf);
+                                            }
                                           } catch (e) {
                                             Get.snackbar(
                                               "Error",
