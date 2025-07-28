@@ -16,6 +16,7 @@ import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/auth/register/r
 import 'package:mobile_umroh_v2/mitra_desa_&_jemaah/presentation/bottombar/bottom_bar.dart';
 import 'package:mobile_umroh_v2/regional-manager/presentation/regional_manager_home_page.dart';
 import 'package:mobile_umroh_v2/services/storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -83,6 +84,16 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
+
+  final String url = 'https://www.umrahdesa.com/';
+
+  void _launchURL() async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'Tidak bisa membuka URL: $url';
+    }
+  }
+
 
   @override
   void dispose() {
@@ -377,7 +388,31 @@ class _LoginPageState extends State<LoginPage> {
                                       const Text("Daftar Sebagai Mitra Desa"),
                                 ),
                               ],
-                            )
+                            ),
+                            const SizedBox(height: 16),
+                             SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        _launchURL();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            ColorConstant.primaryBlue,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 16),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(32),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Registrasi Mandiri Disini",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ),

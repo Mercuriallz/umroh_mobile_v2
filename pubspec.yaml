@@ -60,6 +60,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   flutter_html: ^3.0.0
   fpdart: ^1.1.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
